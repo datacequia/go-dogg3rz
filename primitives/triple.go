@@ -1,7 +1,7 @@
 package primitives
 
 import (
-	"github.com/adpadilla/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/errors"
 )
 
 const ATTR_SUBJECT = "subject"

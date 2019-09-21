@@ -3,8 +3,8 @@ package main
 import (
 	"fmt"
 
-	cmd "github.com/adpadilla/go-dogg3rz/cmd"
-	"github.com/adpadilla/go-dogg3rz/errors"
+	cmd "github.com/datacequia/go-dogg3rz/cmd"
+	"github.com/datacequia/go-dogg3rz/errors"
 )
 
 func testErr() error {
@@ -25,7 +25,7 @@ func testErr() error {
 		fmt.Println("not nil")
 	}
 
-	e4 := errors.Range.Wrapf(e3, "sss")
+	e4 := errors.OutOfRange.Wrapf(e3, "sss")
 	return e4
 }
 

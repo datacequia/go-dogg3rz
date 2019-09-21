@@ -3,7 +3,7 @@ package primitives
 import (
 	"encoding/json"
 	"io"
-  "github.com/adpadilla/go-dogg3rz/errors"
+  "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/fatih/structs"
 	"reflect"
 )

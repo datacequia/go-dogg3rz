@@ -3,15 +3,12 @@ package primitives
 import (
 	"reflect"
 
-	"github.com/adpadilla/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/fatih/structs"
-
 )
 
 const TYPE_DOGG3RZ_TREE = "dogg3rz.tree"
 const D_ATTR_ENTRIES = "entries"
-
-
 
 type dgrzTree struct {
 	name    string
