@@ -30,7 +30,7 @@ provide an equivalent development environment to develop metadata projects where
 data developers can curate, version, relate, share,  and combine metadata  
 with other Dogg3rz projects to collectively stitch together a global metadata commons.  
 
-[[Alpha Demo](img/logic-metadata-puzzle.png)]
+[Data And Logic](img/logic-metadata-puzzle.png)
 
 ##Contributing
 
@@ -42,6 +42,6 @@ The Dogg3rz Project is a work in progress. As such, there's a few things you can
 -   **Take a look at the code**. Contributions here that would be most helpful are **top-level comments** about how it should look based on your understanding. Again, the more eyes the better.
 -   **Add tests**. There can never be enough tests.
 
-==License
+#License
 
 [Affero GPL 3.0](LICENSE)
