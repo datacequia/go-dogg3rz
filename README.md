@@ -1,8 +1,8 @@
-#Dogg3rz is the Git for Metadata
+# Dogg3rz is the Git for Metadata
 
 Welcome to the Dogg3rz project! Dogg3rz is data's best friend :)
 
-##Overview
+## Overview
 
 Dogg3rz is a decentralized version control management tool for Metadata. Dogg3rz
 seeks to address the disparity that exists between the development of logic and
@@ -20,7 +20,7 @@ accessibility, and usability issues of metadata and the data it describes.
 The realization of this would result in a community curated environment for
 metadata that spans utility across organizations, industries, and domains.
 
-##Approach
+## Approach
 
 The Dogg3rz project views logic and data as intrinsically intertwined elements
 that compose our digital knowledge infrastructure. They share fundamentally
@@ -30,9 +30,9 @@ provide an equivalent development environment to develop metadata projects where
 data developers can curate, version, relate, share,  and combine metadata  
 with other Dogg3rz projects to collectively stitch together a global metadata commons.  
 
-[Data And Logic](img/logic-metadata-puzzle.png)
+![Logic & Data](img/logic-metadata-puzzle.png)
 
-##Contributing
+## Contributing
 
 The Dogg3rz Project is a work in progress. As such, there's a few things you can do right now to help out:
 
@@ -42,6 +42,6 @@ The Dogg3rz Project is a work in progress. As such, there's a few things you can
 -   **Take a look at the code**. Contributions here that would be most helpful are **top-level comments** about how it should look based on your understanding. Again, the more eyes the better.
 -   **Add tests**. There can never be enough tests.
 
-#License
+# License
 
 [Affero GPL 3.0](LICENSE)
