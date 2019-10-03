@@ -1,0 +1,5 @@
+{
+  "ipfs": {
+    "apiEndpoint":"http://localhost:5001/"
+  }
+}

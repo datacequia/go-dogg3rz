@@ -18,6 +18,9 @@ const (
 	AlreadyExists
 	NotFound
 	UnexpectedType
+	InitNodeError
+	TryAgain
+	ConfigError
 )
 
 type badDogg3rz struct {
@@ -51,6 +54,12 @@ func errorTypeToString(errType ErrorType) string {
 		return "resource not found"
 	case UnexpectedType:
 		return "unexpected type encountered"
+	case InitNodeError:
+		return "node initialization error"
+	case TryAgain:
+		return "try again"
+	case ConfigError:
+		return "configuration error"
 	default:
 		return "unknown error"
 	}
