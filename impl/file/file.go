@@ -1,10 +1,12 @@
 package file
 
 import (
+	"fmt"
 	"io"
 	"log"
 	"os"
 	"path"
+	"strings"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	//	"github.com/datacequia/go-dogg3rz/impl/file/config"
@@ -15,6 +17,9 @@ const dotDirName = ".dogg3rz"
 const LOCK_FILE_SUFFIX = ".lock"
 const dataDirName = "data"
 const repositoriesDirName = "repositories"
+const RefsDirName = "refs"
+const HeadsDirName = "heads"
+const MasterBranchName = "master"
 
 // Writes contents of Reader object to 'path' atomically
 // i.e. no other writers can write at the same time.
@@ -105,6 +110,14 @@ func RepositoriesDirPath() string {
 
 }
 
+func RepositoriesRefsDirPath() string {
+	return path.Join(RepositoriesDirPath(), RefsDirName)
+}
+
+func RepositoriesRefsHeadsDirPath() string {
+	return path.Join(RepositoriesRefsDirPath(), HeadsDirName)
+}
+
 func FileExists(path string) bool {
 	info, err := os.Stat(path)
 	if os.IsNotExist(err) {
@@ -112,4 +125,15 @@ func FileExists(path string) bool {
 	}
 	return !info.IsDir()
 
+}
+
+func WriteHeadFile(repoName string, branchName string) error {
+
+	content := fmt.Sprintf("ref: %s\n", strings.Join([]string{RefsDirName, HeadsDirName, branchName},
+		string(os.PathSeparator)))
+
+	_, err := WriteToFileAtomic(strings.NewReader(content),
+		path.Join(RepositoriesDirPath(), repoName, "HEAD"))
+
+	return err
 }
