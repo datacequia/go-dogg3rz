@@ -6,9 +6,7 @@ import (
 	//fsrepo "github.com/ipfs/go-ipfs/repo/fsrepo"
 	//	"os"
 
-	implnode "github.com/datacequia/go-dogg3rz/impl/file/node"
-
-	resnode "github.com/datacequia/go-dogg3rz/resource/node"
+	"github.com/datacequia/go-dogg3rz/resource"
 )
 
 type dgrzInitCmd struct {
@@ -32,20 +30,14 @@ func init() {
 
 func (x *dgrzInitNode) Execute(args []string) error {
 
-	var initNode resnode.NodeResource = &implnode.FileNodeResource{}
+	return resource.GetNodeResource().InitNode()
 
-	err := initNode.InitNode()
-	if err != nil {
-		return err
-	}
-
-	return nil
 }
 
 func (x *dgrzInitRepo) Execute(args []string) error {
-	fmt.Printf("init repo here ''%s'", x.Positional.RepoName)
 
-	return nil
+	return resource.GetRepositoryResource().InitRepo(x.Positional.RepoName)
+
 }
 
 // // IMPLEMENTS 'Commander' interface

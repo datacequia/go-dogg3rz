@@ -8,6 +8,7 @@ import (
 	"log"
 	"os"
 
+	//	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	shell "github.com/ipfs/go-ipfs-api"
 	"github.com/jessevdk/go-flags"
 )
@@ -27,6 +28,12 @@ type options struct {
 
 // HOLDS LIST OF COMMANDS REGISTERED BY VARIOUS COMMAND SRC FILE
 var dgrzCmds []Dogg3rzCmd
+
+// HOLDS LIST OF INITIALIZATION FUNCS FOR EACH IMPLEMENTED
+// STATE-STORE SUPPORTED
+// KEY = STORE TYPE
+// VALLUE = LIST OF INIT FUNCS FOR STORE TYPE
+var stateStoreRegistry = make(map[string][]func() error)
 
 var errMissingFilePath = errors.New("missing file path")
 var parser = flags.NewParser(&options{}, flags.Default)

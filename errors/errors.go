@@ -21,6 +21,7 @@ const (
 	InitNodeError
 	TryAgain
 	ConfigError
+	RepoError
 )
 
 type badDogg3rz struct {
@@ -60,6 +61,8 @@ func errorTypeToString(errType ErrorType) string {
 		return "try again"
 	case ConfigError:
 		return "configuration error"
+	case RepoError:
+		return "repository error"
 	default:
 		return "unknown error"
 	}

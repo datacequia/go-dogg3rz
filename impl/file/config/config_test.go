@@ -7,7 +7,8 @@ import (
 	"path"
 	"testing"
 
-	"github.com/datacequia/go-dogg3rz/impl/config"
+	"github.com/datacequia/go-dogg3rz/resource/config"
+	//"github.com/datacequia/go-dogg3rz/impl/config"
 )
 
 func TestValidateConfig(t *testing.T) {
@@ -26,7 +27,7 @@ func TestValidateConfig(t *testing.T) {
 		}
 	}
 
-	testFilesGood := []string{"file://testfiles/good-config.json"}
+	testFilesGood := []string{"testfiles/good-config.json"}
 
 	for _, tf := range testFilesGood {
 		err = validateConfig(tf)
@@ -45,7 +46,8 @@ func TestValidateConfig(t *testing.T) {
 	}
 	defer os.Remove(defaultConfigPath)
 
-	err = validateConfig("file://" + defaultConfigPath)
+	// validateConfig arg requires URL protocol schema (i.e. file://)
+	err = validateConfig(defaultConfigPath)
 	if err != nil {
 		t.Errorf("default config (config.CONFIG_JSON_DEFAULT) is malformed or config.CONFIG_JSON_SCHEMA is malformed: %s", err)
 

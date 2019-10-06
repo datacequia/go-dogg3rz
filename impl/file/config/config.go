@@ -5,16 +5,13 @@ import (
 	"io/ioutil"
 	"log"
 	"path"
+	"path/filepath"
 	"strings"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	resourceconfig "github.com/datacequia/go-dogg3rz/resource/config"
 
-	//	"github.com/datacequia/go-dogg3rz/impl/config"
-	//	"github.com/datacequia/go-dogg3rz/impl/config"
-
-	//"github.com/datacequia/go-dogg3rz/impl/config/file"
 	"github.com/xeipuuv/gojsonschema"
 )
 
@@ -50,14 +47,20 @@ func (configResource *FileConfigResource) GetConfig() (*resourceconfig.Dogg3rzCo
 func configPath() string {
 
 	// gojsonschema reequires the schema 'file://' prepeended to path
-	return path.Join("file://", file.DotDirPath(), configFileName)
+	return path.Join(file.DotDirPath(), configFileName)
 
 }
 
 func validateConfig(path string) error {
 
 	schemaLoader := gojsonschema.NewStringLoader(resourceconfig.CONFIG_JSON_SCHEMA)
-	documentLoader := gojsonschema.NewReferenceLoader(path)
+
+	absPath, err := filepath.Abs(path)
+	if err != nil {
+		return err
+	}
+
+	documentLoader := gojsonschema.NewReferenceLoader("file://" + absPath)
 
 	result, err := gojsonschema.Validate(schemaLoader, documentLoader)
 	if err != nil {

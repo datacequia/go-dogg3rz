@@ -13,6 +13,8 @@ import (
 // FILESTORE CONSTANTS
 const dotDirName = ".dogg3rz"
 const LOCK_FILE_SUFFIX = ".lock"
+const dataDirName = "data"
+const repositoriesDirName = "repositories"
 
 // Writes contents of Reader object to 'path' atomically
 // i.e. no other writers can write at the same time.
@@ -91,6 +93,15 @@ func DotDirPath() string {
 	}
 
 	return path.Join(homeDir, dotDirName)
+
+}
+
+func DataDirPath() string {
+	return path.Join(DotDirPath(), dataDirName)
+}
+
+func RepositoriesDirPath() string {
+	return path.Join(DataDirPath(), repositoriesDirName)
 
 }
 
