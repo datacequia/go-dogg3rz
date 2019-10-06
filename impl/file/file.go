@@ -20,13 +20,14 @@ const repositoriesDirName = "repositories"
 const RefsDirName = "refs"
 const HeadsDirName = "heads"
 const MasterBranchName = "master"
+const IndexFileName = "index"
 
 // Writes contents of Reader object to 'path' atomically
 // i.e. no other writers can write at the same time.
 // An attempt for other writers to do so simultaneously
 // will result inn a 'TryAgain' error being returned
 // RETURNS PathError or TryAgain error types
-func WriteToFileAtomic(r io.Reader, path string) (int64, error) {
+func WriteToFileAtomic(readerFunc func() (io.Reader, error), path string) (int64, error) {
 
 	var bytesWritten int64 = 0
 
@@ -36,7 +37,7 @@ func WriteToFileAtomic(r io.Reader, path string) (int64, error) {
 
 	var lf *os.File
 	var err error
-
+	var r io.Reader
 	// OPEN LOCK FILE EXCLUSIVELY
 
 	lf, err = os.OpenFile(lockFile, os.O_RDWR|os.O_CREATE|os.O_EXCL, os.FileMode(0600))
@@ -53,8 +54,18 @@ func WriteToFileAtomic(r io.Reader, path string) (int64, error) {
 
 		}
 		// OTHERWISE RETURN ORIGINAL Errors
-		return 0, err
+		return bytesWritten, err
 	}
+
+	r, err = readerFunc()
+	if err != nil {
+		// FAILED TO GET READER.
+		// RM LOCK FILE AND EXIT
+		err = os.Remove(lockFile)
+		return bytesWritten, err
+
+	}
+
 	// OPENING LOCK FILE SUCCEEDED. COPY DATA FROM Reader
 	bytesWritten, err = io.Copy(lf, r)
 
@@ -132,7 +143,7 @@ func WriteHeadFile(repoName string, branchName string) error {
 	content := fmt.Sprintf("ref: %s\n", strings.Join([]string{RefsDirName, HeadsDirName, branchName},
 		string(os.PathSeparator)))
 
-	_, err := WriteToFileAtomic(strings.NewReader(content),
+	_, err := WriteToFileAtomic(func() (io.Reader, error) { return strings.NewReader(content), nil },
 		path.Join(RepositoriesDirPath(), repoName, "HEAD"))
 
 	return err

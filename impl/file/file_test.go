@@ -1,6 +1,7 @@
 package file
 
 import (
+	"io"
 	"os"
 	"path"
 	"reflect"
@@ -23,7 +24,7 @@ func TestWriteToFileAtomic(t *testing.T) {
 
 	// TEST
 	reader := strings.NewReader(s)
-	bytesWritten, err := WriteToFileAtomic(reader, theFile)
+	bytesWritten, err := WriteToFileAtomic(func() (io.Reader, error) { return reader, nil }, theFile)
 	if err != nil {
 
 		if FileExists(theFileLock) {
@@ -49,7 +50,7 @@ func TestWriteToFileAtomic(t *testing.T) {
 		t.Fail()
 	}
 
-	bytesWritten, err = WriteToFileAtomic(strings.NewReader(s), theFile)
+	bytesWritten, err = WriteToFileAtomic(func() (io.Reader, error) { return strings.NewReader(s), nil }, theFile)
 	if err != nil {
 		if dgrzerr.GetType(err) != dgrzerr.TryAgain {
 			// Error Type is not a TryAgain Errors
