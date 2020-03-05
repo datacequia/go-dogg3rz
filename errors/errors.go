@@ -40,6 +40,8 @@ const (
 	TryAgain
 	ConfigError
 	RepoError
+	UnexpectedValue
+	AssertionError
 )
 
 type badDogg3rz struct {
@@ -81,6 +83,10 @@ func errorTypeToString(errType ErrorType) string {
 		return "configuration error"
 	case RepoError:
 		return "repository error"
+	case UnexpectedValue:
+		return "unexpected value encountered"
+	case AssertionError:
+		return "assertion error"
 	default:
 		return "unknown error"
 	}

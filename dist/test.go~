@@ -1,0 +1,16 @@
+package test
+import "os"
+import "fmt"
+
+
+func main() {
+
+   var buf [10]byte 
+   for r,err := os.Stdin.Read(buf); err != nil {
+      fmt.Print(buf[:r])
+
+   } else {
+       fmt.Println("err",err)
+   }
+
+}

@@ -19,12 +19,16 @@
 package repo
 
 import (
+	"io"
 	"os"
 	"path"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
+	"github.com/datacequia/go-dogg3rz/resource/repo"
 )
+
+const indexFileName = "index"
 
 type FileRepositoryResource struct {
 }
@@ -33,8 +37,10 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 
 	repoDir := path.Join(file.RepositoriesDirPath(), name)
 	// CREATE 'refs/heads' SUBDIR
-	refsDir := path.Join(repoDir, "refs")
-	headsDir := path.Join(refsDir, "heads")
+	// CREATE '.dgrz' DIR AS SUBDI OF BASE REPO DIR
+	dgrzDir := path.Join(repoDir, ".dgrz")
+	refsDir := path.Join(dgrzDir, "refs")
+	headsDir := path.Join(dgrzDir, "heads")
 
 	dirsList := []string{repoDir, refsDir, headsDir}
 
@@ -64,5 +70,24 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 	}
 
 	return nil
+
+}
+
+func (repo *FileRepositoryResource) GetRepoIndex(name string) (repo.RepositoryIndex, error) {
+
+	repoDir := path.Join(file.RepositoriesDirPath(), name)
+	indexFile := path.Join(repoDir, ".dgrz", indexFileName)
+
+	index := &FileRepositoryIndex{repoDir: repoDir, repoName: name, path: indexFile}
+
+	return index, nil
+}
+
+func (repo *FileRepositoryResource) CreateSchema(repoName string, schemaSubpath string,
+	schemaReader io.Reader) error {
+
+	createSchema := &fileCreateSchema{}
+
+	return createSchema.createSchema(repoName, schemaSubpath, schemaReader)
 
 }

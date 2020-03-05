@@ -104,14 +104,6 @@ func (x *dgrzAddCmd) Execute(args []string) error {
 		return err
 	}
 
-	//fmt.Printf("you typed filename '%s'\n", args[0])
-	/*
-		r, err := os.Open(args[0])
-		if err != nil {
-
-			return err
-		}
-	*/
 	filedata, err := ioutil.ReadFile(args[0])
 
 	if !json.Valid(filedata) {
@@ -126,7 +118,6 @@ func (x *dgrzAddCmd) Execute(args []string) error {
 	cid, err := sh.DagPut(string(filedata), "json", "cbor")
 	if err != nil {
 		return err
-
 	}
 
 	fmt.Printf("Added %s for file %s", cid, args[0])

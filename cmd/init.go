@@ -71,9 +71,9 @@ func (o *dgrzInitCmd) CommandName() string {
 }
 
 func (o *dgrzInitCmd) ShortDescription() string {
-	return "initialize a resource"
+	return "initialize a new repository"
 }
 
 func (o *dgrzInitCmd) LongDescription() string {
-	return "initialize a resource"
+	return "initialize a new repository"
 }

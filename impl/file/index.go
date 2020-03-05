@@ -16,24 +16,8 @@
  *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
-package repo
+package file
 
-import (
-	"io"
+type Index struct {
 
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
-)
-
-type RepositoryResource interface {
-	InitRepo(repoName string) error
-	GetRepoIndex(repoName string) (RepositoryIndex, error)
-
-	// REPOSITORY COMMANDS
-	CreateSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error
-}
-
-type RepositoryIndex interface {
-	Stage(resId rescom.RepositoryResourceId, multiHash string) error
-	//AddMap(resIdMap map[rescom.ResourceId]string) error
-	Unstage(resId rescom.RepositoryResourceId) error
 }

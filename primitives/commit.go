@@ -21,42 +21,41 @@ package primitives
 import (
 	"encoding/json"
 	"io"
-  "github.com/datacequia/go-dogg3rz/errors"
-	"github.com/fatih/structs"
-	"reflect"
+
+	"github.com/datacequia/go-dogg3rz/errors"
 )
 
 //const D_ATTR_NAME = "objectHeads"
 const TYPE_DOGG3RZ_COMMIT = "dogg3rz.commit"
 
 //const MD_ATTR_NAME = "name"
-const MD_ATTR_IPFS_PEER_ID = "ipfsPeerId"
+//const MD_ATTR_IPFS_PEER_ID = "ipfsPeerId"
 const MD_ATTR_EMAIL_ADDR = "emailAddress"
+const MD_ATTR_REPO_NAME = "repositoryName"
+const MD_ATTR_REPO_ID = "repositoryId"
 
-const D_ATTR_ROOT_TREE = "rootTree"
+//const D_ATTR_ROOT_TREE = "rootTree"
 const D_ATTR_TRIPLES = "triples"
 const D_ATTR_IMPORTS = "imports"
 
-var reservedMDAttrCommit = [...]string{MD_ATTR_IPFS_PEER_ID, MD_ATTR_EMAIL_ADDR}
+var reservedMDAttrCommit = [...]string{MD_ATTR_REPO_NAME, MD_ATTR_EMAIL_ADDR}
 
-var reservedDAttrCommit = [...]string{D_ATTR_ROOT_TREE, D_ATTR_TRIPLES, D_ATTR_IMPORTS}
+var reservedDAttrCommit = [...]string{D_ATTR_TRIPLES, D_ATTR_IMPORTS}
 
 type dgrzCommit struct {
-	IpfsPeerId   string
-	emailAddress string
-	rootTree     *dgrzTree
+	repositoryId string // GLOBALLY UNIQUE IMMUTABLE IDENTIFIER FOR REPOSITORY
+	// THAT THIS COMMIT BELONGS TO.
+	emailAddress string // EMAIL ADDRESS OF COMMITTER
 
-	parent string
+	repositoryName string // REPOSITORY NAME FOR THIS COMMIT
+
+	parents []string
 }
 
-func Dogg3rzCommitNew(repoName string, ipfsPeerId string, emailAddress string) (*dgrzCommit, error) {
+func Dogg3rzCommitNew(repoName string, repoId string, emailAddress string, parentCommits []string) (*dgrzCommit, error) {
 
-	rootTree, err := Dogg3rzTreeNew(repoName)
-	if err != nil {
-		return nil, err
-	}
-
-	c := &dgrzCommit{IpfsPeerId: ipfsPeerId, emailAddress: emailAddress, rootTree: rootTree}
+	c := &dgrzCommit{repositoryName: repoName, emailAddress: emailAddress,
+		repositoryId: repoId, parents: parentCommits}
 
 	return c, nil
 }
@@ -69,70 +68,61 @@ func Deserialize(reader io.Reader) (*dgrzCommit, error) {
 
 	if dgrzObj.ObjectType != TYPE_DOGG3RZ_COMMIT {
 		return nil, errors.UnexpectedType.Newf("expected dogg3rz type '%s', found '%s'",
-			 TYPE_DOGG3RZ_COMMIT,dgrzObj.ObjectType)
+			TYPE_DOGG3RZ_COMMIT, dgrzObj.ObjectType)
 
 	}
 
 	var (
-		ipfsPeerId string
-		emailAddr string
-		rootTree map[string]interface{}
+		repoName     string
+		emailAddress string
+		repoId       string
+		parents      []string
 	)
 
+	if len(dgrzObj.Parents) > 0 {
+		parents = make([]string, len(dgrzObj.Parents))
+		copy(parents, dgrzObj.Parents)
+
+	}
 	// FETCH  PEER ID FROM METADATA SECTION
-	if val,ok := dgrzObj.Metadata[MD_ATTR_IPFS_PEER_ID]; !ok {
+	if val, ok := dgrzObj.Metadata[MD_ATTR_REPO_NAME]; !ok {
 		return nil, errors.NotFound.Newf("metadata attribute value '%s' not found",
-			MD_ATTR_IPFS_PEER_ID)
+			MD_ATTR_REPO_NAME)
 	} else {
-		ipfsPeerId = val
+		repoName = val
+	}
+	// FETCH  REPO ID FROM METADATA SECTION
+	if val, ok := dgrzObj.Metadata[MD_ATTR_REPO_ID]; !ok {
+		return nil, errors.NotFound.Newf("metadata attribute value '%s' not found",
+			MD_ATTR_REPO_ID)
+	} else {
+		repoId = val
 	}
 
 	// FETCH COMMITTER'S EMAIL ADDRESS FROM METADATA SECTION
-	if val,ok := dgrzObj.Metadata[MD_ATTR_EMAIL_ADDR]; !ok {
+	if val, ok := dgrzObj.Metadata[MD_ATTR_EMAIL_ADDR]; !ok {
 		return nil, errors.NotFound.Newf("metadata attribute value '%s' not found",
 			MD_ATTR_EMAIL_ADDR)
 	} else {
-		emailAddr = val
-	}
-
-	// FETCH ROOT TREE OBJECT FROM DATA SECTION
-	if val,ok := dgrzObj.Data[D_ATTR_ROOT_TREE]; !ok {
-		return nil, errors.NotFound.Newf("data attribute value '%s' not found")
-	} else {
-		if val2,ok := val.(map[string]interface{}); !ok {
-			return nil,errors.UnexpectedType.Newf("expected type %v for data attribute %s, found '%s'",
-			reflect.TypeOf(rootTree),D_ATTR_ROOT_TREE, reflect.TypeOf(val))
-		} else {
-			rootTree = val2
-		}
-
+		emailAddress = val
 	}
 
 	// GET NAME OF REPO FROM ROOT TREE OBJ
-//	if val,ok := rootTree[DOGG3RZ_OBJECT_ATTR_METADATA]; !ok {
-//		return nil, errors.NotFound.Newf("data attribute")
-//	} else {
+	//	if val,ok := rootTree[DOGG3RZ_OBJECT_ATTR_METADATA]; !ok {
+	//		return nil, errors.NotFound.Newf("data attribute")
+	//	} else {
 
-//	}
+	//	}
 
 	// CREATE COMMIT OBJECT FROM ATTRIBUTES
 	// EXTRACTEED FROM DESERIALIZED DOGG3RZ Object
 
-	commitObj := Dogg3rzCommitNew(repoName, ipfsPeerId, emailAddress)
-
-
-	// GET METADATA ATTR_OBJECT
-	commitObj.IpfsPeerId, ok := dgrzObj.Metadata[D_ATTR_IPFS_PEER_ID]
-	if ! ok {
-		return errors.NotFound.Newf("")
-	}
-	rootTree,ok := dgrzObj.Data[D_ATTR_ROOT_TREE]
-	if ! ok {
-
+	commitObj, err := Dogg3rzCommitNew(repoName, repoId, emailAddress, parents)
+	if err != nil {
+		return nil, err
 	}
 
-
-	return nil, nil
+	return commitObj, nil
 }
 
 func Serialize(commit *dgrzCommit, writer io.Writer) error {
@@ -151,10 +141,13 @@ func (receiver *dgrzCommit) ToDogg3rzObject() *dgrzObject {
 
 	o := Dogg3rzObjectNew(TYPE_DOGG3RZ_COMMIT)
 
-	o.Metadata[MD_ATTR_IPFS_PEER_ID] = receiver.IpfsPeerId
+	o.Metadata[MD_ATTR_REPO_ID] = receiver.repositoryId
+	o.Metadata[MD_ATTR_REPO_NAME] = receiver.repositoryName
 	o.Metadata[MD_ATTR_EMAIL_ADDR] = receiver.emailAddress
 
-	o.Data[D_ATTR_ROOT_TREE] = structs.Map(receiver.rootTree.Dogg3rzObject())
+	o.Parents = make([]string, len(receiver.parents))
+	copy(o.Parents, receiver.parents)
+	//	o.Parent = receiver.parent
 
 	return o
 }

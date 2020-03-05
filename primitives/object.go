@@ -35,7 +35,7 @@ type dgrzObject struct {
 	ObjectType string                 `structs:"type" json:"type"`
 	Metadata   map[string]string      `structs:"metadata" json:"metadata"`
 	Data       map[string]interface{} `structs:"data,omitempty" json:"data,omitempty"`
-	Parent     string                 `structs:"parent,omitempty" json:"parent,omitempty"`
+	Parents    []string               `structs:"parent,omitempty" json:"parent,omitempty"`
 }
 
 type Dogg3rzObjectifiable interface {

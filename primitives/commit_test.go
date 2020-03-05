@@ -26,7 +26,10 @@ import (
 
 func TestWrite(t *testing.T) {
 
-	commit, err := Dogg3rzCommitNew("test", "myPeerId", "dogg3rz@datacequia.com")
+	var multiHashes = []string{"pretend", "these", "are", "multihashes"}
+
+	commit, err := Dogg3rzCommitNew("test", "myRepoId", "dogg3rz@datacequia.com",
+		multiHashes)
 
 	if err != nil {
 		t.Errorf("failed to create Dogg3rzCommit object: { error = %v }", err)
@@ -34,7 +37,7 @@ func TestWrite(t *testing.T) {
 	var b strings.Builder
 	encoder := json.NewEncoder(&b)
 
-	encoder.Encode(commit.Dogg3rzObject())
+	encoder.Encode(commit.ToDogg3rzObject())
 
 	decoder := json.NewDecoder(strings.NewReader(b.String()))
 
@@ -48,9 +51,21 @@ func TestWrite(t *testing.T) {
 		t.Errorf("bad object type. expected %s, got %s", TYPE_DOGG3RZ_COMMIT, do.ObjectType)
 	}
 
+	if len(do.Parents) != len(multiHashes) {
+		t.Errorf("bad parents. expected len %d, got %d", len(multiHashes),
+			len(do.Parents))
+	}
+
+	for i, mh := range do.Parents {
+		if mh != multiHashes[i] {
+			t.Errorf("bad parents. expected  %s at index %d, got %s",
+				multiHashes[i], i, mh)
+		}
+	}
+
 	// CHECK THAT PEERID VALUE WAS SET
-	if do.Metadata[MD_ATTR_IPFS_PEER_ID] != "myPeerId" {
-		t.Errorf("bad metadata attr %s. expected %s, got %s", MD_ATTR_IPFS_PEER_ID, "myPeerId", do.Metadata[MD_ATTR_IPFS_PEER_ID])
+	if do.Metadata[MD_ATTR_REPO_ID] != "myRepoId" {
+		t.Errorf("bad metadata attr %s. expected %s, got %s", MD_ATTR_REPO_ID, "myPeerId", do.Metadata[MD_ATTR_REPO_ID])
 	}
 	// CHECK THAT EMAIL ADDR VALUE WAS SET
 	if do.Metadata[MD_ATTR_EMAIL_ADDR] != "dogg3rz@datacequia.com" {
@@ -58,13 +73,15 @@ func TestWrite(t *testing.T) {
 
 	}
 	// CHECK THAT THE METADATA NAME ATTR WAS SET
-	if rootTree, ok := do.Data[D_ATTR_ROOT_TREE].(map[string]interface{}); ok {
+	/*
+		if rootTree, ok := do.Data[D_ATTR_ROOT_TREE].(map[string]interface{}); ok {
 
-		if metadata, ok := rootTree["metadata"].(map[string]interface{}); ok && metadata[MD_ATTR_NAME] != "test" {
-			t.Errorf("unexpected root tree name. expected %s, got %s", "test", metadata[MD_ATTR_NAME])
+			if metadata, ok := rootTree["metadata"].(map[string]interface{}); ok && metadata[MD_ATTR_NAME] != "test" {
+				t.Errorf("unexpected root tree name. expected %s, got %s", "test", metadata[MD_ATTR_NAME])
+			}
+		} else {
+			t.Errorf("commit attr 'rootTree' does not have expected type")
 		}
-	} else {
-		t.Errorf("commit attr 'rootTree' does not have expected type")
-	}
+	*/
 
 }
