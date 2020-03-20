@@ -29,9 +29,6 @@ import (
 	"strings"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/primitives"
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
-	"github.com/google/uuid"
 	//	"github.com/datacequia/go-dogg3rz/impl/file/config"
 )
 
@@ -43,9 +40,10 @@ const repositoriesDirName = "repositories"
 const RefsDirName = "refs"
 const HeadsDirName = "heads"
 const MasterBranchName = "master"
-const IndexFileName = "index"
-
+const IndexFileName = ".index"
+const DirLockFileName = ".__dirlock__"
 const ResourceCacheSignature = "RESC"
+const IndexFormatVersion = uint32(1)
 
 // Writes contents of Reader object to 'path' atomically
 // i.e. no other writers can write at the same time.
@@ -130,14 +128,22 @@ func Touch(path string) error {
 
 func DotDirPath() string {
 
-	homeDir, err := os.UserHomeDir()
-	if err != nil {
-		// CAN'T FETCH THE HOMEDIR???
-		// BAIL!
-		log.Panicf("can't find user home directory: %s", err)
+	var dogg3rzHomeDir string
+
+	if envVal, envIsSet := os.LookupEnv("DOGG3RZ_HOME"); envIsSet {
+		dogg3rzHomeDir = envVal
+	} else {
+		// DEFAULT TO DOT DIR PATH IF DOGG3RZ_HOME IS NOT SET
+		homeDir, err := os.UserHomeDir()
+		if err != nil {
+			// CAN'T FETCH THE HOMEDIR???
+			// BAIL!
+			log.Panicf("can't find user home directory: %s", err)
+		}
+		dogg3rzHomeDir = filepath.Join(homeDir, dotDirName)
 	}
 
-	return path.Join(homeDir, dotDirName)
+	return dogg3rzHomeDir
 
 }
 
@@ -160,10 +166,27 @@ func RepositoriesRefsHeadsDirPath() string {
 
 func FileExists(path string) bool {
 	info, err := os.Stat(path)
-	if os.IsNotExist(err) {
-		return false
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+		log.Panicf("can't stat path %s: %v", path, err)
 	}
 	return !info.IsDir()
+
+}
+
+func DirExists(path string) bool {
+
+	info, err := os.Stat(path)
+	if err != nil {
+		if os.IsNotExist(err) {
+			return false
+		}
+		log.Panicf("can't stat path %s: %v", path, err)
+	}
+
+	return info.IsDir()
 
 }
 
@@ -196,128 +219,74 @@ func RepositoryExist(repoName string) bool {
 
 }
 
-// CREATES THE RESOURCE PATH IN THE DESIGNATED REPOSITORY OF A SPECIFIC
-// RESOURCE TYPE
-func CreateRepositoryResourcePath(resPath *rescom.RepositoryPath, repoName string,
-	resType string, bodyReader io.Reader) (string, error) {
+func GetResourceAttributeCB(resPath string, attrName string, cb func(io.Reader,
+	os.FileInfo) error) error {
 
-	if !RepositoryExist(repoName) {
-		return "", dgrzerr.NotFound.Newf("repository '%s' does not exist. please create it first", repoName)
-	}
-	// REPO DOES EXIST. CREATE EACH PATH ELEMENT IF NECESSARY
-	curPath := filepath.Join(RepositoriesDirPath(), repoName)
-	curResType := primitives.TYPE_DOGG3RZ_TREE
+	dotFile := "." + attrName
 
-	var success bool = false
+	attrPath := filepath.Join(resPath, dotFile)
 
-	// SETUP CALLBACK TO REMOVE FILESYSTEM PATH using
-	// DEFER IN EVENT THAT THIS FUNCTION FAILS
-	cleanupResourceOnErrFunc := func(path string) {
-		if !success {
-			err := os.RemoveAll(path)
-			if err != nil {
-				log.Printf("failed to remove repository resource %s on error.  "+
-					"Please remove manually: %s", path, err)
-			}
-		}
-	}
+	if fp, err := os.Open(attrPath); err != nil {
+		return err
+	} else {
 
-	for pathElementIndex, path := range resPath.PathElements() {
-		curPath = filepath.Join(curPath, path)
+		defer fp.Close()
 
-		if pathElementIndex == (resPath.Size() - 1) {
-			// LAST ELEMENT. MAKE CUR RESOURCE TYPE
-			// THE DESIRED RESOURCE TYPE
-			curResType = resType
-		}
-
-		// EVAL CURRENT REPO PATH TO ENSURE IT'S A DIRECTORY AND
-		// A DOGG3RZ TREE OBJECT
-		if _, err := os.Stat(curPath); err != nil {
-			if os.IsNotExist(err) {
-
-				// CURRENT PATH DOES NOT EXIST. CREATE IT
-				if err := os.Mkdir(curPath, os.FileMode(0700)); err != nil {
-					return "", err
-				}
-				// DELETE THIS DIRECTORY IF THIS FUNCTION FAILS
-				defer cleanupResourceOnErrFunc(curPath)
-
-				// NOW CREATE '.type' attr file
-				cbFunc := func() (io.Reader, error) {
-					return strings.NewReader(curResType), nil
-				}
-
-				if _, err := WriteToFileAtomic(cbFunc,
-					filepath.Join(curPath, ".type")); err != nil {
-					return "", err
-				}
-
-				// NOW CREATE '.id' attribute file containing unique uuid
-				cbFunc = func() (io.Reader, error) {
-					treeUUID := uuid.New().String()
-					return strings.NewReader(treeUUID), nil
-				}
-
-				if _, err := WriteToFileAtomic(cbFunc,
-					filepath.Join(curPath, ".id")); err != nil {
-					return "", err
-				}
-
-			} else {
-				// SOME OTHER (SYSTEM?) ERROR OCCURRED. RETURN IT
-				return "", err
-			}
+		// * call stat on open file to get metadata
+		if fileInfo, err := fp.Stat(); err != nil {
+			return err
 		} else {
-			// PATH EXISTS. IS IT A DOGG3RZ TREE OBJECT?
-			typeAttrPath := filepath.Join(curPath, ".type")
-			if content, err := ioutil.ReadFile(typeAttrPath); err != nil {
-				// ERROR READING .type ATTR FILE. ALL DIRECTORIES
-				// IN A REPO SHOULD HAVE ONE
-				return "", err
-			} else {
-				// READ CONTENT. IS IT A DOGGERZ TREE OBJECT?
-				if string(content) != primitives.TYPE_DOGG3RZ_TREE {
-
-					if pathElementIndex == (resPath.Size() - 1) {
-						return "", dgrzerr.AlreadyExists.Newf(
-							"%s: type = %s",
-							resPath.ToString(),
-							content)
-
-					} else {
-
-						return "", dgrzerr.InvalidPathElement.Newf(
-							"encountered invalid base path '%s' for creation of "+
-								"repository resource '%s': want type '%s', found type '%s'",
-							curPath,
-							resPath.ToString(),
-							primitives.TYPE_DOGG3RZ_TREE,
-							content)
-
-					}
-
-				}
-				// IS A TREE OBJECT. GTG...
+			if err := cb(fp, fileInfo); err != nil {
+				return err
 			}
-
 		}
-	}
-	// NOW WRITE THE BODY
-	bodyFunc := func() (io.Reader, error) {
 
-		return bodyReader, nil
 	}
 
-	if _, err := WriteToFileAtomic(bodyFunc,
-		filepath.Join(curPath, ".body")); err != nil {
-		return "", err
+	return nil
+}
+
+func GetResourceAttributeS(resPath string, attrName string) (string, error) {
+
+	var attrValue []byte
+	var err error
+
+	cb := func(r io.Reader, fileInfo os.FileInfo) error {
+		attrValue, err = ioutil.ReadAll(r)
+
+		return err
 	}
 
-	// FLAG AS SUCCESSFUL SO DEFER FUNC WILL NOT
-	// REMOVE DIRECTORIES CREATED
-	success = true
+	err = GetResourceAttributeCB(resPath, attrName, cb)
 
-	return curPath, nil
+	return string(attrValue), err
+
+}
+
+// WRITE ATTRIBUTE FILE TO RESOURCE AT 'resPath' (a directory)
+func PutResourceAttribute(resPath string, attrName string, attrValue io.Reader) (string, error) {
+
+	dotFile := "." + attrName
+
+	attrPath := filepath.Join(resPath, dotFile)
+
+	cbFunc := func() (io.Reader, error) {
+		return attrValue, nil
+	}
+
+	if _, err := WriteToFileAtomic(cbFunc, attrPath); err != nil {
+		return attrPath, err
+	}
+
+	return attrPath, nil
+
+}
+
+func PutResourceAttributeS(resPath string, attrName string,
+	attrValue string) (string, error) {
+
+	attrValueAsReader := strings.NewReader(attrValue)
+
+	return PutResourceAttribute(resPath, attrName, attrValueAsReader)
 
 }

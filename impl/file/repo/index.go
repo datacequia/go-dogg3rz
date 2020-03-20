@@ -1,31 +1,82 @@
 package repo
 
 import (
+	"io"
 	"os"
 
 	"bytes"
 	"crypto/sha1"
 	"encoding/binary"
+	"path/filepath"
+
+	"github.com/google/uuid"
 
 	"github.com/datacequia/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/primitives"
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
-	"github.com/datacequia/go-dogg3rz/util"
+
+	cid "github.com/ipfs/go-cid"
+//	"log"
+//	"log"
+	"fmt"
 )
 
-const FILE_INDEX_VERSION = uint32(1)
+const (
+	//	FILE_INDEX_VERSION = uint32(1)
+	HeaderLength   = 12
+	ChecksumLength = sha1.Size
 
-type FileRepositoryIndex struct {
+//	HeaderSignature    = [4]byte{'R', 'E', 'S', 'C'}
+)
+
+type fileRepositoryIndex struct {
 
 	// O/S PATH TO BASE REPOSITORY
 	// DIRECTORY
 	repoDir string
-
 	// THE REPOSITORY NAME
 	repoName string
-
 	// THE O/S PATH TO THE INDEX FILE
 	path string
+}
+
+type indexEntry struct {
+	Type      string
+	Uuid      string
+	MtimeNs   int64
+	FileSize  int64
+	Multihash string
+	Subpath   string
+}
+
+type indexEntryInternal struct {
+	Type uint32
+	Uuid uuid.UUID
+	MtimeNs int64
+	FileSize int64
+	MultihashLength int8
+	Multihash []byte
+	SubpathLength int16
+	Subpath []byte
+}
+
+// MAP DOGG3RZOBJECT TYPES TO UIN32 EQUIVLANT
+var dogg3rzObjectTypesToUint32Map map[primitives.Dogg3rzObjectType]uint32
+// MAP UINT32 TO DOGG3RZOBJECTYPE
+var uint32ToDogg3rzObjectTypesMap map[uint32]primitives.Dogg3rzObjectType
+
+func init() {
+
+	 dogg3rzObjectTypesToUint32Map = make(map[primitives.Dogg3rzObjectType]uint32)
+	 uint32ToDogg3rzObjectTypesMap = make(map[uint32]primitives.Dogg3rzObjectType)
+
+	 for _,t := range primitives.Dogg3rzObjectTypes() {
+
+		 dogg3rzObjectTypesToUint32Map[t] = uint32(t)
+		 uint32ToDogg3rzObjectTypesMap[uint32(t)] = t
+
+	 }
 }
 
 /*
@@ -48,234 +99,472 @@ CHECKSUM
                          CHECKSUM
 */
 
-// Adds a new resource (resId) to the index
-func (index *FileRepositoryIndex) Stage(resId rescom.RepositoryResourceId, multiHash string) error {
+func newFileRepositoryIndex(repoName string) (*fileRepositoryIndex, error) {
 
-	// THE MULTIHASH AS AN ARRAY OF BYTES
-	/*
-		var mhBytes []byte
+	index := &fileRepositoryIndex{}
 
-		var decodedMultihash *multihash.DecodedMultihash
-		var err error
 
-		if mhBytes, err = hex.DecodeString(multiHash); err != nil {
 
-			return errors.InvalidArg.Wrapf(err, "FileRepositoryIndex.Add: multiHash")
-		}
+	index.repoName = repoName
 
-		if decodedMultihash, err = multihash.Decode(mhBytes); err != nil {
-			return errors.InvalidArg.Wrapf(err, "FileRepositoryIndex.Add: multiHash")
-		}
-	*/
+	index.repoDir = filepath.Join(file.RepositoriesDirPath(), repoName)
 
-	//	addFunc := func() (io.Reader, error) {
+	index.path = filepath.Join(index.repoDir, file.IndexFileName)
 
-	// GET EXISTING ENTRIES IN INDEX FILE//
-	//		indexEntries, err := readIndexFile(index.path)
-	//		if err != nil {
-	//			return nil, err
-	//		}
 
-	// CREATE NEW ENTRY
-	//		entry := indexEntry{resourceId: resId}
 
-	// CHECK IF ENTRY EXISTS IN INDEX ALREADY
-	//	var entryExists bool
-	//	var entryIndex uint
-	// APPEND ENTRY
-	//		for i, e := range indexEntries {
-	//	if e.resourceId.Kind() == entry.resourceId.Kind() {
-	//			if e.resourceId.Subpath() == entry.resourceId.Subpath() {
-	//entryExists = true
-	//	entryIndex = uint(i)
-	//			}
-	//	}
-	//		}
+	if !file.DirExists(index.repoDir) {
+		return nil, errors.NotFound.Newf("repository directory at %s does not exist",
+			index.repoDir)
+	}
 
-	//indexMap[resId.UnixStylePath()] = multiHash
-	// TODO RETURN SOME VALUE
-	//		return nil, nil
-	//	}
-	/*
-		bytesWritten, err := file.WriteToFileAtomic(addFunc, index.path)
-		if err != nil {
+	return index, nil
 
-		}
-	*/
-
-	return nil // TODO return some value
 }
 
-func (index *FileRepositoryIndex) Unstage(resId rescom.RepositoryResourceId) error {
+// Adds a new resource (resId) to the index
+func (index *fileRepositoryIndex) update(entry1 indexEntry) error {
+
+	var internalEntry indexEntryInternal
+
+	if i,err := ValidateIndexEntry(entry1); err != nil {
+		return err
+	} else {
+		internalEntry = i
+	}
+	//fmt.Println("ValidateIndexEntry returned",internalEntry.String())
+
+	addFunc := func() (io.Reader, error) {
+		// GET EXISTING ENTRIES IN INDEX FILE//
+
+		var indexEntriesInternal []indexEntryInternal
+
+		if ie, err := index.readIndexFileInternal();err != nil {
+			if os.IsNotExist(err) {
+				// DOESN'T EXIST YET. ASSUME FOR NOW
+				// THAT REPO DIR EXISTS BUT INDEX FILE DOESN'T
+				indexEntriesInternal = make([]indexEntryInternal,0)
+			} else {
+				// SOME OTHER ERROR OCCURRED OTHER THAN
+				// INDEX FILE DOES NOT EXIIT. RETURN THE ERROR
+				return nil, err
+			}
+		} else {
+			// INDEX READ SUCCESSFUL
+		//	fmt.Println("index read returned entries",len(ie))
+			indexEntriesInternal = ie
+		}
+
+		var updatedExistingEntry bool = false
+
+		for i, e := range indexEntriesInternal {
+			// CONVERT STRING FORMATTEED UUID BEFORE COMPARE
+			// AS FORMATTING COULD VARY . COMPARE BYTE[16] ARRAYS
+		//	fmt.Printf("entry read type=%d, uuid=%v,fs=%d,mtime=%d,spl=%d",e.Type,e.Uuid,e.FileSize,e.MtimeNs,e.SubpathLength)
+			if  e.Uuid == internalEntry.Uuid {
+				 indexEntriesInternal[i] = internalEntry
+				 updatedExistingEntry=true
+			}
+		}
+
+
+		if ! updatedExistingEntry {
+			indexEntriesInternal = append(indexEntriesInternal, internalEntry)
+
+		}
+
+		buf := &bytes.Buffer{}
+		///////////////////////////////////
+		// WRITE HEADER TO BUFFFER
+		//////////////////////////////////
+		if err := binary.Write(buf, binary.BigEndian, []byte(file.ResourceCacheSignature));
+		err != nil {
+			return nil, err
+		}
+
+		if err := binary.Write(buf,binary.BigEndian,file.IndexFormatVersion); err != nil {
+			return nil, err
+		}
+
+		var numIndexEntries uint32 = uint32(len(indexEntriesInternal))
+		if err := binary.Write(buf,binary.BigEndian,numIndexEntries); err!=nil {
+			return nil,err
+		}
+
+		// WRITE ENTRIES TO BUFFER
+		if err := writeIndexEntriesToBuffer(buf, indexEntriesInternal); err != nil {
+			return nil, err
+		}
+
+		// WRITE SHA1 HASH
+
+		var checkSum [ChecksumLength]byte = sha1.Sum(buf.Bytes())
+
+		if err := binary.Write(buf,binary.BigEndian, checkSum); err != nil {
+			return buf, err
+		}
+
+
+		return buf,nil
+
+	}
+
+	//log.Printf("index.path = %s",index.path)
+
+	if _, err := file.WriteToFileAtomic(addFunc, index.path);err != nil {
+		return err
+	}
+
 
 	return nil
 }
 
-func readIndexFile(indexPath string) ([]indexEntry, error) {
+func writeIndexEntriesToBuffer(buf *bytes.Buffer,indexEntries []indexEntryInternal) error {
+
+	for _,e := range indexEntries {
+
+
+		if err := binary.Write(buf, binary.BigEndian, e.Type); err != nil {
+			return err
+		}
+
+		if err := binary.Write(buf, binary.BigEndian, e.Uuid); err != nil {
+			return err
+		}
+
+		if err := binary.Write(buf, binary.BigEndian, e.MtimeNs); err != nil {
+			return err
+		}
+
+		if err := binary.Write(buf, binary.BigEndian, e.FileSize); err != nil {
+			return  err
+		}
+
+	//fmt.Println("writeIndexEntriesToBuffer: multihashlength:",e.MultihashLength,e.FileSize)
+		if err := binary.Write(buf, binary.BigEndian, e.MultihashLength); err != nil {
+			return  err
+		}
+
+
+		if err := binary.Write(buf, binary.BigEndian, e.Multihash); err != nil {
+			return  err
+		}
+
+
+		if err := binary.Write(buf, binary.BigEndian, e.SubpathLength); err != nil {
+			return  err
+		}
+
+		if err := binary.Write(buf, binary.BigEndian, e.Subpath); err != nil {
+			return  err
+		}
+	//	fmt.Printf("writeIndexEntriesToBuffer[%d]=%s\n",i,e.String())
+	}
+
+	return nil
+
+}
+
+func (index *fileRepositoryIndex) readIndexFile() ([]indexEntry,error) {
+
+	  var indexEntriesInternal []indexEntryInternal = []indexEntryInternal{}
+		var indexEntries []indexEntry = []indexEntry{}
+
+		if i,err := index.readIndexFileInternal();err != nil  {
+			return indexEntries,err
+		} else {
+			indexEntriesInternal = i
+		}
+
+		indexEntries = make([]indexEntry,len(indexEntriesInternal))
+		for i, indexEntryInternal := range indexEntriesInternal {
+				indexEntries[i] = indexEntryInternal.ToIndexEntry()
+		}
+
+		return indexEntries, nil
+
+}
+
+func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal, error) {
+
+	indexEntries := []indexEntryInternal{}
 
 	/////////////////////////
 	// OPEN INDEX FILE
 	////////////////////////
-	f, err := os.Open(indexPath)
+
+	f, err := os.Open(index.path)
 	if err != nil {
 		return nil, err
 	}
 
-	////////////////////
-	// READ HEADER
-	////////////////////
-	const HeaderLength = 12
-	const ChecksumLength = sha1.Size
-	var indexFileSize = int64(0)
+	defer f.Close()
 
-	// VALIDATE FILE SIZE OF INDEX IS LARGE
-	// ENOUGH TO HOLD A MINIMUM SIZE INDEX
+	// CHECK SIZE OF FILE TO ENSURE IT MEETS
+	// EXPEECT MIN SIZE REQUIREMNETS
+	minSize := int64(len(file.ResourceCacheSignature) +
+		4 + // SIZEOF UINT32 FOR HEADER VERSION
+		4 + // SIZEOF UIN32 FOR # OF INDEX ENTRIES
+		ChecksumLength) // SIZEOF SHA1 HASH AT END
+
+	var indexPathFileInfo os.FileInfo
+
 	if fileInfo, err := f.Stat(); err != nil {
-		return nil, err
-
+		return indexEntries, err
 	} else {
 
-		const minIndexFileSize = HeaderLength + ChecksumLength
-		if fileInfo.Size() < minIndexFileSize {
-			return nil, errors.UnexpectedValue.Newf("index: %s: expected at least a "+
-				"%d byte file (header+checksum), found %d byte file",
-				indexPath, minIndexFileSize, fileInfo.Size())
+		indexPathFileInfo = fileInfo
 
-		}
+		if fileInfo.Size() < minSize {
+			return indexEntries, errors.OutOfRange.Newf(
+				"expected index file at %s to be at least %d bytes, actual size is %d bytes",
+				index.path, minSize, fileInfo.Size())
 
-		indexFileSize = fileInfo.Size()
-
-	}
-
-	// MAKE READ BUFFER TO READ WHOLE INDEX
-	// INTO MEMORY
-	var fileData = make([]byte, indexFileSize)
-
-	// READ WHOLE FILE INTO BYTE ARRAY
-	if numBytesRead, err := f.Read(fileData); err != nil {
-		return nil, err
-	} else {
-		if int64(numBytesRead) != indexFileSize {
-			return nil, errors.UnexpectedValue.Newf(
-				"index: %s: expected to read %d bytes (file size), read only %d bytes",
-				indexPath, indexFileSize, numBytesRead)
 		}
 	}
 
-	// GET CHECKSUM AT END OF FILE
-	checkSum := fileData[indexFileSize-ChecksumLength:]
+	var offset1 int64 = indexPathFileInfo.Size() - int64(ChecksumLength)
 
-	// RECOMPUTE CHECKSUM ON FILE CONTENTS
-	verifyCheckSum := sha1.Sum(fileData[0 : indexFileSize-ChecksumLength])
-
-	///////////////////////////
-	// VERIFY CHECKSUM
-	///////////////////////////
-
-	// NOTE:  USE [:] TO CONVERT fixed byte[sha1.Size] array  to SLICE
-	if !bytes.Equal(checkSum, verifyCheckSum[:]) {
-		return nil, errors.UnexpectedValue.Newf("index: %s: checksum failed: "+
-			"index checksum %v , computed checksum %v",
-			indexPath, checkSum, verifyCheckSum)
-
+	///////////////////////////////////////////////
+	// COMPUTE SHA1 CHECKSUM OF INDEX FILE
+	//////////////////////////////////////////////
+	h := sha1.New()
+	if _, err := io.CopyN(h, f, offset1); err != nil {
+		return indexEntries, err
 	}
 
-	////////////////////////////
-	// VERIFY HEADER
-	///////////////////////////
+	///////////////////////////////////////////////////
+	// READ CHECKSUM WRITTEN AT END OF INDEX FILE
+	//////////////////////////////////////////////////
+	fileChecksum := make([]byte, ChecksumLength)
+	if readSize, err := f.Read(fileChecksum); err != nil {
+		return indexEntries, err
+	} else {
+		if readSize != ChecksumLength {
+			return indexEntries, errors.UnexpectedValue.Newf(
+				"expected to read %d byte index hash at "+
+					"end of index file at %s, only was able to read %d bytes",
+				ChecksumLength, index.path, readSize)
+		} else {
 
-	// EVAL HEADER SIG
-	headerSig := fileData[0:4]
-	sig := []byte(file.ResourceCacheSignature)
-	if !bytes.Equal(sig, headerSig) {
-		return nil, errors.UnexpectedValue.Newf("index: %s: expected resource signature value %#v, found %#v",
-			indexPath, sig, headerSig)
-	}
-
-	// EVAL HEADER VERSION
-	headerVersion := binary.BigEndian.Uint32(fileData[4:8])
-	if headerVersion != FILE_INDEX_VERSION {
-		return nil, errors.UnexpectedValue.Newf("index: %s: expected header version  %d, found %d",
-			indexPath, FILE_INDEX_VERSION, headerVersion)
-
-	}
-
-	// EVAL NUMBER OF ENTRIES
-	numIndexEntries := binary.BigEndian.Uint32(fileData[8:12])
-
-	indexEntries := make([]indexEntry, numIndexEntries)
-
-	// COUNTER FOR ACTUAL INDEX ENTRIES ITERATED
-	var actualIndexEntries = uint32(0)
-
-	for nextOffset := HeaderLength; nextOffset < len(fileData); {
-
-		var dgrzPath string
-		var multiHash string
-
-		dgrzPath, nextOffset = readNullTermString(fileData, nextOffset)
-		multiHash, nextOffset = readNullTermString(fileData, nextOffset)
-
-		if len(dgrzPath) > 0 && len(multiHash) > 0 {
-
-			var resId rescom.RepositoryResourceId
-			//	var decodedMultiHash *multihash.DecodedMultihash
-			var err error
-
-			//CONVERT STRING TO RESOURCE ID
-			if resId, err = util.UnixStylePathToResourceId(dgrzPath); err != nil {
-				return nil, err
+			// COMPARE HASHES
+			computedChecksum := h.Sum(nil)
+			if !bytes.Equal(computedChecksum, fileChecksum) {
+				return indexEntries, errors.UnexpectedValue.Newf(
+					"index file at %s checksum verification failed:"+
+						" { index file checksum = %x, computed checksum = %x}",
+					index.path, fileChecksum, computedChecksum)
 			}
 
-			// VALIDATE multiHash
+		}
+	}
 
-			/*
-				if hexDecodedMultiHash, err := hex.DecodeString(multiHash); err != nil {
-					return nil, err
-				} else {
-					if decodedMultiHash, err := multihash.Decode(hexDecodedMultiHash); err != nil {
-						return nil, err
-					}
-				}
-			*/
 
-			entry := indexEntry{resourceId: resId}
+	// REWIND FILE POINTER BACK TO BEGINNNING NOW THAT
+	// INDEX FILE CHECKSUM VERIFIED
+	if _, err := f.Seek(0, os.SEEK_SET); err != nil {
+		return indexEntries, err
+	}
 
-			// ADD TO SLICE OF INDEX ENTRIES
-			indexEntries[actualIndexEntries] = entry
-			// INCREMENT COUNT OF ACTUAL INDEX ENTRIES AFTER ADD
-			actualIndexEntries++
+
+	// READ HEADER SIGNATURE
+	sig := make([]byte, len(file.ResourceCacheSignature))
+	if err := binary.Read(f, binary.BigEndian, sig); err != nil {
+		return indexEntries, err
+	}
+
+	if string(sig) != file.ResourceCacheSignature {
+		return indexEntries, errors.UnexpectedValue.Newf(
+			"%s: expected header signature '%s' , found '%s'",
+			index.path, file.ResourceCacheSignature, string(sig))
+
+	}
+
+	// READ INDEX VERSION
+	var indexVersion uint32
+	if err := binary.Read(f, binary.BigEndian, &indexVersion); err != nil {
+		return indexEntries, err
+	}
+	if indexVersion != file.IndexFormatVersion {
+		return indexEntries, errors.UnexpectedValue.Newf("expected index version %d, found %d",
+			file.IndexFormatVersion, indexVersion)
+	}
+
+	// READ NUMBER OF INDEX ENTRIES
+	var numIndexEntries uint32
+	if err := binary.Read(f, binary.BigEndian, &numIndexEntries); err != nil {
+		return indexEntries, err
+	}
+
+	if numIndexEntries < 1 {
+		// EMPTY INDEX. NO ENTRIES...
+		return indexEntries, nil
+	}
+
+	// READ INDEX ENTRIES INTO MEMORY
+	indexEntries = make([]indexEntryInternal, numIndexEntries)
+	for i := uint32(0); i < numIndexEntries; i++ {
+
+		var e indexEntryInternal
+
+	//	var dgrzType uint32
+
+		if err := binary.Read(f, binary.BigEndian, &e.Type); err != nil {
+			return indexEntries, err
+		}
+
+	//	var id = make([]byte, 16)
+
+		if err := binary.Read(f, binary.BigEndian, &e.Uuid); err != nil {
+			return indexEntries, err
+		}
+
+	//	var mTimeNs int64
+
+		if err := binary.Read(f, binary.BigEndian, &e.MtimeNs); err != nil {
+			return indexEntries, err
+		}
+
+//		var fileSize int64
+
+		if err := binary.Read(f, binary.BigEndian, &e.FileSize); err != nil {
+			return indexEntries, err
+		}
+
+	//	var multiHashLength int8
+
+		if err := binary.Read(f, binary.BigEndian, &e.MultihashLength); err != nil {
+			return indexEntries, err
+		}
+		if e.MultihashLength < 1 {
+			return indexEntries, errors.UnexpectedValue.Newf(
+				"expected multihash length to be greater than zero, found length %d: "+
+					"{ file = %s, entry = %d }", e.MultihashLength, index.path, i)
 
 		}
 
+		var multiHash []byte = make([]byte,e.MultihashLength)
+		if err := binary.Read(f, binary.BigEndian, multiHash); err != nil {
+			return indexEntries, err
+		} else {
+			e.Multihash = multiHash
+		}
+
+//		var subPathLength int16
+
+		if err := binary.Read(f, binary.BigEndian, &e.SubpathLength); err != nil {
+			return indexEntries, err
+		}
+
+		if e.SubpathLength  < 1 {
+			return indexEntries, errors.UnexpectedValue.Newf(
+				"expected sub path length to be greater than zero, found length %d: "+
+					"{ file = %s, index entry offset = %d }",
+					e.SubpathLength,
+				index.path,
+				i)
+
+		}
+
+		var subPath = make([]byte, e.SubpathLength)
+		if err := binary.Read(f, binary.BigEndian, &subPath); err != nil {
+			return indexEntries, err
+		} else {
+			e.Subpath = subPath
+		}
+
+		indexEntries[i] = e
+
 	}
 
-	// MAKE SURE EXPECTED INDEX entries
-	// AND ACTUAL MATCH UP
-	if actualIndexEntries != numIndexEntries {
-		return nil, errors.UnexpectedValue.Newf("index: %s: expected  %d index entries, counted %d",
-			indexPath, numIndexEntries, actualIndexEntries)
-	}
-
-	// SUCCESS!
 	return indexEntries, nil
+}
+
+
+
+func (e indexEntry) String() string {
+
+	return fmt.Sprintf("indexEntry: { Type=%s, Uuid = %s, MtimeNs=%d, FileSize=%d, Multihash = %s, Subpath = %s }",
+	e.Type,e.Uuid,e.MtimeNs,e.FileSize,e.Multihash,e.Subpath)
 
 }
 
-// READ NULL TERMINATED STRING FROM BYTE ARRAY STARTING
-// AT offset AND RETURN NEXT OFFSET TO READ OR len(buf)+1
-func readNullTermString(buf []byte, offset int) (string, int) {
+func ValidateIndexEntry(e indexEntry) (indexEntryInternal,error) {
 
-	var s string
-	var lenBuf = len(buf)
+	var internal indexEntryInternal
 
-	for i := offset; i < lenBuf; i++ {
-		if buf[i] == 0x00 {
-			// RETURN STRING AND NEXT OFFSET TO READ
-			return string(buf[offset:i]), i + 1
-		}
+	if  dot,err := primitives.Dogg3rzObjectTypeFromString(e.Type);err != nil  {
+		return internal, errors.UnexpectedValue.Newf("ValidateIndexEntry(): indexEntry.Type = '%s': " +
+		"This identifier does not map to one of following defined in the 'primitives' package: %v",
+		e.Type, primitives.Dogg3rzObjectTypes())
+	}  else {
+		internal.Type = uint32(dot)
 	}
 
-	return s, lenBuf + 1
+	internal.MtimeNs = e.MtimeNs
 
+
+	if e.FileSize < 0 {
+		return internal, errors.OutOfRange.Newf("ValidateIndexEntry(): indexEntry.FileSize = %d. " +
+		"Must be greater than zero",e.FileSize)
+	} else {
+		internal.FileSize = e.FileSize
+	}
+
+	if _,err := cid.Decode(e.Multihash); err != nil {
+		 return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): "+
+		 "indexEntry.Multihash = %s. Expected valid multihash",e.Multihash)
+	} else {
+		internal.Multihash = []byte(e.Multihash)
+		internal.MultihashLength = int8(len (internal.Multihash) )
+	//	fmt.Println("ValidateIIndexEntry: multihashlength:",internal.MultihashLength)
+	}
+
+	if repoPath,err := rescom.RepositoryPathNew(e.Subpath); err != nil {
+		return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): " +
+	  "indexEntry.Subpath: %s",err)
+	} else {
+		 internal.Subpath = []byte(repoPath.ToString()) // used normalized path
+		 internal.SubpathLength = int16(len(internal.Subpath))
+	}
+
+	if myUUID, err := uuid.Parse(e.Uuid); err != nil {
+		return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): " +
+		"indexEntry.Uuid: %s",err)
+
+	} else {
+		internal.Uuid = myUUID
+	}
+
+	return internal,nil
+
+}
+
+func (i indexEntryInternal) ToIndexEntry() indexEntry {
+
+	var e indexEntry
+
+	e.Type = uint32ToDogg3rzObjectTypesMap[i.Type].String()
+	e.Uuid = i.Uuid.String()
+	e.MtimeNs = i.MtimeNs
+	e.FileSize = i.FileSize
+	e.Subpath = string(i.Subpath)
+
+
+	e.Multihash = string(i.Multihash)
+
+	return e
+}
+
+func (i indexEntryInternal) String() string {
+
+	return fmt.Sprintf("indexEntryInternal={Type=%s,Uuid=%s,FileSize=%d,MtimeNs=%d,MultiHashLength=%d,Multihash=%s,SubpathLength=%d,Subpath=%s}",
+		uint32ToDogg3rzObjectTypesMap[i.Type].String(),
+		i.Uuid.String(),
+		i.FileSize,
+		i.MtimeNs,
+		i.MultihashLength,
+		string(i.Multihash),
+		i.SubpathLength,
+		string(i.Subpath))
 }

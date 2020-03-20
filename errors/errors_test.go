@@ -19,7 +19,6 @@
 package errors
 
 import (
-	"fmt"
 	"strings"
 	"testing"
 )
@@ -28,16 +27,16 @@ func TestNew(t *testing.T) {
 
 	errStr := "<my var name>"
 
-	err := InvalidArg.New(errStr)
+	err := InvalidValue.New(errStr)
 	bd, ok := err.(badDogg3rz)
 	if !ok {
 		t.Errorf("returned %v", bd)
 	}
 
-	fmt.Println("bd ", bd.errorType, NoType)
-	if bd.errorType != InvalidArg {
+	//	fmt.Println("bd ", bd.errorType, NoType)
+	if bd.errorType != InvalidValue {
 		//fmt.Println("failed")
-		t.Errorf("expected ErrorType %v, found %v", InvalidArg, bd.errorType)
+		t.Errorf("expected ErrorType %v, found %v", InvalidValue, bd.errorType)
 	}
 
 	if !strings.Contains(err.Error(), errStr) {

@@ -1,5 +1,6 @@
 package repo
 
+/*
 import (
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
@@ -27,3 +28,4 @@ func (cache *fileRepositoryIndexCache) Read(p []byte) (n int, err error) {
 
 	return 0, nil
 }
+*/

@@ -19,16 +19,16 @@
 package primitives
 
 import (
-	"encoding/json"
 	"io"
 )
 
 const (
-	TYPE_DOGG3RZ_OBJECT             = "dogg3rz.object"
-	DOGG3RZ_OBJECT_ATTR_OBJECT_TYPE = "type"
-	DOGG3RZ_OBJECT_ATTR_METADATA    = "metadata"
-	DOGG3RZ_OBJECT_ATTR_DATA        = "data"
-	DOGG3RZ_OBJECT_ATTR_PARENT      = "parent"
+	TYPE_DOGG3RZ_OBJECT          Dogg3rzObjectType = 1 << 3
+	DOGG3RZ_OBJECT_ATTR_TYPE                       = "type"
+	DOGG3RZ_OBJECT_ATTR_ID                         = "id"
+	DOGG3RZ_OBJECT_ATTR_METADATA                   = "meta"
+	DOGG3RZ_OBJECT_ATTR_BODY                       = "body"
+	DOGG3RZ_OBJECT_ATTR_PARENT                     = "parent"
 )
 
 type dgrzObject struct {
@@ -38,46 +38,13 @@ type dgrzObject struct {
 	Parents    []string               `structs:"parent,omitempty" json:"parent,omitempty"`
 }
 
-type Dogg3rzObjectifiable interface {
-	ToDogg3rzObject() *dgrzObject
-}
+type Dogg3rzObject interface {
+	//ToDogg3rzObject() *dgrzObject
 
-func Dogg3rzObjectDeserializeFromJson(reader io.Reader) (*dgrzObject, error) {
+	Type() string
+	Id() string
 
-	decoder := json.NewDecoder(reader)
+	LastModified()
 
-	obj := dgrzObjectNew()
-
-	err := decoder.Decode(obj)
-	if err != nil {
-		return nil, err
-	}
-
-	return obj, err
-
-}
-
-func Dogg3rzObjectSerializeToJson(obj *dgrzObject, writer io.Writer) error {
-
-	encoder := json.NewEncoder(writer)
-
-	err := encoder.Encode(obj)
-
-	return err
-
-}
-
-func Dogg3rzObjectNew(objectType string) *dgrzObject {
-
-	o := dgrzObjectNew()
-
-	o.ObjectType = objectType
-
-	return o
-
-}
-
-func dgrzObjectNew() *dgrzObject {
-	return &dgrzObject{ObjectType: "", Metadata: make(map[string]string),
-		Data: make(map[string]interface{})}
+	JSONReadCloser() io.ReadCloser
 }

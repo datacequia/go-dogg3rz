@@ -22,6 +22,8 @@ import (
 	"github.com/datacequia/go-dogg3rz/errors"
 )
 
+const TYPE_DOGG3RZ_TRIPLE Dogg3rzObjectType = 1 << 6
+
 const ATTR_SUBJECT = "subject"
 const ATTR_PREDICATE = "predicate"
 const ATTR_OBJECT = "object"
@@ -42,26 +44,26 @@ func Dogg3rzTripleNew(subject string, predicate string, object string) (*dgrzTri
 	// TODO: validate args 'subject' and 'object' to check if they are valid
 	// CIDs using IPFS API
 	if ok, err := errors.StrlenGtZero(subject); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "subject")
+		return nil, errors.InvalidValue.Wrap(err, "subject")
 	}
 
 	if ok, err := errors.StrlenGtZero(predicate); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "predicate")
+		return nil, errors.InvalidValue.Wrap(err, "predicate")
 	}
 
 	if ok, err := errors.StrlenGtZero(object); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "object")
+		return nil, errors.InvalidValue.Wrap(err, "object")
 	}
 
 	if ok, err := errors.StrAlpha(subject); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "subject")
+		return nil, errors.InvalidValue.Wrap(err, "subject")
 	}
 	if ok, err := errors.StrAlpha(predicate); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "predicate")
+		return nil, errors.InvalidValue.Wrap(err, "predicate")
 	}
 
 	if ok, err := errors.StrAlpha(object); !ok {
-		return nil, errors.InvalidArg.Wrap(err, "object")
+		return nil, errors.InvalidValue.Wrap(err, "object")
 	}
 
 	triple := &dgrzTriple{subject: subject, predicate: predicate, object: object}

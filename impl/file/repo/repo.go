@@ -25,7 +25,6 @@ import (
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
-	"github.com/datacequia/go-dogg3rz/resource/repo"
 )
 
 const indexFileName = "index"
@@ -42,7 +41,7 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 	refsDir := path.Join(dgrzDir, "refs")
 	headsDir := path.Join(dgrzDir, "heads")
 
-	dirsList := []string{repoDir, refsDir, headsDir}
+	dirsList := []string{repoDir, dgrzDir, refsDir, headsDir}
 
 	for _, d := range dirsList {
 
@@ -73,6 +72,7 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 
 }
 
+/*
 func (repo *FileRepositoryResource) GetRepoIndex(name string) (repo.RepositoryIndex, error) {
 
 	repoDir := path.Join(file.RepositoriesDirPath(), name)
@@ -82,6 +82,7 @@ func (repo *FileRepositoryResource) GetRepoIndex(name string) (repo.RepositoryIn
 
 	return index, nil
 }
+*/
 
 func (repo *FileRepositoryResource) CreateSchema(repoName string, schemaSubpath string,
 	schemaReader io.Reader) error {
@@ -90,4 +91,11 @@ func (repo *FileRepositoryResource) CreateSchema(repoName string, schemaSubpath 
 
 	return createSchema.createSchema(repoName, schemaSubpath, schemaReader)
 
+}
+
+func (repo *FileRepositoryResource) StageResource(repoName string,
+	schemaSubpath string) error {
+	sr := &fileStageResource{}
+
+	return sr.stageResource(repoName, schemaSubpath)
 }

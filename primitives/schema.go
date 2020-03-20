@@ -23,7 +23,7 @@ package primitives
 //"github.com/adpadilla/go-dogg3rz/errors"
 //"github.com/fatih/structs"
 
-const TYPE_DOGG3RZ_SCHEMA = "dogg3rz.schema"
+const TYPE_DOGG3RZ_SCHEMA Dogg3rzObjectType = 1 << 2
 
 //const D_ATTR_ENTRIES = "entries"
 

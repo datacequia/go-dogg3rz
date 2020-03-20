@@ -30,7 +30,7 @@ type ErrorType uint
 
 const (
 	NoType = ErrorType(iota)
-	InvalidArg
+	InvalidValue
 	OutOfRange
 	InvalidPathElement
 	AlreadyExists
@@ -62,33 +62,33 @@ func errorTypeToString(errType ErrorType) string {
 
 	switch errType {
 	case NoType:
-		return "external error"
-	case InvalidArg:
-		return "invalid argument"
+		return "NoType"
+	case InvalidValue:
+		return "InvalidValue"
 	case OutOfRange:
-		return "out of range"
+		return "OutOfRange"
 	case InvalidPathElement:
-		return "invalid dogg3rz path element value"
+		return "InvalidPathElement"
 	case AlreadyExists:
-		return "resource already exists"
+		return "AlreadyExists"
 	case NotFound:
-		return "resource not found"
+		return "NotFound"
 	case UnexpectedType:
-		return "unexpected type encountered"
+		return "UnexpectedType"
 	case InitNodeError:
-		return "node initialization error"
+		return "InitNodeError"
 	case TryAgain:
-		return "try again"
+		return "TryAgain"
 	case ConfigError:
-		return "configuration error"
+		return "ConfigError"
 	case RepoError:
-		return "repository error"
+		return "RepoError"
 	case UnexpectedValue:
-		return "unexpected value encountered"
+		return "UnexpectedValue"
 	case AssertionError:
-		return "assertion error"
+		return "AssertionError"
 	default:
-		return "unknown error"
+		panic("unknown error")
 	}
 }
 

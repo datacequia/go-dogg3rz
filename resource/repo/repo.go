@@ -20,20 +20,24 @@ package repo
 
 import (
 	"io"
-
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
+
+type RepositoryIndexEntry struct {
+}
 
 type RepositoryResource interface {
 	InitRepo(repoName string) error
-	GetRepoIndex(repoName string) (RepositoryIndex, error)
+	//	GetRepoIndex(repoName string) (RepositoryIndex, error)
 
 	// REPOSITORY COMMANDS
 	CreateSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error
+	StageResource(repoName string, schemaSubpath string) error
 }
 
+/*
 type RepositoryIndex interface {
 	Stage(resId rescom.RepositoryResourceId, multiHash string) error
 	//AddMap(resIdMap map[rescom.ResourceId]string) error
 	Unstage(resId rescom.RepositoryResourceId) error
 }
+*/

@@ -20,7 +20,7 @@ var VALID_PATH_ELEMENT_SPECIAL_CHARS = []rune{'.', '_', '-'}
 func RepositoryPathNew(path string) (*RepositoryPath, error) {
 
 	if len(path) < 1 {
-		return nil, errors.InvalidArg.New("repository path is zero length (empty) string")
+		return nil, errors.InvalidValue.New("repository path is zero length (empty) string")
 	}
 
 	rp := &RepositoryPath{}
@@ -52,8 +52,8 @@ func RepositoryPathNew(path string) (*RepositoryPath, error) {
 				// FIRST CHARACTER IN PATH ELEMENT EVAL HERE
 				if !(unicode.IsLetter(rune(c)) || unicode.IsDigit(rune(c))) {
 					return nil, errors.InvalidPathElement.Newf(
-						"expecting path element that begins "+
-							"with alphanumeric character, found '%s'", string(c))
+						"%s: expecting path element that begins "+
+							"with alphanumeric character, found '%s'", path, string(c))
 				}
 			default:
 				// ALL OTHER PATH ELEMENT CHARS EVAL HERE
@@ -73,7 +73,7 @@ func RepositoryPathNew(path string) (*RepositoryPath, error) {
 	}
 
 	if len(standardizedPathElements) < 1 {
-		return nil, errors.InvalidArg.New("repository path has zero path elements")
+		return nil, errors.InvalidValue.New("repository path has zero path elements")
 
 	}
 

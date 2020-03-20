@@ -1,6 +1,6 @@
 package primitives
 
-const TYPE_DOGG3RZ_TREE = "dogg3rz.tree"
+const TYPE_DOGG3RZ_TREE Dogg3rzObjectType = 1
 
 //const D_ATTR_ENTRIES = "entries"
 

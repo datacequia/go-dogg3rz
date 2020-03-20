@@ -1,9 +1,9 @@
 package cmd
 
 import (
+	"fmt"
 	"io"
 	"os"
-	"strings"
 
 	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/resource"
@@ -11,12 +11,13 @@ import (
 )
 
 type dgrzCreateCmd struct {
-	Schema dgrzCreateSchema `command:"schema" description:"create a new schema object" `
+	Schema   dgrzCreateSchema   `command:"schema" description:"create a new schema object" `
+	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the repository"`
 }
 
 type dgrzCreateSchema struct {
 	Positional struct {
-		RepoSchemaPath string `positional-arg-name:"REPO:SCHEMA_PATH" required:"yes" `
+		RepoSchemaPath string `positional-arg-name:"REPOSITORY:SCHEMA_PATH" required:"yes" `
 	} `positional-args:"yes"`
 
 	// USED FOR SCHEMA PARSING
@@ -24,24 +25,45 @@ type dgrzCreateSchema struct {
 	wrappedReader io.Reader
 }
 
+type dgrzCreateSnapshot struct {
+	Positional struct {
+		Repository string `positional-arg-name:"REPOSITORY" required:"yes"`
+	} `positional-args:"yes"`
+}
+
+///////////////////////////////////////////////////////////
+// CREATE COMMAND FUNCTIONS
+///////////////////////////////////////////////////////////
+
 func init() {
 	// REGISTER THE 'init' COMMAND
 	register(&dgrzCreateCmd{})
 }
 
+func (o *dgrzCreateCmd) CommandName() string {
+	return "create"
+}
+
+func (o *dgrzCreateCmd) ShortDescription() string {
+	return "create a new repository resource"
+}
+
+func (o *dgrzCreateCmd) LongDescription() string {
+	return "create a new repository resource"
+}
+
+///////////////////////////////////////////////////////////
+// CREATE SCHEMA SUBCOMMAND FUNCTIONS
+///////////////////////////////////////////////////////////
+
 func (x *dgrzCreateSchema) Execute(args []string) error {
 
 	repo := resource.GetRepositoryResource()
 
-	repoSchemaPath := strings.SplitN(x.Positional.RepoSchemaPath, ":", 2)
-	if len(repoSchemaPath) != 2 {
-		return errors.UnexpectedValue.Newf("found '%s': want format REPO:SCHEMA_PATH",
-			x.Positional.RepoSchemaPath)
-
+	repoName, schemaPath, err := parseRepoSchemaPath(x.Positional.RepoSchemaPath)
+	if err != nil {
+		return err
 	}
-
-	repoName := repoSchemaPath[0]
-	schemaPath := repoSchemaPath[1]
 
 	x.jsonLoader, x.wrappedReader = gojsonschema.NewReaderLoader(os.Stdin)
 
@@ -69,14 +91,23 @@ func (o *dgrzCreateSchema) Read(p []byte) (n int, err error) {
 
 }
 
-func (o *dgrzCreateCmd) CommandName() string {
-	return "create"
+///////////////////////////////////////////////////////////
+// CREATE SNAPSHOT SUBCOMMAND  FUNCTIONS
+///////////////////////////////////////////////////////////
+func (x *dgrzCreateSnapshot) Execute(args []string) error {
+
+	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
+	return nil
 }
 
-func (o *dgrzCreateCmd) ShortDescription() string {
-	return "create a new repository resource"
+func (o *dgrzCreateSnapshot) CommandName() string {
+	return "create snapshot"
 }
 
-func (o *dgrzCreateCmd) LongDescription() string {
-	return "create a new repository resource"
+func (o *dgrzCreateSnapshot) ShortDescription() string {
+	return "create a repository snapshot"
+}
+
+func (o *dgrzCreateSnapshot) LongDescription() string {
+	return "create a repository snapshot"
 }
