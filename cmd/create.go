@@ -1,7 +1,6 @@
 package cmd
 
 import (
-	"fmt"
 	"io"
 	"os"
 
@@ -94,10 +93,15 @@ func (o *dgrzCreateSchema) Read(p []byte) (n int, err error) {
 ///////////////////////////////////////////////////////////
 // CREATE SNAPSHOT SUBCOMMAND  FUNCTIONS
 ///////////////////////////////////////////////////////////
+
 func (x *dgrzCreateSnapshot) Execute(args []string) error {
 
-	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
-	return nil
+	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
+
+	repo := resource.GetRepositoryResource()
+
+	return repo.CreateSnapshot(x.Positional.Repository)
+
 }
 
 func (o *dgrzCreateSnapshot) CommandName() string {

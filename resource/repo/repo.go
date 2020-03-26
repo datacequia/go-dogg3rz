@@ -32,6 +32,7 @@ type RepositoryResource interface {
 	// REPOSITORY COMMANDS
 	CreateSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error
 	StageResource(repoName string, schemaSubpath string) error
+	CreateSnapshot(repoName string) error
 }
 
 /*

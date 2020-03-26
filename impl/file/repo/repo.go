@@ -99,3 +99,11 @@ func (repo *FileRepositoryResource) StageResource(repoName string,
 
 	return sr.stageResource(repoName, schemaSubpath)
 }
+
+func (repo *FileRepositoryResource) CreateSnapshot(repoName string) error {
+
+	ss := &fileCreateSnapshot{}
+
+	return ss.createSnapshot(repoName)
+
+}

@@ -30,11 +30,8 @@ type fileCreateSchema struct {
 	fileSystemPath string
 }
 
-type fileCreateSnapshot struct {
-	repoName string
-}
-
 //
+
 func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error {
 
 	rp, err := common.RepositoryPathNew(schemaSubpath)
