@@ -18,6 +18,10 @@
 
 package node
 
+import (
+	"github.com/datacequia/go-dogg3rz/resource/config"
+)
+
 type NodeResource interface {
-	InitNode() error
+	InitNode(config config.Dogg3rzConfig) error
 }

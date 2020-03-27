@@ -37,6 +37,9 @@ const dotDirName = ".dogg3rz"
 const LOCK_FILE_SUFFIX = ".lock"
 const dataDirName = "data"
 const repositoriesDirName = "repositories"
+
+// BASE REPO DIR FOR ALL STATE FILES
+const DgrzDirName = ".dgrz"
 const RefsDirName = "refs"
 const HeadsDirName = "heads"
 const MasterBranchName = "master"
@@ -44,6 +47,8 @@ const IndexFileName = ".index"
 const DirLockFileName = ".__dirlock__"
 const ResourceCacheSignature = "RESC"
 const IndexFormatVersion = uint32(1)
+const HeadFileName = "HEAD"
+const RepositoryIdFileName = "ID"
 
 // Writes contents of Reader object to 'path' atomically
 // i.e. no other writers can write at the same time.
@@ -155,13 +160,16 @@ func RepositoriesDirPath() string {
 	return path.Join(DataDirPath(), repositoriesDirName)
 
 }
-
-func RepositoriesRefsDirPath() string {
-	return path.Join(RepositoriesDirPath(), RefsDirName)
+func RepositoriesDgrzDirPath(repoName string) string {
+	return path.Join(RepositoriesDirPath(), repoName, DgrzDirName)
 }
 
-func RepositoriesRefsHeadsDirPath() string {
-	return path.Join(RepositoriesRefsDirPath(), HeadsDirName)
+func RepositoriesRefsDirPath(repoName string) string {
+	return path.Join(RepositoriesDgrzDirPath(repoName), RefsDirName)
+}
+
+func RepositoriesRefsHeadsDirPath(repoName string) string {
+	return path.Join(RepositoriesRefsDirPath(repoName), HeadsDirName)
 }
 
 func FileExists(path string) bool {
@@ -192,15 +200,47 @@ func DirExists(path string) bool {
 
 func WriteHeadFile(repoName string, branchName string) error {
 
-	content := fmt.Sprintf("ref: %s\n", strings.Join([]string{RefsDirName, HeadsDirName, branchName},
-		string(os.PathSeparator)))
+	content := fmt.Sprintf("ref: %s\n", filepath.Join(RefsDirName, HeadsDirName, branchName))
 
 	_, err := WriteToFileAtomic(func() (io.Reader, error) { return strings.NewReader(content), nil },
-		path.Join(RepositoriesDirPath(), repoName, "HEAD"))
+		path.Join(RepositoriesDirPath(), repoName, DgrzDirName, HeadFileName))
 
 	return err
 }
 
+func WriteCommitHashToCurrentBranchHeadFile(repoName string, commitHash string) error {
+
+	headFile := path.Join(RepositoriesDirPath(), repoName, DgrzDirName, HeadFileName)
+
+	if f, err := os.Open(headFile); err != nil {
+		return err
+	} else {
+		defer f.Close()
+
+		var headFileSubPath string
+		if n, err := fmt.Fscanf(f, "ref: %s", &headFileSubPath); err != nil {
+			return err
+		} else {
+			if n != 1 {
+				return dgrzerr.UnexpectedValue.Newf("%s: expected to scan 1 relative path, "+
+					", scanned %d", headFile, n)
+			}
+		}
+
+		commitHashFile := path.Join(RepositoriesDirPath(), repoName, DgrzDirName, headFileSubPath)
+
+		myFunc := func() (io.Reader, error) {
+			return strings.NewReader(commitHash), nil
+		}
+
+		if _, err := WriteToFileAtomic(myFunc, commitHashFile); err != nil {
+			return err
+		}
+
+	}
+	return nil
+
+}
 func RepositoryExist(repoName string) bool {
 
 	repoPath := filepath.Join(RepositoriesDirPath(), repoName)

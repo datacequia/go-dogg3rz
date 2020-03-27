@@ -22,12 +22,19 @@ import (
 	"io/ioutil"
 	"os"
 
-	resourceconfig "github.com/datacequia/go-dogg3rz/resource/config"
+	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
-func SetConfigDefault() error {
+func SetConfigDefault(c config.Dogg3rzConfig) error {
 
-	err := ioutil.WriteFile(configPath(), []byte(resourceconfig.CONFIG_JSON_DEFAULT), os.FileMode(0660))
+	var dgrzConfS string
+	var err error
+	dgrzConfS, err = config.GenerateDefault(c)
+	if err != nil {
+		return err
+	}
+
+	err = ioutil.WriteFile(configPath(), []byte(dgrzConfS), os.FileMode(0660))
 
 	return err
 

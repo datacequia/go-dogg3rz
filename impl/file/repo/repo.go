@@ -37,9 +37,9 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 	repoDir := path.Join(file.RepositoriesDirPath(), name)
 	// CREATE 'refs/heads' SUBDIR
 	// CREATE '.dgrz' DIR AS SUBDI OF BASE REPO DIR
-	dgrzDir := path.Join(repoDir, ".dgrz")
-	refsDir := path.Join(dgrzDir, "refs")
-	headsDir := path.Join(dgrzDir, "heads")
+	dgrzDir := path.Join(repoDir, file.DgrzDirName)
+	refsDir := path.Join(dgrzDir, file.RefsDirName)
+	headsDir := path.Join(refsDir, file.HeadsDirName)
 
 	dirsList := []string{repoDir, dgrzDir, refsDir, headsDir}
 
@@ -60,12 +60,12 @@ func (repo *FileRepositoryResource) InitRepo(name string) error {
 			return err
 
 		}
-		// WRITE THE HEAD FILE WITH A POINTER TO DEFAULT MASTER BRANCH
-		err = file.WriteHeadFile(name, file.MasterBranchName)
-		if err != nil {
-			return err
-		}
 
+	}
+	// WRITE THE HEAD FILE WITH A POINTER TO DEFAULT MASTER BRANCH
+	err := file.WriteHeadFile(name, file.MasterBranchName)
+	if err != nil {
+		return err
 	}
 
 	return nil

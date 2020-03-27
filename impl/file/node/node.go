@@ -23,12 +23,13 @@ import (
 
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/impl/file/config"
+	conf "github.com/datacequia/go-dogg3rz/resource/config"
 )
 
 type FileNodeResource struct {
 }
 
-func (node *FileNodeResource) InitNode() error {
+func (node *FileNodeResource) InitNode(c conf.Dogg3rzConfig) error {
 
 	file.DotDirPath()
 
@@ -43,7 +44,7 @@ func (node *FileNodeResource) InitNode() error {
 		}
 	}
 
-	err := config.SetConfigDefault()
+	err := config.SetConfigDefault(c)
 	if err != nil {
 		return err
 	}

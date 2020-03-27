@@ -19,28 +19,22 @@
 package primitives
 
 //const D_ATTR_NAME = "objectHeads"
-const TYPE_DOGG3RZ_COMMIT = "dogg3rz.commit"
+const TYPE_DOGG3RZ_SNAPSHOT = "dogg3rz.snapshot"
 
 //const MD_ATTR_NAME = "name"
 //const MD_ATTR_IPFS_PEER_ID = "ipfsPeerId"
-const MD_ATTR_EMAIL_ADDR = "emailAddress"
-const MD_ATTR_REPO_NAME = "repositoryName"
-const MD_ATTR_REPO_ID = "repositoryId"
+const META_ATTR_EMAIL_ADDR = "_email.address"
+const META_ATTR_REPO_NAME = "_repository.name"
+const META_ATTR_REPO_ID = "_repository.id"
+
+const BODY_ATTR_ROOT_TREE = "rootTree"
 
 //const D_ATTR_ROOT_TREE = "rootTree"
-const D_ATTR_TRIPLES = "triples"
-const D_ATTR_IMPORTS = "imports"
+//const D_ATTR_TRIPLES = "triples"
+//const D_ATTR_IMPORTS = "imports"
 
+/*
 var reservedMDAttrCommit = [...]string{MD_ATTR_REPO_NAME, MD_ATTR_EMAIL_ADDR}
 
 var reservedDAttrCommit = [...]string{D_ATTR_TRIPLES, D_ATTR_IMPORTS}
-
-type dgrzCommit struct {
-	repositoryId string // GLOBALLY UNIQUE IMMUTABLE IDENTIFIER FOR REPOSITORY
-	// THAT THIS COMMIT BELONGS TO.
-	emailAddress string // EMAIL ADDRESS OF COMMITTER
-
-	repositoryName string // REPOSITORY NAME FOR THIS COMMIT
-
-	parents []string
-}
+*/

@@ -55,9 +55,20 @@ func TestValidateConfig(t *testing.T) {
 	}
 
 	// TEST THE DEFAULT CONFIG
+	var dgrzConf config.Dogg3rzConfig
+	var defaultConfS string
+
+	dgrzConf.User.Email = "test@datacequia.com"
+	dgrzConf.User.FirstName = "Dogg3rz"
+	defaultConfS, err = config.GenerateDefault(dgrzConf)
+	if err != nil {
+		t.FailNow()
+	}
+	//fmt.Println(defaultConfS)
+
 	defaultConfigPath := path.Join(os.TempDir(), "dogg3rz-default-config.json")
 	err = ioutil.WriteFile(defaultConfigPath,
-		[]byte(config.CONFIG_JSON_DEFAULT), os.FileMode(0777))
+		[]byte(defaultConfS), os.FileMode(0777))
 	if err != nil {
 		// FAILED TO WRITE DEFAULT
 		t.Fail()

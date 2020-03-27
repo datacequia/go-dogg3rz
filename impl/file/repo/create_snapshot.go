@@ -8,7 +8,9 @@ import (
 	"path/filepath"
 
 	"github.com/datacequia/go-dogg3rz/errors"
+
 	"github.com/datacequia/go-dogg3rz/impl/file"
+	"github.com/datacequia/go-dogg3rz/impl/file/config"
 	"github.com/datacequia/go-dogg3rz/primitives"
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/google/uuid"
@@ -66,18 +68,31 @@ func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
 
 		buf := &bytes.Buffer{}
 
+		var dgrzSnapshotObject *map[string]interface{}
+
+		if p, err := createSnapshotObject(cs.repoName, rootTree); err != nil {
+			return err
+		} else {
+			dgrzSnapshotObject = p
+		}
+
 		e := json.NewEncoder(buf)
-		if err := e.Encode(rootTree); err != nil {
+		if err := e.Encode(dgrzSnapshotObject); err != nil {
 			return err
 		}
 
-		//fmt.Printf("rootTree: %v", (*rootTree))
+		//	fmt.Printf("rootTree: %v", (*dgrzSnapshotObject))
 		sh := shell.NewShell("localhost:5001")
 		//	fmt.Println(s)
 		if cid, err := sh.DagPut(buf, "json", "cbor"); err != nil {
 			//	fmt.Printf("dagput err: %s: %s", err, string(resBytes))
 			return err
 		} else {
+
+			if err := file.WriteCommitHashToCurrentBranchHeadFile(cs.repoName, cid); err != nil {
+				return err
+			}
+
 			fmt.Printf("%s\n", cid)
 		}
 	}
@@ -178,8 +193,10 @@ func (cs *fileCreateSnapshot) createTree(parent *map[string]interface{},
 				(*createdTree)[entryPathElements[level]] = map[string]string{"/": entry.entry.Multihash}
 			} else {
 				// level < entry.RepoPath.Size()
+				var entryListOfOne []snapshotIndexEntry = []snapshotIndexEntry{entry}
+
 				if _, err := cs.createTree(createdTree,
-					level+1, pathList, entryPathElements[level]); err != nil {
+					level+1, &entryListOfOne, entryPathElements[level]); err != nil {
 					return nil, err
 				}
 			}
@@ -217,4 +234,34 @@ func getStringValueFromKey(m *map[string]interface{}, key string) (string, bool)
 		}
 
 	}
+}
+
+func createSnapshotObject(repoName string, rootTree *map[string]interface{}) (*map[string]interface{}, error) {
+
+	dogg3rzObject := make(map[string]interface{})
+
+	var cr config.FileConfigResource
+	var err error
+
+	c, err := cr.GetConfig()
+	if err != nil {
+		return &dogg3rzObject, err
+	}
+
+	meta := make(map[string]string)
+
+	meta[primitives.META_ATTR_REPO_NAME] = repoName
+	//meta[primitives.META_ATTR_REPO_ID] = ""
+	meta[primitives.META_ATTR_EMAIL_ADDR] = c.User.Email
+
+	body := make(map[string]interface{})
+
+	body[primitives.BODY_ATTR_ROOT_TREE] = *rootTree
+
+	dogg3rzObject[primitives.DOGG3RZ_OBJECT_ATTR_TYPE] = primitives.TYPE_DOGG3RZ_SNAPSHOT
+	dogg3rzObject[primitives.DOGG3RZ_OBJECT_ATTR_METADATA] = meta
+	dogg3rzObject[primitives.DOGG3RZ_OBJECT_ATTR_BODY] = body
+
+	//	m[primitives.DOGG3RZ_OBJECT_ATTR_METADATA]
+	return &dogg3rzObject, nil
 }

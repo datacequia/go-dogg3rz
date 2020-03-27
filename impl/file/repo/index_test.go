@@ -11,6 +11,7 @@ import (
 
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 	"github.com/datacequia/go-dogg3rz/primitives"
+	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
 var dogg3rzHome string
@@ -29,7 +30,12 @@ func indexSetup(t *testing.T) {
 
 	fileNodeResource := &filenode.FileNodeResource{}
 
-	if err := fileNodeResource.InitNode(); err != nil {
+	var dgrzConf config.Dogg3rzConfig
+
+	// REQUIRED CONF
+	dgrzConf.User.Email = "test@dogg3rz.com"
+
+	if err := fileNodeResource.InitNode(dgrzConf); err != nil {
 		t.Error(err)
 	}
 	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)

@@ -25,6 +25,7 @@ import (
 	//	"os"
 
 	"github.com/datacequia/go-dogg3rz/resource"
+	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
 type dgrzInitCmd struct {
@@ -33,6 +34,10 @@ type dgrzInitCmd struct {
 }
 
 type dgrzInitNode struct {
+	UserEmail       string `long:"user-email" description:"user's email address" required:"true"`
+	UserFirstName   string `long:"user-firstname" description:"user's first name"`
+	UserLastName    string `long:"user-lastname" description:"user's last name"`
+	IPFSApiEndpoint string `long:"ipfs-api-endpoint" description:"the http(s) url your IPFS node's api endpoint listener" default:"http://localhost:5001/"`
 }
 
 type dgrzInitRepo struct {
@@ -48,7 +53,14 @@ func init() {
 
 func (x *dgrzInitNode) Execute(args []string) error {
 
-	return resource.GetNodeResource().InitNode()
+	var c config.Dogg3rzConfig
+
+	// ASSIGN REQUIIRED USER EMAIL
+	c.User.Email = x.UserEmail
+	c.User.FirstName = x.UserFirstName
+	c.User.LastName = x.UserLastName
+
+	return resource.GetNodeResource().InitNode(c)
 
 }
 

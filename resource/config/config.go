@@ -18,6 +18,11 @@
 
 package config
 
+import (
+	"bytes"
+	"text/template"
+)
+
 const CONFIG_JSON_SCHEMA = `
 {
 	"$id": "https://www.datacequia.com/dogg3rz.config.schema.json",
@@ -36,30 +41,87 @@ const CONFIG_JSON_SCHEMA = `
 				}
 			},
 			"required": ["apiEndpoint"]
-    }
-
+    },
+		"user": {
+			"description":"User Information Section",
+			"type": "object",
+			"properties": {
+				"email": {
+					"description":"User's email address",
+					"type":"string"
+				},
+				"firstName": {
+					"description":"User's first name",
+					"type": "string"
+				},
+				"lastName": {
+					"description":"User's last name",
+					"description":"string"
+				}
+			},
+			"required":["email"]
+		}
   },
-  "required": [ "ipfs" ]
+  "required": [ "ipfs","user" ]
 }
 `
 
-const CONFIG_JSON_DEFAULT = `
+// use CONFIG_JSON_DEFAAULT 	with text/template to generraate default
+const CONFIG_JSON_DEFAULT_TEMPLATE = `
 {
     "ipfs": {
-      "apiEndpoint":"http://localhost:5001/"
-    }
+      "apiEndpoint":"{{ .IPFS.ApiEndpoint }}"
+    },
+		"user": {
+			"email":"{{ .User.Email }}",
+			"firstName":"{{ .User.FirstName }}",
+			"lastName":"{{ .User.LastName  }}"
+		}
 
 }
 `
 
 type Dogg3rzConfig struct {
 	IPFS IPFSConfig `json:"ipfs"`
+	User UserConfig `json:"user"`
 }
 
 type IPFSConfig struct {
 	ApiEndpoint string `json:"apiEndpoint"`
 }
 
+type UserConfig struct {
+	Email     string `json:"email"`
+	FirstName string `json:"firstName"`
+	LastName  string `json:"lastName"`
+}
+
 type ConfigResource interface {
 	GetConfig() (*Dogg3rzConfig, error)
+}
+
+func GenerateDefault(config Dogg3rzConfig) (string, error) {
+
+	//var user config.UserConfig
+	var buf bytes.Buffer
+	var tmpl *template.Template
+	var err error
+
+	// DEFAULT TO localhost:5001 if not provided
+	if len(config.IPFS.ApiEndpoint) == 0 {
+		config.IPFS.ApiEndpoint = "http://localhost:5001/"
+	}
+
+	tmpl, err = template.New("GenerateDefault").Parse(
+		CONFIG_JSON_DEFAULT_TEMPLATE)
+	if err != nil {
+		return "", err
+	}
+	err = tmpl.Execute(&buf, config)
+	if err != nil {
+		return "", err
+	}
+
+	return string(buf.Bytes()), nil
+
 }

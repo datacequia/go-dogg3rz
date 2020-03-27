@@ -1,5 +1,8 @@
 {
   "ipfs": {
     "apiEndpoint":"http://localhost:5001/"
+  },
+  "user": {
+    "email":"dog@datacequia.com"
   }
 }
