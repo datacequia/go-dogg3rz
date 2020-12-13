@@ -1,25 +1,34 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package repo
 
 import (
-	"io"
-	"os"
-
 	"bytes"
+	"context"
 	"crypto/sha1"
 	"encoding/binary"
+	"fmt"
+	"io"
+	"math"
+	"os"
 	"path/filepath"
 
-	"github.com/google/uuid"
-
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/primitives"
 	"github.com/datacequia/go-dogg3rz/impl/file"
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
-
+	"github.com/datacequia/go-dogg3rz/resource/common"
+	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 	cid "github.com/ipfs/go-cid"
-//	"log"
-//	"log"
-	"fmt"
 )
 
 const (
@@ -41,77 +50,68 @@ type fileRepositoryIndex struct {
 	path string
 }
 
+/*
 type indexEntry struct {
-	Type      string
-	Uuid      string
-	MtimeNs   int64
-	FileSize  int64
-	Multihash string
-	Subpath   string
+	datasetPath    string
+	objectType     jsonld.JSONLDResourceType
+	objectID       string // IRI or TERM
+	containerType  jsonld.JSONLDResourceType
+	containerID    string
+	lastModifiedNs int64
+	objectCID      string
 }
+*/
 
 type indexEntryInternal struct {
-	Type uint32
-	Uuid uuid.UUID
-	MtimeNs int64
-	FileSize int64
-	MultihashLength int8
-	Multihash []byte
-	SubpathLength int16
-	Subpath []byte
-}
-
-// MAP DOGG3RZOBJECT TYPES TO UIN32 EQUIVLANT
-var dogg3rzObjectTypesToUint32Map map[primitives.Dogg3rzObjectType]uint32
-// MAP UINT32 TO DOGG3RZOBJECTYPE
-var uint32ToDogg3rzObjectTypesMap map[uint32]primitives.Dogg3rzObjectType
-
-func init() {
-
-	 dogg3rzObjectTypesToUint32Map = make(map[primitives.Dogg3rzObjectType]uint32)
-	 uint32ToDogg3rzObjectTypesMap = make(map[uint32]primitives.Dogg3rzObjectType)
-
-	 for _,t := range primitives.Dogg3rzObjectTypes() {
-
-		 dogg3rzObjectTypesToUint32Map[t] = uint32(t)
-		 uint32ToDogg3rzObjectTypesMap[uint32(t)] = t
-
-	 }
+	datasetPathLength int16
+	datasetPath       []byte
+	objectType        jsonld.JSONLDResourceType
+	objectIDLength    int16
+	objectID          []byte
+	containerType     jsonld.JSONLDResourceType
+	containerIDLength int16
+	containerID       []byte
+	lastModifiedNs    int64
+	objectCIDLength   int8
+	objectCID         []byte
 }
 
 /*
-Index format
+
+INDEX FILE BINARY FORMAT
 
 HEADER
   SIGNATURE - 4 BYTES . ALWAYS 'RESC' (RESOURCE CACHE)
   VERSION   - 4 BYTES. INDEX FORMAT VERSION
   NUM ENTRIES - 4 BYTES, NUMBER OF INDEX ENTRIES
 ENTRY
-  DGRZ RESOURCE PATH (UNIX STYLE)
-  NUL BYTE - 1 BYTE
-  MULTIASH - THE (IPFS) HASH FINGERPRINT FOR THE RESOURCE CONTENT
-    HASH FUNCTION TYPE - 1 BYTE,
-    DIGEST LENGTH - 1 BYTE, THE LENGTH OF THE DIGEST
-    DIGEST VALUE - THE CONTENT OF DIGEST
-  NUL BYTE - 1 BYTE
+  DATASET PATH LENGTH - 2 BYTES
+  DATASET PATH (UNIX STYLE) - VARIABLE LENGTH (UP TO 2^16 )
+	(JSONLD) OBJECT TYPE - 1 BYTE
+	OBJECT ID/IRI LENGTH - 2 BYTES
+	(JSONLD) OBJECT ID/IRI - VARIABLE LENGTH (UP TO 2^16)
+	(JSONLD) CONTAINER TYPE - 1 BYTE
+	(JSONLD) CONTAINER ID/IRI LENGTH - 2 BYTES
+	(JSONLD) CONTAINER ID/IRI - VARIABLE LENGTH (UP TO 2^16)
+
+	(JSONLD) OBJECT LAST MODIFIED (EPOCH TIME) NANO - 8 BYTES
+	(JSONLD) OBJECT CID LENGTH -  1 BYTE
+	(JSONLD) OBJECT CID - VARIABLE LENGTH (UP TO 2^8)
+
 CHECKSUM
   SHA-1 INDEX CHECKSUM - 160 BIT (8 BYTES) OVER CONTENT OF INDEX BEFORE THIS
                          CHECKSUM
 */
 
-func newFileRepositoryIndex(repoName string) (*fileRepositoryIndex, error) {
+func newFileRepositoryIndex(repoName string, ctxt context.Context) (*fileRepositoryIndex, error) {
 
 	index := &fileRepositoryIndex{}
 
-
-
 	index.repoName = repoName
 
-	index.repoDir = filepath.Join(file.RepositoriesDirPath(), repoName)
+	index.repoDir = filepath.Join(file.RepositoriesDirPath(ctxt), repoName)
 
 	index.path = filepath.Join(index.repoDir, file.IndexFileName)
-
-
 
 	if !file.DirExists(index.repoDir) {
 		return nil, errors.NotFound.Newf("repository directory at %s does not exist",
@@ -123,27 +123,26 @@ func newFileRepositoryIndex(repoName string) (*fileRepositoryIndex, error) {
 }
 
 // Adds a new resource (resId) to the index
-func (index *fileRepositoryIndex) update(entry1 indexEntry) error {
+func (index *fileRepositoryIndex) update(entry1 common.StagingResource) error {
 
 	var internalEntry indexEntryInternal
+	var err error
 
-	if i,err := ValidateIndexEntry(entry1); err != nil {
+	if internalEntry, err = ValidateIndexEntry(entry1); err != nil {
 		return err
-	} else {
-		internalEntry = i
 	}
-	//fmt.Println("ValidateIndexEntry returned",internalEntry.String())
+	// CREATE CALLBACK TO WRITE NEW ENTRY
 
 	addFunc := func() (io.Reader, error) {
 		// GET EXISTING ENTRIES IN INDEX FILE//
 
 		var indexEntriesInternal []indexEntryInternal
 
-		if ie, err := index.readIndexFileInternal();err != nil {
+		if ie, err := index.readIndexFileInternal(); err != nil {
 			if os.IsNotExist(err) {
 				// DOESN'T EXIST YET. ASSUME FOR NOW
 				// THAT REPO DIR EXISTS BUT INDEX FILE DOESN'T
-				indexEntriesInternal = make([]indexEntryInternal,0)
+				indexEntriesInternal = make([]indexEntryInternal, 0)
 			} else {
 				// SOME OTHER ERROR OCCURRED OTHER THAN
 				// INDEX FILE DOES NOT EXIIT. RETURN THE ERROR
@@ -151,24 +150,25 @@ func (index *fileRepositoryIndex) update(entry1 indexEntry) error {
 			}
 		} else {
 			// INDEX READ SUCCESSFUL
-		//	fmt.Println("index read returned entries",len(ie))
+			//	fmt.Println("index read returned entries",len(ie))
 			indexEntriesInternal = ie
 		}
-
 		var updatedExistingEntry bool = false
 
 		for i, e := range indexEntriesInternal {
 			// CONVERT STRING FORMATTEED UUID BEFORE COMPARE
 			// AS FORMATTING COULD VARY . COMPARE BYTE[16] ARRAYS
-		//	fmt.Printf("entry read type=%d, uuid=%v,fs=%d,mtime=%d,spl=%d",e.Type,e.Uuid,e.FileSize,e.MtimeNs,e.SubpathLength)
-			if  e.Uuid == internalEntry.Uuid {
-				 indexEntriesInternal[i] = internalEntry
-				 updatedExistingEntry=true
+			//	fmt.Printf("entry read type=%d, uuid=%v,fs=%d,mtime=%d,spl=%d",e.Type,e.Uuid,e.FileSize,e.MtimeNs,e.SubpathLength)
+
+			// COMPARE BY OBJECT IDENTIFIERS (IRI) WHICH SHOULD BE UNIQUE
+			// FOR A GIVEN DATASET
+			if bytes.Equal(e.datasetPath, internalEntry.datasetPath) &&
+				bytes.Equal(e.objectID, internalEntry.objectID) {
+				indexEntriesInternal[i] = internalEntry
+				updatedExistingEntry = true
 			}
 		}
-
-
-		if ! updatedExistingEntry {
+		if !updatedExistingEntry {
 			indexEntriesInternal = append(indexEntriesInternal, internalEntry)
 
 		}
@@ -177,20 +177,18 @@ func (index *fileRepositoryIndex) update(entry1 indexEntry) error {
 		///////////////////////////////////
 		// WRITE HEADER TO BUFFFER
 		//////////////////////////////////
-		if err := binary.Write(buf, binary.BigEndian, []byte(file.ResourceCacheSignature));
-		err != nil {
+		if err := binary.Write(buf, binary.BigEndian, []byte(file.ResourceCacheSignature)); err != nil {
 			return nil, err
 		}
 
-		if err := binary.Write(buf,binary.BigEndian,file.IndexFormatVersion); err != nil {
+		if err := binary.Write(buf, binary.BigEndian, file.IndexFormatVersion); err != nil {
 			return nil, err
 		}
 
 		var numIndexEntries uint32 = uint32(len(indexEntriesInternal))
-		if err := binary.Write(buf,binary.BigEndian,numIndexEntries); err!=nil {
-			return nil,err
+		if err := binary.Write(buf, binary.BigEndian, numIndexEntries); err != nil {
+			return nil, err
 		}
-
 		// WRITE ENTRIES TO BUFFER
 		if err := writeIndexEntriesToBuffer(buf, indexEntriesInternal); err != nil {
 			return nil, err
@@ -200,88 +198,71 @@ func (index *fileRepositoryIndex) update(entry1 indexEntry) error {
 
 		var checkSum [ChecksumLength]byte = sha1.Sum(buf.Bytes())
 
-		if err := binary.Write(buf,binary.BigEndian, checkSum); err != nil {
+		if err := binary.Write(buf, binary.BigEndian, checkSum); err != nil {
 			return buf, err
 		}
 
-
-		return buf,nil
+		return buf, nil
 
 	}
 
 	//log.Printf("index.path = %s",index.path)
 
-	if _, err := file.WriteToFileAtomic(addFunc, index.path);err != nil {
+	if _, err := file.WriteToFileAtomic(addFunc, index.path); err != nil {
 		return err
 	}
 
-
 	return nil
 }
 
-func writeIndexEntriesToBuffer(buf *bytes.Buffer,indexEntries []indexEntryInternal) error {
+func writeIndexEntriesToBuffer(buf *bytes.Buffer, indexEntries []indexEntryInternal) error {
 
-	for _,e := range indexEntries {
+	for _, e := range indexEntries {
 
-
-		if err := binary.Write(buf, binary.BigEndian, e.Type); err != nil {
-			return err
+		var writeList []interface{} = []interface{}{
+			e.datasetPathLength,
+			e.datasetPath,
+			e.objectType,
+			e.objectIDLength,
+			e.objectID,
+			e.containerType,
+			e.containerIDLength,
+			e.containerID,
+			e.lastModifiedNs,
+			e.objectCIDLength,
+			e.objectCID,
 		}
 
-		if err := binary.Write(buf, binary.BigEndian, e.Uuid); err != nil {
-			return err
+		for _, dataElement := range writeList {
+			if err := binary.Write(buf, binary.BigEndian, dataElement); err != nil {
+				return err
+			}
 		}
 
-		if err := binary.Write(buf, binary.BigEndian, e.MtimeNs); err != nil {
-			return err
-		}
-
-		if err := binary.Write(buf, binary.BigEndian, e.FileSize); err != nil {
-			return  err
-		}
-
-	//fmt.Println("writeIndexEntriesToBuffer: multihashlength:",e.MultihashLength,e.FileSize)
-		if err := binary.Write(buf, binary.BigEndian, e.MultihashLength); err != nil {
-			return  err
-		}
-
-
-		if err := binary.Write(buf, binary.BigEndian, e.Multihash); err != nil {
-			return  err
-		}
-
-
-		if err := binary.Write(buf, binary.BigEndian, e.SubpathLength); err != nil {
-			return  err
-		}
-
-		if err := binary.Write(buf, binary.BigEndian, e.Subpath); err != nil {
-			return  err
-		}
-	//	fmt.Printf("writeIndexEntriesToBuffer[%d]=%s\n",i,e.String())
+		//	fmt.Printf("writeIndexEntriesToBuffer[%d]=%s\n",i,e.String())
 	}
 
 	return nil
 
 }
 
-func (index *fileRepositoryIndex) readIndexFile() ([]indexEntry,error) {
+func (index *fileRepositoryIndex) readIndexFile() ([]common.StagingResource, error) {
 
-	  var indexEntriesInternal []indexEntryInternal = []indexEntryInternal{}
-		var indexEntries []indexEntry = []indexEntry{}
+	var indexEntriesInternal []indexEntryInternal = []indexEntryInternal{}
+	var indexEntries []common.StagingResource = []common.StagingResource{}
 
-		if i,err := index.readIndexFileInternal();err != nil  {
-			return indexEntries,err
-		} else {
-			indexEntriesInternal = i
-		}
+	if i, err := index.readIndexFileInternal(); err != nil {
+		return indexEntries, err
+	} else {
+		indexEntriesInternal = i
+	}
 
-		indexEntries = make([]indexEntry,len(indexEntriesInternal))
-		for i, indexEntryInternal := range indexEntriesInternal {
-				indexEntries[i] = indexEntryInternal.ToIndexEntry()
-		}
+	indexEntries = make([]common.StagingResource, len(indexEntriesInternal))
+	for i, indexEntryInternal := range indexEntriesInternal {
+		indexEntries[i] = indexEntryInternal.ToStagingResource()
+	}
 
-		return indexEntries, nil
+	return indexEntries, nil
 
 }
 
@@ -359,13 +340,11 @@ func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal,
 		}
 	}
 
-
 	// REWIND FILE POINTER BACK TO BEGINNNING NOW THAT
 	// INDEX FILE CHECKSUM VERIFIED
 	if _, err := f.Seek(0, os.SEEK_SET); err != nil {
 		return indexEntries, err
 	}
-
 
 	// READ HEADER SIGNATURE
 	sig := make([]byte, len(file.ResourceCacheSignature))
@@ -407,70 +386,59 @@ func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal,
 
 		var e indexEntryInternal
 
-	//	var dgrzType uint32
-
-		if err := binary.Read(f, binary.BigEndian, &e.Type); err != nil {
+		// READ DATASETPATH
+		if err := binary.Read(f, binary.BigEndian, &e.datasetPathLength); err != nil {
 			return indexEntries, err
 		}
 
-	//	var id = make([]byte, 16)
-
-		if err := binary.Read(f, binary.BigEndian, &e.Uuid); err != nil {
+		e.datasetPath = make([]byte, e.datasetPathLength)
+		if err := binary.Read(f, binary.BigEndian, &e.datasetPath); err != nil {
 			return indexEntries, err
 		}
 
-	//	var mTimeNs int64
-
-		if err := binary.Read(f, binary.BigEndian, &e.MtimeNs); err != nil {
+		// READ OBJECTTYPE
+		if err := binary.Read(f, binary.BigEndian, &e.objectType); err != nil {
 			return indexEntries, err
 		}
 
-//		var fileSize int64
-
-		if err := binary.Read(f, binary.BigEndian, &e.FileSize); err != nil {
+		// READ OBJECTID
+		if err := binary.Read(f, binary.BigEndian, &e.objectIDLength); err != nil {
 			return indexEntries, err
 		}
 
-	//	var multiHashLength int8
-
-		if err := binary.Read(f, binary.BigEndian, &e.MultihashLength); err != nil {
-			return indexEntries, err
-		}
-		if e.MultihashLength < 1 {
-			return indexEntries, errors.UnexpectedValue.Newf(
-				"expected multihash length to be greater than zero, found length %d: "+
-					"{ file = %s, entry = %d }", e.MultihashLength, index.path, i)
-
-		}
-
-		var multiHash []byte = make([]byte,e.MultihashLength)
-		if err := binary.Read(f, binary.BigEndian, multiHash); err != nil {
-			return indexEntries, err
-		} else {
-			e.Multihash = multiHash
-		}
-
-//		var subPathLength int16
-
-		if err := binary.Read(f, binary.BigEndian, &e.SubpathLength); err != nil {
+		e.objectID = make([]byte, e.objectIDLength)
+		if err := binary.Read(f, binary.BigEndian, &e.objectID); err != nil {
 			return indexEntries, err
 		}
 
-		if e.SubpathLength  < 1 {
-			return indexEntries, errors.UnexpectedValue.Newf(
-				"expected sub path length to be greater than zero, found length %d: "+
-					"{ file = %s, index entry offset = %d }",
-					e.SubpathLength,
-				index.path,
-				i)
-
+		// READ CONTAINERTYPE
+		if err := binary.Read(f, binary.BigEndian, &e.containerType); err != nil {
+			return indexEntries, err
 		}
 
-		var subPath = make([]byte, e.SubpathLength)
-		if err := binary.Read(f, binary.BigEndian, &subPath); err != nil {
+		// READ CONTAINERID
+		if err := binary.Read(f, binary.BigEndian, &e.containerIDLength); err != nil {
 			return indexEntries, err
-		} else {
-			e.Subpath = subPath
+		}
+
+		e.containerID = make([]byte, e.containerIDLength)
+		if err := binary.Read(f, binary.BigEndian, &e.containerID); err != nil {
+			return indexEntries, err
+		}
+
+		// READ LASTMODIFIEDNS
+		if err := binary.Read(f, binary.BigEndian, &e.lastModifiedNs); err != nil {
+			return indexEntries, err
+		}
+
+		// READ OBJECTCID
+		if err := binary.Read(f, binary.BigEndian, &e.objectCIDLength); err != nil {
+			return indexEntries, err
+		}
+
+		e.objectCID = make([]byte, e.objectCIDLength)
+		if err := binary.Read(f, binary.BigEndian, &e.objectCID); err != nil {
+			return indexEntries, err
 		}
 
 		indexEntries[i] = e
@@ -478,93 +446,137 @@ func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal,
 	}
 
 	return indexEntries, nil
+
 }
 
-
-
+/*
 func (e indexEntry) String() string {
 
-	return fmt.Sprintf("indexEntry: { Type=%s, Uuid = %s, MtimeNs=%d, FileSize=%d, Multihash = %s, Subpath = %s }",
-	e.Type,e.Uuid,e.MtimeNs,e.FileSize,e.Multihash,e.Subpath)
+	return fmt.Sprintf("indexEntry: { datasetPath=%s, objectType = %s, "+
+		"objectID=%s, containerType=%s, containerID = %s, lastModifiedNs = %d objectCID = %s }",
+		e.datasetPath, e.objectType, e.objectID, e.containerType, e.containerID,
+		e.lastModifiedNs, e.objectCID)
 
 }
+*/
 
-func ValidateIndexEntry(e indexEntry) (indexEntryInternal,error) {
+func ValidateIndexEntry(e common.StagingResource) (indexEntryInternal, error) {
 
 	var internal indexEntryInternal
 
-	if  dot,err := primitives.Dogg3rzObjectTypeFromString(e.Type);err != nil  {
-		return internal, errors.UnexpectedValue.Newf("ValidateIndexEntry(): indexEntry.Type = '%s': " +
-		"This identifier does not map to one of following defined in the 'primitives' package: %v",
-		e.Type, primitives.Dogg3rzObjectTypes())
-	}  else {
-		internal.Type = uint32(dot)
+	// VALIDATE DATASET PATH
+	var rp *common.RepositoryPath
+	var err error
+
+	if err = e.AssertValid(); err != nil {
+		return internal, err
 	}
 
-	internal.MtimeNs = e.MtimeNs
-
-
-	if e.FileSize < 0 {
-		return internal, errors.OutOfRange.Newf("ValidateIndexEntry(): indexEntry.FileSize = %d. " +
-		"Must be greater than zero",e.FileSize)
-	} else {
-		internal.FileSize = e.FileSize
+	if rp, err = common.RepositoryPathNew(e.DatasetPath); err != nil {
+		return internal, err
 	}
 
-	if _,err := cid.Decode(e.Multihash); err != nil {
-		 return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): "+
-		 "indexEntry.Multihash = %s. Expected valid multihash",e.Multihash)
-	} else {
-		internal.Multihash = []byte(e.Multihash)
-		internal.MultihashLength = int8(len (internal.Multihash) )
-	//	fmt.Println("ValidateIIndexEntry: multihashlength:",internal.MultihashLength)
+	internal.datasetPath = []byte(rp.ToString())
+
+	if len(internal.datasetPath) > math.MaxInt16 {
+		return internal, errors.OutOfRange.Newf(
+			"datasetPath length too long: { datasetPath length %d, max allowed length %d }",
+			len(internal.datasetPath), math.MaxInt16)
+
+	}
+	internal.datasetPathLength = int16(len(internal.datasetPath))
+
+	// VALIDATE OBJECT TYPE
+	/*
+		if err = e.objectType.AssertValid(); err != nil {
+			return internal, err
+		}
+	*/
+
+	internal.objectType = e.ObjectType
+
+	// VALIDATE OBJECT ID
+	internal.objectID = []byte(e.ObjectIRI)
+	if len(internal.objectID) > math.MaxInt16 {
+		return internal, errors.OutOfRange.Newf("objectID length too long: { objectID length %d, max allowed length %d}",
+			len(internal.objectID), math.MaxInt16)
+
+	}
+	internal.objectIDLength = int16(len(internal.objectID))
+
+	// VALIDATE CONTAINER TYPE
+	/*
+		if err := e.containerType.AssertValid(); err != nil {
+			return internal, err
+		}
+	*/
+
+	internal.containerType = e.ContainerType
+
+	// 	VALIDATE CONTAINER ID
+	internal.containerID = []byte(e.ContainerIRI)
+	if len(internal.containerID) > math.MaxInt16 {
+		return internal, errors.OutOfRange.Newf("containerID length too long: { containerID length %d, max allowed length %d}",
+			len(internal.containerID), math.MaxInt16)
+
+	}
+	internal.containerIDLength = int16(len(internal.containerID))
+
+	//  VALIDATE LAST MODIFIED TIME
+	if e.LastModifiedNs < 0 {
+		// EPOCH TIME SHOULD NEVER BE LESS THAN ZERO
+		return internal, errors.OutOfRange.Newf("lastModifiedNs (epoch time) should be between 0 and %d. found %d",
+			math.MaxInt64, e.LastModifiedNs)
+	}
+	internal.lastModifiedNs = e.LastModifiedNs
+
+	// VALIDATE CID (IF StagingResource Wants CID assigned)
+	if e.WantsCID() {
+		if _, err = cid.Decode(e.ObjectCID); err != nil {
+			return internal, errors.InvalidValue.Wrapf(err, ""+
+				"bad content identifier value '%s' assigned to objectCID", e.ObjectCID)
+
+		}
 	}
 
-	if repoPath,err := rescom.RepositoryPathNew(e.Subpath); err != nil {
-		return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): " +
-	  "indexEntry.Subpath: %s",err)
-	} else {
-		 internal.Subpath = []byte(repoPath.ToString()) // used normalized path
-		 internal.SubpathLength = int16(len(internal.Subpath))
+	internal.objectCID = []byte(e.ObjectCID)
+	if len(internal.objectCID) > math.MaxInt8 {
+		return internal, errors.OutOfRange.Newf("objectCID length too long: { objectCID length %d, max allowed length %d}",
+			len(internal.objectCID), math.MaxInt8)
 	}
+	internal.objectCIDLength = int8(len(internal.objectCID))
 
-	if myUUID, err := uuid.Parse(e.Uuid); err != nil {
-		return internal, errors.InvalidValue.Wrapf(err,"ValidateIndexEntry(): " +
-		"indexEntry.Uuid: %s",err)
-
-	} else {
-		internal.Uuid = myUUID
-	}
-
-	return internal,nil
+	return internal, nil
 
 }
 
-func (i indexEntryInternal) ToIndexEntry() indexEntry {
+func (i indexEntryInternal) ToStagingResource() common.StagingResource {
 
-	var e indexEntry
+	var e common.StagingResource
 
-	e.Type = uint32ToDogg3rzObjectTypesMap[i.Type].String()
-	e.Uuid = i.Uuid.String()
-	e.MtimeNs = i.MtimeNs
-	e.FileSize = i.FileSize
-	e.Subpath = string(i.Subpath)
-
-
-	e.Multihash = string(i.Multihash)
+	e.DatasetPath = string(i.datasetPath)
+	e.ObjectType = i.objectType
+	e.ObjectIRI = string(i.objectID)
+	e.ContainerType = i.containerType
+	e.ContainerIRI = string(i.containerID)
+	e.LastModifiedNs = i.lastModifiedNs
+	e.ObjectCID = string(i.objectCID)
 
 	return e
 }
 
 func (i indexEntryInternal) String() string {
 
-	return fmt.Sprintf("indexEntryInternal={Type=%s,Uuid=%s,FileSize=%d,MtimeNs=%d,MultiHashLength=%d,Multihash=%s,SubpathLength=%d,Subpath=%s}",
-		uint32ToDogg3rzObjectTypesMap[i.Type].String(),
-		i.Uuid.String(),
-		i.FileSize,
-		i.MtimeNs,
-		i.MultihashLength,
-		string(i.Multihash),
-		i.SubpathLength,
-		string(i.Subpath))
+	return fmt.Sprintf("indexEntryInternal = { DatasetPathLength=%d, DatasetPath=%s, "+
+		"objectType=%s, objectIDLength=%d, objectID=%s,"+
+		" containerType=%s, containerIDLength=%d, containerID=%s"+
+		" lastModifiedNs=%d, objectCIDLength=%d, objectCID=%s }",
+		i.datasetPathLength, string(i.datasetPath),
+		i.objectType,
+		i.objectIDLength, string(i.objectID),
+		i.containerType,
+		i.containerIDLength, string(i.containerID),
+		i.lastModifiedNs,
+		i.objectCIDLength, string(i.objectCID))
+
 }

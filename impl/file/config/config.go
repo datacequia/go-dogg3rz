@@ -1,24 +1,20 @@
 /*
- *  Dogg3rz is a decentralized metadata version control system
- *  Copyright (C) 2019 D. Andrew Padilla dba Datacequia
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
 package config
 
 import (
+	"context"
 	"encoding/json"
 	"io/ioutil"
 	"log"
@@ -38,16 +34,16 @@ const configFileName = "config"
 type FileConfigResource struct {
 }
 
-func (configResource *FileConfigResource) GetConfig() (*resourceconfig.Dogg3rzConfig, error) {
+func (configResource *FileConfigResource) GetConfig(ctxt context.Context) (*resourceconfig.Dogg3rzConfig, error) {
 
-	err := validateConfig(configPath())
+	err := validateConfig(configPath(ctxt))
 	if err != nil {
 		return nil, err
 	}
 
 	dgrzCfg := &resourceconfig.Dogg3rzConfig{}
 
-	byteValue, err := ioutil.ReadFile(configPath())
+	byteValue, err := ioutil.ReadFile(configPath(ctxt))
 	if err != nil {
 		return nil, err
 	}
@@ -62,10 +58,10 @@ func (configResource *FileConfigResource) GetConfig() (*resourceconfig.Dogg3rzCo
 }
 
 // Returns Path to dogg3rz configuration file
-func configPath() string {
+func configPath(ctxt context.Context) string {
 
 	// gojsonschema reequires the schema 'file://' prepeended to path
-	return path.Join(file.DotDirPath(), configFileName)
+	return path.Join(file.DotDirPath(ctxt), configFileName)
 
 }
 

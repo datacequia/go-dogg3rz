@@ -1,271 +1,293 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package repo
 
 import (
+	"context"
 	"encoding/json"
 	"fmt"
-	"io"
+	"math"
 	"os"
-	"path/filepath"
 
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/impl/file"
-	"github.com/datacequia/go-dogg3rz/primitives"
-	"github.com/datacequia/go-dogg3rz/resource/common"
-
-	shell "github.com/ipfs/go-ipfs-api"
+	"github.com/datacequia/go-dogg3rz/ipfs"
+	rescom "github.com/datacequia/go-dogg3rz/resource/common"
+	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
+type stagingResourceLocationFile struct {
+	rescom.StagingResourceLocation
+
+	fileDataset *fileDataset
+}
+
 type fileStageResource struct {
-	repoName       string
-	schemaSubpathS string
-	repositoryPath *common.RepositoryPath
-	filesystemPath string // filesystem path to resource
+	repoName string
 
-	attrType         string
-	attrId           string
-	attrMeta         map[string]interface{}
-	attrBodyCid      string
-	attrBodyFileInfo os.FileInfo
-	resourceContent  string
-	resourceCid      string
+	stagedResources []rescom.StagingResource
+
+	startList []stagingResourceLocationFile
+
+	// CONTAINS MAP OF ALL IN-MEMORY PARSED DATASETS FOR repoName
+	jsonLDParsedDocMap map[string]map[string]interface{} // key = REPO_NAME:DATASET_PATH
+
+	// SPECIFIES CURRENT PARSED JSON-LD DOC BEING PROCESSED
+	currentJSONLDParsedDoc map[string]interface{}
+	// SPECIFIES THE STAGING RESOURCEES BEING SEARCHED FOR STAGING
+	// AT THE MOMENT THE SEARCH IS PROCESSING
+	currentStagingResourceLocation rescom.StagingResourceLocation
+	// INDICATES IF PARSER IS CURRENTLY ITERATING THAT RESOURCE AND/OR RESOURCES
+	// WITHIN IF IT'S A CONTAINER RESOURCE
+	inCurrentStagingResourceLocation bool
 }
 
-var stageableResources = []primitives.Dogg3rzObjectType{
-	primitives.TYPE_DOGG3RZ_SCHEMA,
-	primitives.TYPE_DOGG3RZ_MEDIA,
-	primitives.TYPE_DOGG3RZ_OBJECT,
-	primitives.TYPE_DOGG3RZ_TRIPLE,
-	primitives.TYPE_DOGG3RZ_SERVICE,
-}
+func (fsr *fileStageResource) stageResources(repoName string, startList []rescom.StagingResourceLocation, ctxt context.Context) ([]rescom.StagingResource, error) {
 
-//
-func (s *fileStageResource) stageResource(repoName string, schemaSubpath string) error {
-
-	if !file.RepositoryExist(repoName) {
-		return errors.NotFound.Newf("repository '%s' does not exist. please create it first.", repoName)
-	}
-
-	s.repoName = repoName
-	s.schemaSubpathS = schemaSubpath
-
-	rp, err := common.RepositoryPathNew(schemaSubpath)
-	if err != nil {
-		return err
-	} else {
-		s.repositoryPath = rp
-	}
-
-	if s.repositoryPath.EndsWithPathSeparator() {
-		return errors.InvalidValue.Newf("path to resource object to be staged cannot end "+
-			"with path separater, found %s",
-			schemaSubpath)
-	}
-
-	s.filesystemPath = filepath.Join(file.RepositoriesDirPath(), repoName, rp.ToString())
-
-	if err := s.loadResourceAttributes(s.filesystemPath); err != nil {
-		return err
-	}
-
-	// CREATE DOGG3RZ OBJECT
-	resource := make(map[string]interface{})
-	//fmt.Println("create resource ")
-	resource[primitives.DOGG3RZ_OBJECT_ATTR_TYPE] = s.attrType
-	resource[primitives.DOGG3RZ_OBJECT_ATTR_ID] = s.attrId
-	resource[primitives.DOGG3RZ_OBJECT_ATTR_METADATA] = s.attrMeta
-	//	fmt.Println("putted resource ")
-	mapBody := make(map[string]interface{})
-	mapBody["/"] = s.attrBodyCid // POINT TO BODY CONTENT USING IPFS CID
-
-	resource[primitives.DOGG3RZ_OBJECT_ATTR_BODY] = mapBody
-
-	if resBytes, err := json.Marshal(resource); err != nil {
-		return err
-	} else {
-
-		sh := shell.NewShell("localhost:5001")
-		//	fmt.Println(s)
-		if cid, err := sh.DagPut(resBytes, "json", "cbor"); err != nil {
-			//	fmt.Printf("dagput err: %s: %s", err, string(resBytes))
-			return err
-		} else {
-			//	fmt.Println("resourceCid", cid)
-			s.resourceCid = cid
-
-		}
-	}
-
-	var entry indexEntry
-
-	entry.Type = s.attrType
-	entry.Uuid = s.attrId
-	entry.FileSize = s.attrBodyFileInfo.ModTime().UnixNano()
-	entry.MtimeNs = s.attrBodyFileInfo.Size()
-	entry.Multihash = s.resourceCid
-	entry.Subpath = rp.ToString()
-	//fmt.Println(entry.String())
-	if fileRepoIdx, err := newFileRepositoryIndex(repoName); err != nil {
-		return err
-	} else {
-		if err := fileRepoIdx.update(entry); err != nil {
-			return err
-		}
-	}
-
-	// PRINT THE MULTIHASH OF THE RESOURCE THAT WAS STAGED (FOR NOW)
-	fmt.Println(s.resourceCid)
-
-	return nil
-
-}
-
-func (s *fileStageResource) String() string {
-
-	return fmt.Sprintf("fileStageResource = { "+
-		"repoName: %v, "+
-		"schemaSubpathS: %v, "+
-		"repositoryPath: %v, "+
-		"filesystemPath: %v, "+
-		"attrType: %v, "+
-		"attrId: %v, "+
-		"attrMeta: %v, "+
-		"attrBodyCid: %v, "+
-		"resourceCid: %v }",
-		s.repoName, s.schemaSubpathS, s.repositoryPath,
-		s.filesystemPath, s.attrType, s.attrId,
-		s.attrMeta, s.attrBodyCid, s.resourceCid)
-
-}
-
-func isRepositoryStageable(resType primitives.Dogg3rzObjectType) bool {
-
-	for _, rt := range stageableResources {
-
-		if resType == rt {
-			return true
-		}
-	}
-	return false
-
-}
-
-func (s *fileStageResource) loadResourceAttributes(resPath string) error {
-
-	//	var resType string
-
-	if attrValue, err := file.GetResourceAttributeS(resPath,
-		primitives.DOGG3RZ_OBJECT_ATTR_TYPE); err != nil {
-		if os.IsNotExist(err) {
-			return errors.NotFound.Wrapf(err, "repository resource attribute not found")
-		}
-		return err
-	} else {
-		s.attrType = attrValue
-	}
-
-	if dt, err := primitives.Dogg3rzObjectTypeFromString(s.attrType); err != nil {
-
-		if !isRepositoryStageable(dt) {
-			return errors.UnexpectedType.Newf(
-				"expected repository resource type to be one of %v, found '%s'",
-				stageableResources, s.attrType)
-		}
-	}
-
-	if attrValue, err := file.GetResourceAttributeS(resPath,
-		primitives.DOGG3RZ_OBJECT_ATTR_ID); err != nil {
-		if os.IsNotExist(err) {
-			return errors.NotFound.Wrapf(err, "repository resource attribute not found")
-		}
-		return err
-	} else {
-		s.attrId = attrValue
-	}
-
-	if attrValue, err := file.GetResourceAttributeS(resPath,
-		primitives.DOGG3RZ_OBJECT_ATTR_METADATA); err != nil {
-		if !os.IsNotExist(err) {
-			// METADATA IS OPTIONAL. ASSIGN EMPTY JSON ObjectType
-			// ONLY RETURN ERROR IF IT'S NOT A 'NOTEXIST' ERROR
-
-			return err
-		}
-		// MAKE EMPTY OBJECT
-		s.attrMeta = make(map[string]interface{})
-	} else {
-
-		if err := json.Unmarshal([]byte(attrValue), &s.attrMeta); err != nil {
-			return errors.UnexpectedValue.Wrapf(err, "expected JSON map when loading resource %s attribute",
-				primitives.DOGG3RZ_OBJECT_ATTR_METADATA)
-
-		}
-
-	}
-	//fmt.Println("call GetResourceAttributeCB begin...")
-	if err := file.GetResourceAttributeCB(resPath,
-		primitives.DOGG3RZ_OBJECT_ATTR_BODY,
-		s.loadBody); err != nil {
-		if os.IsNotExist(err) {
-			return errors.NotFound.Wrapf(err, "repository resource attribute '%s' not found", primitives.DOGG3RZ_OBJECT_ATTR_BODY)
-		}
-		return err
-	}
-	//fmt.Println("call GetResourceAttributeCB end")
-
-	return nil
-}
-
-func (s *fileStageResource) expectJSONBody() bool {
-
-	if t, err := primitives.Dogg3rzObjectTypeFromString(s.attrType); err == nil {
-
-		switch t {
-		case primitives.TYPE_DOGG3RZ_SCHEMA:
-			return true
-		case primitives.TYPE_DOGG3RZ_OBJECT:
-			return true
-		case primitives.TYPE_DOGG3RZ_MEDIA:
-			return false
-		case primitives.TYPE_DOGG3RZ_TRIPLE:
-			return true
-		case primitives.TYPE_DOGG3RZ_SERVICE:
-			return true
-		default:
-			// SHOULD NOT HAVE GOTTEN THIS FAR. ONLY ABOVE RESOURCE TYPES
-			// CAN BE STAGED
-			panic(fmt.Sprintf("expectJSONBody(): "+
-				"unexpected Dogg3rzObjectType value encountered: '%s': { Dogg3zObjectType = %s }",
-				s.attrType, t))
-		}
-
-	} else {
-
-		panic(fmt.Sprintf("expectJSONBody(): "+
-			"unexpected Dogg3rzObjectType value encountered: '%s': %s",
-			s.attrType, err))
-	}
-
-}
-
-func (s *fileStageResource) loadBody(bodyReader io.Reader, fileInfo os.FileInfo) error {
-
-	var cid string
 	var err error
-	//fmt.Println("loadBody start")
-	sh := shell.NewShell("localhost:5001")
 
-	if s.expectJSONBody() {
-		//fmt.Println("loadBody: before dag put")
-		cid, err = sh.DagPut(bodyReader, "json", "cbor")
-		//fmt.Println("loadBody: after dag put")
+	// INIT ARRAY THAT WILL HOLD STAGED resources
+	fsr.stagedResources = make([]rescom.StagingResource, 0)
+	fsr.startList = make([]stagingResourceLocationFile, len(startList))
+	fsr.jsonLDParsedDocMap = make(map[string]map[string]interface{})
+
+	fsr.repoName = repoName
+
+	// VALIDATE START LIST
+	for i, srl := range startList {
+		// copy over to internal start list
+		fsr.startList[i].StagingResourceLocation = srl
+
+		// CREATE NEW (FILE) DATASET OBJECT AND ASSERT IT'S VALID (PATH ETC.)
+		if fsr.startList[i].fileDataset, err = newFileDataset(repoName, srl.DatasetPath, ctxt); err != nil {
+			return fsr.stagedResources, err
+		}
+
+		var datasetExists bool
+
+		// ENSURE REPO /  DATASET JSON-LD DOCUMENT FILE EXIST
+		if datasetExists, err = fsr.startList[i].fileDataset.assertState(true, ctxt); !datasetExists {
+			return fsr.stagedResources, err
+		}
+
+		// IS CURENT RESOURCE STAGEABLE?
+		if err = fsr.startList[i].StagingResourceLocation.AssertValid(); err != nil {
+			// NOT STAGEABLE OR ILLEGAL STATE
+			return fsr.stagedResources, err
+		}
+
+		// PARSE JSON-LD DATASET, IF NOT ALREADY NOT ALREADY PARSED
+		repoDatasetKey := makeJSONLDParsedDocMapKey(repoName, fsr.startList[i].fileDataset)
+
+		// POPULATE MAP OF PARSED JSON-LD DOCUMENTS IDENTIFIED BY KEY
+		if _, found := fsr.jsonLDParsedDocMap[repoDatasetKey]; !found {
+			var parsedJSONDoc map[string]interface{}
+
+			if parsedJSONDoc, err = parseJSONFile(fsr.startList[i].fileDataset.operatingSystemPath); err != nil {
+				return fsr.stagedResources, err
+			}
+
+			// POPULATE PARSED JSON-LD DOC MAP
+			fsr.jsonLDParsedDocMap[repoDatasetKey] = parsedJSONDoc
+
+		}
+
+	}
+
+	// ITERATE STAGED RESOURCED LOCATIONS IN startList AND STAGE
+	// EACH LOCATION IN THE LIST
+	for _, srlf := range fsr.startList {
+		if err = fsr.stageResource(ctxt, srlf); err != nil {
+			return fsr.stagedResources, err
+		}
+	}
+
+	return fsr.stagedResources, nil
+
+}
+
+// makeJSONLDParsedDocMapKey produces a a unique key using
+// repoName and fileDataset as input
+func makeJSONLDParsedDocMapKey(repoName string, ds *fileDataset) string {
+
+	return fmt.Sprintf("%s:%s", repoName, ds.datasetPath.ToString())
+}
+
+func parseJSONFile(path string) (map[string]interface{}, error) {
+
+	var fp *os.File
+	var err error
+	var m map[string]interface{}
+
+	if fp, err = os.Open(path); err != nil {
+		return nil, err
+	}
+
+	m = make(map[string]interface{})
+
+	decoder := json.NewDecoder(fp)
+
+	if err = decoder.Decode(&m); err != nil {
+		return nil, err
+	}
+
+	return m, nil
+
+}
+
+func (fsr *fileStageResource) stageResource(ctxt context.Context, srlf stagingResourceLocationFile) error {
+
+	//	var err error
+
+	var jsonLDDoc map[string]interface{}
+	var ok bool
+	var datasetPath = srlf.fileDataset.datasetPath.ToString()
+	var err error
+
+	mapKey := makeJSONLDParsedDocMapKey(fsr.repoName, srlf.fileDataset)
+
+	// GET PARSED DATASET FROM MAP
+	if jsonLDDoc, ok = fsr.jsonLDParsedDocMap[mapKey]; !ok {
+		// SOMETHING HAPPENED UP CALL CHAIN WHERE THE DATASET WAS
+		// NOT RETRIEVED
+		return errors.NotFound.Newf("expected to find parsed dataset '%s', repository '%s'",
+			datasetPath, fsr.repoName)
+
+	}
+	// SET CONOTEEXT BEFORE FINDING STAGEABLE REESOURCS WITHIN DOC
+	fsr.currentJSONLDParsedDoc = jsonLDDoc
+	fsr.currentStagingResourceLocation = srlf.StagingResourceLocation
+	fsr.inCurrentStagingResourceLocation = false
+	if err = rescom.FindStageableResources(ctxt, datasetPath, jsonLDDoc, fsr); err != nil {
+
+		return err
+	}
+
+	return nil
+
+}
+
+func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) error {
+
+	if location == fsr.currentStagingResourceLocation {
+		fsr.inCurrentStagingResourceLocation = true
+	}
+
+	if !fsr.inCurrentStagingResourceLocation {
+		// NOT ITERATING WITHIN CURRENT TAARGETE STAGING RESOURCE
+		// RETURN
+		//fmt.Println("!fsr.inCurrentStagingResourceLocation")
+		return nil
+	}
+
+	//fmt.Println("in fileStageResource.CollectStart", location)
+
+	var err error
+	var index *fileRepositoryIndex
+
+	if index, err = newFileRepositoryIndex(fsr.repoName, ctxt); err != nil {
+		return err
+	}
+
+	var entry rescom.StagingResource
+
+	entry.StagingResourceLocation = location
+
+	var i interface{}
+	var mtimesMap map[string]interface{}
+	var ok bool
+
+	// GET MTIMES MAP FROM PARSED JSON-LD DOC
+	if i, ok = fsr.currentJSONLDParsedDoc[jsonld.MtimesEntryKeyName]; !ok {
+		return errors.NotFound.Newf("can't find parsed mtimes map within parsed "+
+			"JSON-LD document for dataset '%s', repository '%s'",
+			location.DatasetPath,
+			fsr.repoName)
 	} else {
-		cid, err = sh.Add(bodyReader)
+
+		if mtimesMap, ok = i.(map[string]interface{}); !ok {
+			return errors.UnexpectedType.Newf("expected parsed JSON-LD document "+
+				"entry '%s' value type to be"+
+				" type %T, found type %T: %s",
+				jsonld.MtimesEntryKeyName,
+				mtimesMap, i, location.String())
+		}
+
 	}
 
-	if err == nil {
-		s.attrBodyCid = cid
-		s.attrBodyFileInfo = fileInfo
+	// GET LAST MODIFIED TIME FOR LOCATION
+	var shaKey string
+
+	if shaKey, err = location.GenerateSHA256Key(); err != nil {
+		return err
 	}
 
-	return err
+	var lastModifiedNs interface{}
+
+	if lastModifiedNs, ok = mtimesMap[shaKey]; !ok {
+		return errors.NotFound.Newf("can't find mtimes value in parsed JSON-LD document "+
+			"for stageable resource: { shaKey: %s, location: %s }",
+			shaKey, location.String(),
+		)
+	}
+
+	var lastModifiedAsFloat64 float64
+
+	// NOTE: encoding/json deserializes JSON Number values as float64
+	if lastModifiedAsFloat64, ok = lastModifiedNs.(float64); !ok {
+		return errors.UnexpectedType.Newf("expected 'last modified time' attribute  "+
+			"for object to be type %T, found type %T: { location: %s }",
+			entry.LastModifiedNs, lastModifiedNs, location.String())
+	}
+
+	if lastModifiedAsFloat64 > math.MaxInt64 {
+		return errors.OutOfRange.Newf("expected 'last modified time' attribute "+
+			"for object to be within int64 range ( %v - %v ): found value of %v",
+			math.MinInt64, math.MaxInt64, lastModifiedAsFloat64)
+	}
+
+	entry.LastModifiedNs = int64(lastModifiedAsFloat64)
+
+	// STAGE OBJECT INTO IPFS AND GET CID
+	if location.WantsCID() {
+		//fmt.Println("wants cid ", location)
+
+		// SUBMIT TO IPFS ONLY IF THE RESOURCE LOCATION
+		// INDICATES THAT IT WANTS TO HAVE A CID
+		if entry.ObjectCID, err = ipfs.DagPut(resource); err != nil {
+
+			return err
+		}
+		fmt.Println("CID", entry.ObjectCID)
+	}
+
+	return index.update(entry)
+
+	//return err
+}
+
+func (fsr *fileStageResource) CollectEnd(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) {
+
+	if location == fsr.currentStagingResourceLocation {
+		fsr.inCurrentStagingResourceLocation = false
+	}
+
+	return
+
+}
+
+func (fsr *fileStageResource) String() string {
+
+	return fmt.Sprintf("fileStageResource = { } ")
+
 }

@@ -1,33 +1,67 @@
 /*
- *  Dogg3rz is a decentralized metadata version control system
- *  Copyright (C) 2019 D. Andrew Padilla dba Datacequia
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
 package file
 
 import (
+	"fmt"
 	"io"
 	"os"
 	"path"
+	"path/filepath"
 	"reflect"
 	"strings"
 	"testing"
+	"time"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/resource/config"
 )
+
+func nodeRepoSetup(t *testing.T, prefix string) string {
+
+	dogg3rzHome := filepath.Join(os.TempDir(),
+		fmt.Sprintf("%s_%d", prefix, time.Now().UnixNano()))
+
+	//os.Setenv("DOGG3RZ_HOME", dogg3rzHome)
+
+	//fileNodeResource := &FileNodeResource{}
+
+	var dgrzConf config.Dogg3rzConfig
+
+	// REQUIRED CONF
+	dgrzConf.User.Email = "test@dogg3rz.com"
+
+	if err := fileNodeResource.InitNode(dgrzConf); err != nil {
+		t.Error(err)
+	}
+	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
+
+	fileRepositoryResource := FileRepositoryResource{}
+
+	if err := fileRepositoryResource.InitRepo(testRepoName); err != nil {
+		t.Error(err)
+	}
+
+	return dogg3rzHome
+
+}
+
+func nodeRepoTeardown(t *testing.T, dogg3rzHome string) {
+
+	os.RemoveAll(dogg3rzHome)
+
+}
 
 func TestWriteToFileAtomic(t *testing.T) {
 
@@ -82,5 +116,13 @@ func TestWriteToFileAtomic(t *testing.T) {
 		t.Error("Expected TryAgain error type, got no error!")
 
 	}
+
+}
+
+func TestRepositoryDirList(t *testing.T) {
+
+	// CREATE A NEW NODE/REPO SANDBOX FOR TESTING
+	dogg3rzHome := nodeRepoSetup(t, "file_test")
+	defer nodeRepoTeardown(t, dogg3rzHome)
 
 }

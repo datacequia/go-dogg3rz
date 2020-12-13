@@ -1,42 +1,39 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package cmd
 
-import (
-	"io"
-	"os"
-
-	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/resource"
-	"github.com/xeipuuv/gojsonschema"
-)
-
 type dgrzCreateCmd struct {
-	Schema   dgrzCreateSchema   `command:"schema" description:"create a new schema object" `
+	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+
+	//	DirPath      string                 `long:"dirpath" description:"directory path" required:"true"`
+	Dataset dgrzCreateDataset `command:"dataset" alias:"ds" description:"create a new dataset" `
+	//	Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a repository directory" `
+
 	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the repository"`
-}
 
-type dgrzCreateSchema struct {
-	Positional struct {
-		RepoSchemaPath string `positional-arg-name:"REPOSITORY:SCHEMA_PATH" required:"yes" `
-	} `positional-args:"yes"`
-
-	// USED FOR SCHEMA PARSING
-	jsonLoader    gojsonschema.JSONLoader
-	wrappedReader io.Reader
-}
-
-type dgrzCreateSnapshot struct {
-	Positional struct {
-		Repository string `positional-arg-name:"REPOSITORY" required:"yes"`
-	} `positional-args:"yes"`
+	Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
 }
 
 ///////////////////////////////////////////////////////////
 // CREATE COMMAND FUNCTIONS
 ///////////////////////////////////////////////////////////
 
+var createCmd = dgrzCreateCmd{}
+
 func init() {
 	// REGISTER THE 'init' COMMAND
-	register(&dgrzCreateCmd{})
+	register(&createCmd)
 }
 
 func (o *dgrzCreateCmd) CommandName() string {
@@ -44,74 +41,9 @@ func (o *dgrzCreateCmd) CommandName() string {
 }
 
 func (o *dgrzCreateCmd) ShortDescription() string {
-	return "create a new repository resource"
+	return "create a new schema/non-data repository resource"
 }
 
 func (o *dgrzCreateCmd) LongDescription() string {
-	return "create a new repository resource"
-}
-
-///////////////////////////////////////////////////////////
-// CREATE SCHEMA SUBCOMMAND FUNCTIONS
-///////////////////////////////////////////////////////////
-
-func (x *dgrzCreateSchema) Execute(args []string) error {
-
-	repo := resource.GetRepositoryResource()
-
-	repoName, schemaPath, err := parseRepoSchemaPath(x.Positional.RepoSchemaPath)
-	if err != nil {
-		return err
-	}
-
-	x.jsonLoader, x.wrappedReader = gojsonschema.NewReaderLoader(os.Stdin)
-
-	yy := repo.CreateSchema(repoName, schemaPath, x)
-
-	return yy
-}
-
-func (o *dgrzCreateSchema) Read(p []byte) (n int, err error) {
-
-	// PASS ON TO UNDERLYING READER
-	bytesRead, err := o.wrappedReader.Read(p)
-	if err == io.EOF {
-		// UNDERLYING READER IS FINISHED
-		// READING GRACEFULLY. NOW TRY TO VALIDATE
-		// THE SCHEMA USING THE JSON LOADER OBJECT
-		if _, err := gojsonschema.NewSchema(o.jsonLoader); err != nil {
-			// RETURN SCHEMA RELATED ERROR INSTEAD OF EOF
-			return bytesRead, errors.UnexpectedValue.Wrap(err, "schema error")
-		}
-
-	}
-
-	return bytesRead, err
-
-}
-
-///////////////////////////////////////////////////////////
-// CREATE SNAPSHOT SUBCOMMAND  FUNCTIONS
-///////////////////////////////////////////////////////////
-
-func (x *dgrzCreateSnapshot) Execute(args []string) error {
-
-	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
-
-	repo := resource.GetRepositoryResource()
-
-	return repo.CreateSnapshot(x.Positional.Repository)
-
-}
-
-func (o *dgrzCreateSnapshot) CommandName() string {
-	return "create snapshot"
-}
-
-func (o *dgrzCreateSnapshot) ShortDescription() string {
-	return "create a repository snapshot"
-}
-
-func (o *dgrzCreateSnapshot) LongDescription() string {
-	return "create a repository snapshot"
+	return "create a new schema/non-data repository resource"
 }

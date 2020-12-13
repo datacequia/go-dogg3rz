@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package repo
 
 //	"os"
@@ -11,6 +24,7 @@ package repo
 //	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 //	"github.com/datacequia/go-dogg3rz/util"
 import (
+	"context"
 	"io"
 	"os"
 	"path/filepath"
@@ -32,7 +46,7 @@ type fileCreateSchema struct {
 
 //
 
-func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error {
+func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, schemaReader io.Reader, ctxt context.Context) error {
 
 	rp, err := common.RepositoryPathNew(schemaSubpath)
 	if err != nil {
@@ -47,7 +61,7 @@ func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, 
 
 	if schemaPath, err := cs.createRepositoryResourcePath(
 		rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
-		schemaReader); err != nil {
+		schemaReader, ctxt); err != nil {
 		return err
 	} else {
 
@@ -68,13 +82,13 @@ func (cs *fileCreateSchema) createRepositoryResourcePath(
 	resPath *rescom.RepositoryPath,
 	repoName string,
 	resType primitives.Dogg3rzObjectType,
-	bodyReader io.Reader) (string, error) {
+	bodyReader io.Reader, ctxt context.Context) (string, error) {
 
-	if !file.RepositoryExist(repoName) {
+	if !file.RepositoryExist(repoName, ctxt) {
 		return "", errors.NotFound.Newf("repository '%s' does not exist. please create it first", repoName)
 	}
 	// REPO DOES EXIST. CREATE EACH PATH ELEMENT IF NECESSARY
-	curPath := filepath.Join(file.RepositoriesDirPath(), repoName)
+	curPath := filepath.Join(file.RepositoriesDirPath(ctxt), repoName)
 	curResType := primitives.TYPE_DOGG3RZ_TREE
 	mkDirCount := 0
 	success := false

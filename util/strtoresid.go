@@ -1,3 +1,16 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package util
 
 import (
@@ -20,7 +33,7 @@ func UnixStylePathToResourceId(path string) (rescom.RepositoryResourceId, error)
 	pathElements := strings.SplitN(path, "/", 5)
 
 	if len(pathElements) < 5 {
-		return nil, dgrzerr.InvalidArg.Wrap(dgrzerr.UnexpectedValue.Newf("expected at least 4 path elements, found %d", len(pathElements)-1), "bad resource id")
+		return nil, dgrzerr.OutOfRange.Wrap(dgrzerr.UnexpectedValue.Newf("expected at least 4 path elements, found %d", len(pathElements)-1), "bad resource id")
 	}
 
 	dgrzNs := pathElements[1]
@@ -29,8 +42,8 @@ func UnixStylePathToResourceId(path string) (rescom.RepositoryResourceId, error)
 	subPath := pathElements[4]
 
 	if dgrzNs != rescom.RootPathElementName {
-		return nil, dgrzerr.InvalidArg.Wrap(
-			dgrzerr.UnexpectedValue.Newf("expected first path element to be '%s', found '%s'",
+		return nil, dgrzerr.InvalidValue.Wrap(
+			dgrzerr.InvalidPathElement.Newf("expected first path element to be '%s', found '%s'",
 				rescom.RootPathElementName, dgrzNs), "bad resource id")
 
 	}

@@ -1,26 +1,21 @@
 /*
- *  Dogg3rz is a decentralized metadata version control system
- *  Copyright (C) 2019 D. Andrew Padilla dba Datacequia
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
 package resource
 
 import (
+	"context"
 	"fmt"
-	"os"
 
 	resourceconfig "github.com/datacequia/go-dogg3rz/resource/config"
 	resourcenode "github.com/datacequia/go-dogg3rz/resource/node"
@@ -30,17 +25,27 @@ import (
 	fileconfig "github.com/datacequia/go-dogg3rz/impl/file/config"
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 	filerepo "github.com/datacequia/go-dogg3rz/impl/file/repo"
+
+	"github.com/datacequia/go-dogg3rz/env"
+	"github.com/datacequia/go-dogg3rz/util"
 )
 
+/*
 var configResource resourceconfig.ConfigResource
 var nodeResource resourcenode.NodeResource
 var repoResource resourcerepo.RepositoryResource
+*/
 
 // INITIALIZES THE DESIRED
 // PERSISTENCE IMPLEMENTATION TO USE FOR RESOURCES
 // AS SPECIFIED IN  ENV VAR 'DOGG3RZ_STATE_STORE',
 // AND ASSIGNS IT TO IT'S CORRESPONDING RESOURCE TYPE INTERFACE
 // FOR USE IN REST OF THE CODE WHEN INTERACTING WITH THESE RESOURCE TYPES
+
+//const EnvDogg3rzStateStore = "DOGG3RZ_STATE_STORE"
+const StateStoreTypeFile = "file"
+
+/*
 func init() {
 
 	// DETERRMINE STORE TYPE
@@ -63,16 +68,54 @@ func init() {
 	}
 
 }
+*/
 
-func GetConfigResource() resourceconfig.ConfigResource {
+func GetConfigResource(ctxt context.Context) resourceconfig.ConfigResource {
 
-	return configResource
+	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) // , defaultValue)appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
+	switch storeType {
+	case StateStoreTypeFile:
+		return &fileconfig.FileConfigResource{}
+
+	default:
+		panic(fmt.Sprintf(
+			"unknown store type assigned to '%s' app context variable: %s",
+			env.EnvDogg3rzStateStore,
+			storeType))
+
+	}
+
+	//	return configResource
 }
 
-func GetNodeResource() resourcenode.NodeResource {
-	return nodeResource
+func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
+
+	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) // appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
+	switch storeType {
+	case StateStoreTypeFile:
+		return &filenode.FileNodeResource{}
+
+	default:
+		panic(fmt.Sprintf(
+			"unknown store type assigned to '%s' app context variable: %s",
+			env.EnvDogg3rzStateStore,
+			storeType))
+
+	}
 }
 
-func GetRepositoryResource() resourcerepo.RepositoryResource {
-	return repoResource
+func GetRepositoryResource(ctxt context.Context) resourcerepo.RepositoryResource {
+
+	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
+	switch storeType {
+	case StateStoreTypeFile:
+		return &filerepo.FileRepositoryResource{}
+
+	default:
+		panic(fmt.Sprintf(
+			"unknown store type assigned to '%s' app context variable: %s",
+			env.EnvDogg3rzStateStore,
+			storeType))
+
+	}
 }

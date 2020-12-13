@@ -1,10 +1,23 @@
+/*
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 package repo
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"fmt"
-
 	"path/filepath"
 
 	"github.com/datacequia/go-dogg3rz/errors"
@@ -22,13 +35,13 @@ type fileCreateSnapshot struct {
 	snapshotMap map[uuid.UUID]snapshotResource
 
 	fileRepoIdx  *fileRepositoryIndex
-	indexEntries []indexEntry
+	indexEntries []rescom.StagingResource
 
 	createTreePathElementContext []string
 }
 
 type snapshotIndexEntry struct {
-	entry    *indexEntry
+	entry    *rescom.StagingResource
 	repoPath *rescom.RepositoryPath
 }
 
@@ -46,9 +59,9 @@ type stagingResource struct {
 type snapshotHeadResource struct {
 }
 
-func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
+func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName string) error {
 
-	if !file.RepositoryExist(repoName) {
+	if !file.RepositoryExist(repoName, ctxt) {
 		return errors.NotFound.Newf("repository '%s' does not exist", repoName)
 	}
 
@@ -56,7 +69,7 @@ func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
 	cs.repoName = repoName
 
 	var ssIndexEntries *[]snapshotIndexEntry
-	if i, err := cs.getIndexEntries(); err != nil {
+	if i, err := cs.getIndexEntries(ctxt); err != nil {
 		return err
 	} else {
 		ssIndexEntries = i
@@ -70,7 +83,7 @@ func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
 
 		var dgrzSnapshotObject *map[string]interface{}
 
-		if p, err := createSnapshotObject(cs.repoName, rootTree); err != nil {
+		if p, err := createSnapshotObject(cs.repoName, rootTree, ctxt); err != nil {
 			return err
 		} else {
 			dgrzSnapshotObject = p
@@ -89,7 +102,7 @@ func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
 			return err
 		} else {
 
-			if err := file.WriteCommitHashToCurrentBranchHeadFile(cs.repoName, cid); err != nil {
+			if err := file.WriteCommitHashToCurrentBranchHeadFile(cs.repoName, cid, ctxt); err != nil {
 				return err
 			}
 
@@ -100,16 +113,16 @@ func (cs *fileCreateSnapshot) createSnapshot(repoName string) error {
 	return nil
 }
 
-func (cs *fileCreateSnapshot) getIndexEntries() (*[]snapshotIndexEntry, error) {
+func (cs *fileCreateSnapshot) getIndexEntries(ctxt context.Context) (*[]snapshotIndexEntry, error) {
 
 	var fileRepoIdx *fileRepositoryIndex
-	if i, err := newFileRepositoryIndex(cs.repoName); err != nil {
+	if i, err := newFileRepositoryIndex(cs.repoName, ctxt); err != nil {
 		return nil, err
 	} else {
 		fileRepoIdx = i
 	}
 
-	var indexEntries []indexEntry
+	var indexEntries []rescom.StagingResource
 	if ie, err := fileRepoIdx.readIndexFile(); err != nil {
 		return nil, err
 	} else {
@@ -118,14 +131,17 @@ func (cs *fileCreateSnapshot) getIndexEntries() (*[]snapshotIndexEntry, error) {
 
 	ssIndexEntries := make([]snapshotIndexEntry, len(indexEntries))
 
-	for i := 0; i < len(indexEntries); i++ {
-		var err error
-		ssIndexEntries[i].entry = &indexEntries[i]
-		ssIndexEntries[i].repoPath, err = rescom.RepositoryPathNew(indexEntries[i].Subpath)
-		if err != nil {
-			return nil, err
+	// commented out temporaarily until fix
+	/*
+		for i := 0; i < len(indexEntries); i++ {
+			var err error
+			ssIndexEntries[i].entry = &indexEntries[i]
+			ssIndexEntries[i].repoPath, err = rescom.RepositoryPathNew(indexEntries[i].Subpath)
+			if err != nil {
+				return nil, err
+			}
 		}
-	}
+	*/
 
 	return &ssIndexEntries, nil
 
@@ -179,6 +195,7 @@ func (cs *fileCreateSnapshot) createTree(parent *map[string]interface{},
 
 	}
 
+	/* commented out temporarily untix fix
 	for _, entry := range *pathList {
 		entryPathElements := entry.repoPath.PathElements()
 		if level < entry.repoPath.Size() {
@@ -202,7 +219,7 @@ func (cs *fileCreateSnapshot) createTree(parent *map[string]interface{},
 			}
 		}
 	}
-
+	*/
 	return parent, nil
 }
 
@@ -236,14 +253,14 @@ func getStringValueFromKey(m *map[string]interface{}, key string) (string, bool)
 	}
 }
 
-func createSnapshotObject(repoName string, rootTree *map[string]interface{}) (*map[string]interface{}, error) {
+func createSnapshotObject(repoName string, rootTree *map[string]interface{}, ctxt context.Context) (*map[string]interface{}, error) {
 
 	dogg3rzObject := make(map[string]interface{})
 
 	var cr config.FileConfigResource
 	var err error
 
-	c, err := cr.GetConfig()
+	c, err := cr.GetConfig(ctxt)
 	if err != nil {
 		return &dogg3rzObject, err
 	}

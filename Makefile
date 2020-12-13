@@ -1,7 +1,7 @@
 
 
 build:
-	GODEBUG="tls13=1" go build -o dogg3rz main.go 
+	go build -o dogg3rz main.go 
 	mkdir -p dist/
 	mv dogg3rz dist/
 

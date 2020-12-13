@@ -1,44 +1,62 @@
 /*
- *  Dogg3rz is a decentralized metadata version control system
- *  Copyright (C) 2019 D. Andrew Padilla dba Datacequia
+ * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
- *  This program is free software: you can redistribute it and/or modify
- *  it under the terms of the GNU Affero General Public License as
- *  published by the Free Software Foundation, either version 3 of the
- *  License, or (at your option) any later version.
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
  *
- *  This program is distributed in the hope that it will be useful,
- *  but WITHOUT ANY WARRANTY; without even the implied warranty of
- *  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
- *  GNU Affero General Public License for more details.
- *
- *  You should have received a copy of the GNU Affero General Public License
- *  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
 package repo
 
 import (
-	"io"
+	"context"
+
+	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
 
-type RepositoryIndexEntry struct {
-}
-
+// RepositoryResource is an interface the provides all the interactions
+// a user can leverage against a repository
 type RepositoryResource interface {
-	InitRepo(repoName string) error
+	InitRepo(ctxt context.Context, repoName string) error
 	//	GetRepoIndex(repoName string) (RepositoryIndex, error)
 
-	// REPOSITORY COMMANDS
-	CreateSchema(repoName string, schemaSubpath string, schemaReader io.Reader) error
-	StageResource(repoName string, schemaSubpath string) error
-	CreateSnapshot(repoName string) error
+	// StageResource stages  repository object resources in repository repoName
+	// starting at startList locations
+	// and all the repository object  resources contained within each specified
+	// location, if any, and returns a slice of all the resources staged  within,
+	// and including, startList locations
+	StageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error)
+
+	CreateDataset(ctxt context.Context, repoName string, datasetPath string) error
+
+	AddNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error
+
+	AddNamespaceNode(ctxt context.Context, repoName string, datasetPath string, nodeID string, term string, iri string) error
+
+	CreateSnapshot(ctxt context.Context, repoName string) error
+
+	CreateTypeClass(ctxt context.Context, repoName string, datasetPath string, typeID string, subclassOf string,
+		label string, comment string) error
+
+	CreateTypeDatatype(ctxt context.Context, repoName string, datasetPath string, typeID string, subclassOf string,
+		label string, comment string) error
+
+	CreateTypeProperty(ctxt context.Context, repoName string, datasetPath string, typeID string, subPropertyOf string,
+		domain string, _range string, label string, comment string) error
+
+	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
+	// FOR DATASET datasetPath REPO repoName
+	InsertNode(ctxt context.Context, repoName string, datasetPath string,
+		nodeType string, nodeID string, graphName string,
+		nodeProperties []string, nodeValues []string) error
 }
 
-/*
-type RepositoryIndex interface {
-	Stage(resId rescom.RepositoryResourceId, multiHash string) error
-	//AddMap(resIdMap map[rescom.ResourceId]string) error
-	Unstage(resId rescom.RepositoryResourceId) error
+type GetResourceItem interface {
+	GetPath() string // PATH TO RESOURCE
+	GetStatus() string
 }
-*/
