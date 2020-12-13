@@ -30,4 +30,4 @@ The Dogg3rz Project is a work in progress. As such, there's a few things you can
 
 # License
 
-[Affero GPL 3.0](LICENSE)
+[Apache 2.0](LICENSE)
