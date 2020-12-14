@@ -59,14 +59,14 @@ func indexSetup(t *testing.T) {
 	// REQUIRED CONF
 	dgrzConf.User.Email = "test@dogg3rz.com"
 
-	if err := fileNodeResource.InitNode(dgrzConf, ctxt); err != nil {
+	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		t.Error(err)
 	}
 	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
 	fileRepositoryResource := FileRepositoryResource{}
 
-	if err := fileRepositoryResource.InitRepo(testRepoName, ctxt); err != nil {
+	if err := fileRepositoryResource.InitRepo(ctxt, testRepoName); err != nil {
 		t.Error(err)
 	}
 
@@ -106,11 +106,11 @@ func testNewFileRepoIndex(t *testing.T) {
 	// TEST NEW REPO INDEX WITH BAD REPO NAME
 	ctxt := getContext()
 
-	if _, err := newFileRepositoryIndex(testRepoName+"-badName", ctxt); err == nil {
+	if _, err := newFileRepositoryIndex(ctxt, testRepoName+"-badName"); err == nil {
 		t.Errorf("newFileRepositoryIndex(): succeeded with non-existent repo (name)")
 	}
 
-	if fri, err := newFileRepositoryIndex(testRepoName, ctxt); err != nil {
+	if fri, err := newFileRepositoryIndex(ctxt, testRepoName); err != nil {
 		t.Errorf("newFileRepositoryIndex(): failed  with existing repo (name): %v", err)
 	} else {
 		fileRepoIdx = fri
@@ -298,7 +298,7 @@ func testNewFileRepoIndexOnNonExistentRepo(t *testing.T) {
 
 	ctxt := getContext()
 
-	if _, err := newFileRepositoryIndex(nonExistRepo, ctxt); err == nil {
+	if _, err := newFileRepositoryIndex(ctxt, nonExistRepo); err == nil {
 		t.Errorf("testNewFileRepoIndexOnNonExistentRepo(): did not fail "+
 			"on non-existent repository: %s", nonExistRepo)
 	}

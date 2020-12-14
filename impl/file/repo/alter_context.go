@@ -37,17 +37,17 @@ type addNamespaceNode struct {
 
 }
 
-func addNamespaceDataset(repoName string, datasetPath string, term string, iri string, ctxt context.Context) error {
+func addNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error {
 
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
 	/* ASSERT THAT DATASET EXISTS */
-	if dsExists, noExistErr := fds.assertState(true, ctxt); !dsExists {
+	if dsExists, noExistErr := fds.assertState(ctxt, true); !dsExists {
 		return noExistErr
 	}
 
@@ -145,17 +145,17 @@ func addNamespaceDataset(repoName string, datasetPath string, term string, iri s
 }
 
 // TODO: need to implement this
-func (o *addNamespaceNode) execute(repoName string, datasetPath string, nodeID string, term string, iri string, ctxt context.Context) error {
+func (o *addNamespaceNode) execute(ctxt context.Context, repoName string, datasetPath string, nodeID string, term string, iri string) error {
 
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
 	/* ASSERT THAT DATASET EXISTS */
-	if dsExists, noExistErr := fds.assertState(true, ctxt); !dsExists {
+	if dsExists, noExistErr := fds.assertState(ctxt, true); !dsExists {
 		return noExistErr
 	}
 

@@ -61,7 +61,7 @@ type snapshotHeadResource struct {
 
 func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName string) error {
 
-	if !file.RepositoryExist(repoName, ctxt) {
+	if !file.RepositoryExist(ctxt, repoName) {
 		return errors.NotFound.Newf("repository '%s' does not exist", repoName)
 	}
 
@@ -83,7 +83,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 
 		var dgrzSnapshotObject *map[string]interface{}
 
-		if p, err := createSnapshotObject(cs.repoName, rootTree, ctxt); err != nil {
+		if p, err := createSnapshotObject(ctxt, cs.repoName, rootTree); err != nil {
 			return err
 		} else {
 			dgrzSnapshotObject = p
@@ -102,7 +102,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 			return err
 		} else {
 
-			if err := file.WriteCommitHashToCurrentBranchHeadFile(cs.repoName, cid, ctxt); err != nil {
+			if err := file.WriteCommitHashToCurrentBranchHeadFile(ctxt, cs.repoName, cid); err != nil {
 				return err
 			}
 
@@ -116,7 +116,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 func (cs *fileCreateSnapshot) getIndexEntries(ctxt context.Context) (*[]snapshotIndexEntry, error) {
 
 	var fileRepoIdx *fileRepositoryIndex
-	if i, err := newFileRepositoryIndex(cs.repoName, ctxt); err != nil {
+	if i, err := newFileRepositoryIndex(ctxt, cs.repoName); err != nil {
 		return nil, err
 	} else {
 		fileRepoIdx = i
@@ -253,7 +253,7 @@ func getStringValueFromKey(m *map[string]interface{}, key string) (string, bool)
 	}
 }
 
-func createSnapshotObject(repoName string, rootTree *map[string]interface{}, ctxt context.Context) (*map[string]interface{}, error) {
+func createSnapshotObject(ctxt context.Context, repoName string, rootTree *map[string]interface{}) (*map[string]interface{}, error) {
 
 	dogg3rzObject := make(map[string]interface{})
 

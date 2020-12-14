@@ -30,7 +30,7 @@ import (
 
 func (ds *fileDataset) create(ctxt context.Context) error {
 
-	if state, err := ds.assertState(false, ctxt); !state {
+	if state, err := ds.assertState(ctxt, false); !state {
 		return err
 	}
 

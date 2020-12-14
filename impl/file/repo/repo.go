@@ -59,7 +59,7 @@ func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) 
 
 	}
 	// WRITE THE HEAD FILE WITH A POINTER TO DEFAULT MASTER BRANCH
-	err := file.WriteHeadFile(name, file.MasterBranchName, ctxt)
+	err := file.WriteHeadFile(ctxt, name, file.MasterBranchName)
 	if err != nil {
 		return err
 	}
@@ -75,7 +75,7 @@ func (repo *FileRepositoryResource) StageResources(ctxt context.Context, repoNam
 
 	sr := &fileStageResource{}
 
-	return sr.stageResources(repoName, startList, ctxt)
+	return sr.stageResources(ctxt, repoName, startList)
 }
 
 func (repo *FileRepositoryResource) CreateSnapshot(ctxt context.Context, repoName string) error {
@@ -91,7 +91,7 @@ func (repo *FileRepositoryResource) CreateDataset(ctxt context.Context, repoName
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
@@ -104,7 +104,7 @@ func (repo *FileRepositoryResource) CreateDataset(ctxt context.Context, repoName
 
 func (repo *FileRepositoryResource) AddNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error {
 
-	if err := addNamespaceDataset(repoName, datasetPath, term, iri, ctxt); err != nil {
+	if err := addNamespaceDataset(ctxt, repoName, datasetPath, term, iri); err != nil {
 		return err
 	}
 
@@ -115,7 +115,7 @@ func (repo *FileRepositoryResource) AddNamespaceNode(ctxt context.Context, repoN
 
 	o := &addNamespaceNode{}
 
-	if err := o.execute(repoName, datasetPath, nodeID, term, iri, ctxt); err != nil {
+	if err := o.execute(ctxt, repoName, datasetPath, nodeID, term, iri); err != nil {
 		return err
 	}
 

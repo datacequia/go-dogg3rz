@@ -40,7 +40,7 @@ type fileDataset struct {
 	operatingSystemPath string
 }
 
-func newFileDataset(repoName string, datasetPath string, ctxt context.Context) (*fileDataset, error) {
+func newFileDataset(ctxt context.Context, repoName string, datasetPath string) (*fileDataset, error) {
 
 	var err error
 
@@ -65,12 +65,12 @@ func newFileDataset(repoName string, datasetPath string, ctxt context.Context) (
    fileDataset members are initialized in standardized form
    upon function return
 */
-func (ds *fileDataset) assertState(state bool, ctxt context.Context) (bool, error) {
+func (ds *fileDataset) assertState(ctxt context.Context, state bool) (bool, error) {
 
 	if state {
 		// WANT ASSERT DATASET DOES EXIST
 
-		if !file.RepositoryExist(ds.repoName, ctxt) {
+		if !file.RepositoryExist(ctxt, ds.repoName) {
 			return false, errors.NotFound.Newf("repository '%s' does not exist",
 				ds.repoName)
 		}
@@ -93,10 +93,10 @@ func (ds *fileDataset) assertState(state bool, ctxt context.Context) (bool, erro
 
 }
 
-func (fds *fileDataset) appendNodeToDefaultGraph(newNode map[string]interface{}, ctxt context.Context) error {
+func (fds *fileDataset) appendNodeToDefaultGraph(ctxt context.Context, newNode map[string]interface{}) error {
 
 	// ASSERT THAT DATASET EXISTS
-	if state, err := fds.assertState(true, ctxt); !state {
+	if state, err := fds.assertState(ctxt, true); !state {
 		return err
 	}
 

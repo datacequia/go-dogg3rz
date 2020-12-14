@@ -52,7 +52,7 @@ type fileStageResource struct {
 	inCurrentStagingResourceLocation bool
 }
 
-func (fsr *fileStageResource) stageResources(repoName string, startList []rescom.StagingResourceLocation, ctxt context.Context) ([]rescom.StagingResource, error) {
+func (fsr *fileStageResource) stageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error) {
 
 	var err error
 
@@ -69,14 +69,14 @@ func (fsr *fileStageResource) stageResources(repoName string, startList []rescom
 		fsr.startList[i].StagingResourceLocation = srl
 
 		// CREATE NEW (FILE) DATASET OBJECT AND ASSERT IT'S VALID (PATH ETC.)
-		if fsr.startList[i].fileDataset, err = newFileDataset(repoName, srl.DatasetPath, ctxt); err != nil {
+		if fsr.startList[i].fileDataset, err = newFileDataset(ctxt, repoName, srl.DatasetPath); err != nil {
 			return fsr.stagedResources, err
 		}
 
 		var datasetExists bool
 
 		// ENSURE REPO /  DATASET JSON-LD DOCUMENT FILE EXIST
-		if datasetExists, err = fsr.startList[i].fileDataset.assertState(true, ctxt); !datasetExists {
+		if datasetExists, err = fsr.startList[i].fileDataset.assertState(ctxt, true); !datasetExists {
 			return fsr.stagedResources, err
 		}
 
@@ -195,7 +195,7 @@ func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interf
 	var err error
 	var index *fileRepositoryIndex
 
-	if index, err = newFileRepositoryIndex(fsr.repoName, ctxt); err != nil {
+	if index, err = newFileRepositoryIndex(ctxt, fsr.repoName); err != nil {
 		return err
 	}
 

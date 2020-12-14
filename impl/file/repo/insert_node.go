@@ -28,7 +28,7 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
@@ -70,7 +70,7 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 
 	}
 
-	if err = fds.appendNodeToDefaultGraph(node, ctxt); err != nil {
+	if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
 		return err
 	}
 

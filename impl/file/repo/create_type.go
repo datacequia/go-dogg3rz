@@ -23,7 +23,7 @@ func (repo *FileRepositoryResource) CreateTypeClass(ctxt context.Context, repoNa
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
@@ -41,7 +41,7 @@ func (repo *FileRepositoryResource) CreateTypeClass(ctxt context.Context, repoNa
 		node["rdfs:comment"] = comment
 	}
 
-	if err = fds.appendNodeToDefaultGraph(node, ctxt); err != nil {
+	if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
 		return err
 	}
 
@@ -56,7 +56,7 @@ func (repo *FileRepositoryResource) CreateTypeDatatype(ctxt context.Context,
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
@@ -74,7 +74,7 @@ func (repo *FileRepositoryResource) CreateTypeDatatype(ctxt context.Context,
 		node["rdfs:comment"] = comment
 	}
 
-	if err = fds.appendNodeToDefaultGraph(node, ctxt); err != nil {
+	if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
 		return err
 	}
 
@@ -88,7 +88,7 @@ func (repo *FileRepositoryResource) CreateTypeProperty(ctxt context.Context,
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(repoName, datasetPath, ctxt); err != nil {
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
 
@@ -113,7 +113,7 @@ func (repo *FileRepositoryResource) CreateTypeProperty(ctxt context.Context,
 		node["rdfs:comment"] = comment
 	}
 
-	if err = fds.appendNodeToDefaultGraph(node, ctxt); err != nil {
+	if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
 		return err
 	}
 

@@ -46,7 +46,7 @@ type fileCreateSchema struct {
 
 //
 
-func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, schemaReader io.Reader, ctxt context.Context) error {
+func (cs *fileCreateSchema) createSchema(ctxt context.Context, repoName string, schemaSubpath string, schemaReader io.Reader) error {
 
 	rp, err := common.RepositoryPathNew(schemaSubpath)
 	if err != nil {
@@ -60,8 +60,8 @@ func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, 
 	}
 
 	if schemaPath, err := cs.createRepositoryResourcePath(
-		rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
-		schemaReader, ctxt); err != nil {
+		ctxt,rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
+		schemaReader); err != nil {
 		return err
 	} else {
 
@@ -79,12 +79,13 @@ func (cs *fileCreateSchema) createSchema(repoName string, schemaSubpath string, 
 // CREATES THE RESOURCE PATH IN THE DESIGNATED REPOSITORY OF A SPECIFIC
 // RESOURCE TYPE
 func (cs *fileCreateSchema) createRepositoryResourcePath(
+	ctxt context.Context,
 	resPath *rescom.RepositoryPath,
 	repoName string,
 	resType primitives.Dogg3rzObjectType,
-	bodyReader io.Reader, ctxt context.Context) (string, error) {
+	bodyReader io.Reader) (string, error) {
 
-	if !file.RepositoryExist(repoName, ctxt) {
+	if !file.RepositoryExist(ctxt, repoName) {
 		return "", errors.NotFound.Newf("repository '%s' does not exist. please create it first", repoName)
 	}
 	// REPO DOES EXIST. CREATE EACH PATH ELEMENT IF NECESSARY

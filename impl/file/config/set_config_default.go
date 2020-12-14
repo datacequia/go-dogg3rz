@@ -21,7 +21,7 @@ import (
 	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
-func SetConfigDefault(c config.Dogg3rzConfig, ctxt context.Context) error {
+func SetConfigDefault(ctxt context.Context, c config.Dogg3rzConfig) error {
 
 	var dgrzConfS string
 	var err error

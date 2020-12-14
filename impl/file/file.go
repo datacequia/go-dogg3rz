@@ -167,16 +167,16 @@ func RepositoriesDirPath(ctxt context.Context) string {
 	return path.Join(DataDirPath(ctxt), repositoriesDirName)
 
 }
-func RepositoriesDgrzDirPath(repoName string, ctxt context.Context) string {
+func RepositoriesDgrzDirPath(ctxt context.Context, repoName string) string {
 	return path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName)
 }
 
-func RepositoriesRefsDirPath(repoName string, ctxt context.Context) string {
-	return path.Join(RepositoriesDgrzDirPath(repoName, ctxt), RefsDirName)
+func RepositoriesRefsDirPath(ctxt context.Context, repoName string) string {
+	return path.Join(RepositoriesDgrzDirPath(ctxt, repoName), RefsDirName)
 }
 
-func RepositoriesRefsHeadsDirPath(repoName string, ctxt context.Context) string {
-	return path.Join(RepositoriesRefsDirPath(repoName, ctxt), HeadsDirName)
+func RepositoriesRefsHeadsDirPath(ctxt context.Context, repoName string) string {
+	return path.Join(RepositoriesRefsDirPath(ctxt, repoName), HeadsDirName)
 }
 
 // returns list of directory nams that are repository dirs
@@ -230,7 +230,7 @@ func DirExists(path string) bool {
 
 }
 
-func WriteHeadFile(repoName string, branchName string, ctxt context.Context) error {
+func WriteHeadFile(ctxt context.Context, repoName string, branchName string) error {
 
 	content := fmt.Sprintf("ref: %s\n", filepath.Join(RefsDirName, HeadsDirName, branchName))
 
@@ -240,7 +240,7 @@ func WriteHeadFile(repoName string, branchName string, ctxt context.Context) err
 	return err
 }
 
-func WriteCommitHashToCurrentBranchHeadFile(repoName string, commitHash string, ctxt context.Context) error {
+func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, repoName string, commitHash string) error {
 
 	headFile := path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName, HeadFileName)
 
@@ -274,7 +274,7 @@ func WriteCommitHashToCurrentBranchHeadFile(repoName string, commitHash string, 
 
 }
 
-func RepositoryExist(repoName string, ctxt context.Context) bool {
+func RepositoryExist(ctxt context.Context, repoName string) bool {
 	// TODO: have this method return bool, error
 	repoPath := filepath.Join(RepositoriesDirPath(ctxt), repoName)
 
