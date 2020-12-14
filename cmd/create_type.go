@@ -70,9 +70,13 @@ type dgrzCreateTypeProperty struct {
 ///////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeClass) Execute(args []string) error {
 
-	repo := resource.GetRepositoryResource(getCmdContext())
+	ctxt := getCmdContext()
 
-	if err := repo.CreateTypeClass(createCmd.Repository, o.Positional.DatasetPath,
+	repo := resource.GetRepositoryResource(ctxt)
+
+	if err := repo.CreateTypeClass(ctxt,
+		createCmd.Repository, 
+           	o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubclassOf,
 		o.Options.Label, o.Options.Comment); err != nil {
 		return err
@@ -86,9 +90,12 @@ func (o *dgrzCreateTypeClass) Execute(args []string) error {
 ///////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 
-	repo := resource.GetRepositoryResource(getCmdContext())
+	ctxt := getCmdContext() 
 
-	if err := repo.CreateTypeDatatype(createCmd.Repository, o.Positional.DatasetPath,
+	repo := resource.GetRepositoryResource(ctxt)
+
+	if err := repo.CreateTypeDatatype(ctxt,
+		createCmd.Repository, o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubclassOf,
 		o.Options.Label, o.Options.Comment); err != nil {
 		return err
@@ -102,13 +109,16 @@ func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 ///////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeProperty) Execute(args []string) error {
 
+	ctxt := getCmdContext() 
 	// TODO: ALLOW FOR MULTIPLE RANGES (AND DOMAINS) DURING CREATION
-	repo := resource.GetRepositoryResource(getCmdContext())
+	repo := resource.GetRepositoryResource(ctxt)
 
-	if err := repo.CreateTypeProperty(createCmd.Repository, o.Positional.DatasetPath,
+	if err := repo.CreateTypeProperty(ctxt,
+		createCmd.Repository, o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubpropertyOf,
 		o.Options.Domain, o.Options.Range,
 		o.Options.Label, o.Options.Comment); err != nil {
+
 		return err
 	}
 

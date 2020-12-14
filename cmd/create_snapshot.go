@@ -34,9 +34,11 @@ func (x *dgrzCreateSnapshot) Execute(args []string) error {
 
 	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
 
-	repo := resource.GetRepositoryResource(getCmdContext())
+	ctxt := getCmdContext() 
 
-	return repo.CreateSnapshot(createCmd.Repository)
+	repo := resource.GetRepositoryResource(ctxt)
+
+	return repo.CreateSnapshot(ctxt,createCmd.Repository)
 
 }
 

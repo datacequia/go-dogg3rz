@@ -86,7 +86,8 @@ func (o *dgrzAddNamespace) Execute(args []string) error {
 
 	} else {
 
-		err = repo.AddNamespaceDataset(alterCmd.Repository,
+		err = repo.AddNamespaceDataset(ctxt,
+			alterCmd.Repository,
 			alterCmd.Context.Dataset.Positional.DatasetPath,
 			alterCmd.Context.Dataset.Add.Namespace.Positional.Term,
 			alterCmd.Context.Dataset.Add.Namespace.Positional.IRI)

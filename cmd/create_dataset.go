@@ -64,11 +64,13 @@ type dgrzCreateDataset struct {
 
 func (x *dgrzCreateDataset) Execute(args []string) error {
 
-	repo := resource.GetRepositoryResource(getCmdContext())
+	ctxt := getCmdContext() 
+	repo := resource.GetRepositoryResource(ctxt)
 
 	//fmt.Println("create dataset", createCmd.Repository, x.Positional.DatasetPath)
 
-	if err := repo.CreateDataset(createCmd.Repository,
+	if err := repo.CreateDataset(ctxt,
+		createCmd.Repository,
 		x.Positional.DatasetPath); err != nil {
 		return err
 	}
