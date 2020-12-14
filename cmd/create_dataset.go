@@ -11,8 +11,6 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-
-
 /*
 
 Excerpts on RDF Datasets from  https://www.w3.org/TR/rdf11-concepts/#data-model
@@ -64,7 +62,7 @@ type dgrzCreateDataset struct {
 
 func (x *dgrzCreateDataset) Execute(args []string) error {
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 	repo := resource.GetRepositoryResource(ctxt)
 
 	//fmt.Println("create dataset", createCmd.Repository, x.Positional.DatasetPath)

@@ -79,7 +79,7 @@ func init() {
 
 func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 
 	repo := resource.GetRepositoryResource(ctxt)
 
@@ -109,7 +109,7 @@ func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 		}
 
 		var srl []common.StagingResource
-		if srl, err = repo.StageResources(ctxt,stageCmd.Repository, stagingList); err != nil {
+		if srl, err = repo.StageResources(ctxt, stageCmd.Repository, stagingList); err != nil {
 			return err
 		}
 

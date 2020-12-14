@@ -11,7 +11,6 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-
 // ipfs package ipfs provides wrapper functions to IPFS interactions that
 // are used by dogg3rz
 package ipfs

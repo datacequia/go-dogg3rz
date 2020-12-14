@@ -61,14 +61,14 @@ func (cmd *dgrzSubCmdNodePropertyValues) Execute(args []string) error {
 	insertDefaultGraph := &insertCmd.Node.Into.DefaultGraph.Dataset.PropertyValues
 	insertNamedGraph := &insertCmd.Node.Into.NamedGraph.Dataset.PropertyValues
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 
 	repo := resource.GetRepositoryResource(ctxt)
 
 	switch cmd {
 	case insertDefaultGraph:
 		//fmt.Printf("insert default graph")
-		err = repo.InsertNode(ctxt, 
+		err = repo.InsertNode(ctxt,
 			insertCmd.Repository,
 			insertCmd.Node.Into.DefaultGraph.Dataset.Positional.Path,
 			insertCmd.Node.Options.Type,

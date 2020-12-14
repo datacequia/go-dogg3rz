@@ -75,8 +75,8 @@ func (o *dgrzCreateTypeClass) Execute(args []string) error {
 	repo := resource.GetRepositoryResource(ctxt)
 
 	if err := repo.CreateTypeClass(ctxt,
-		createCmd.Repository, 
-           	o.Positional.DatasetPath,
+		createCmd.Repository,
+		o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubclassOf,
 		o.Options.Label, o.Options.Comment); err != nil {
 		return err
@@ -90,7 +90,7 @@ func (o *dgrzCreateTypeClass) Execute(args []string) error {
 ///////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 
 	repo := resource.GetRepositoryResource(ctxt)
 
@@ -109,7 +109,7 @@ func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 ///////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeProperty) Execute(args []string) error {
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 	// TODO: ALLOW FOR MULTIPLE RANGES (AND DOMAINS) DURING CREATION
 	repo := resource.GetRepositoryResource(ctxt)
 

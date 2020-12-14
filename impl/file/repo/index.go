@@ -103,7 +103,7 @@ CHECKSUM
                          CHECKSUM
 */
 
-func newFileRepositoryIndex(ctxt context.Context,repoName string) (*fileRepositoryIndex, error) {
+func newFileRepositoryIndex(ctxt context.Context, repoName string) (*fileRepositoryIndex, error) {
 
 	index := &fileRepositoryIndex{}
 

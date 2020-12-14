@@ -14,5 +14,4 @@
 package file
 
 type Index struct {
-
 }

@@ -41,7 +41,7 @@ func (node *FileNodeResource) InitNode(ctxt context.Context, c conf.Dogg3rzConfi
 		}
 	}
 
-	err := config.SetConfigDefault(ctxt,c)
+	err := config.SetConfigDefault(ctxt, c)
 	if err != nil {
 		return err
 	}

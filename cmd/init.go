@@ -56,17 +56,17 @@ func (x *dgrzInitNode) Execute(args []string) error {
 	c.User.FirstName = x.UserFirstName
 	c.User.LastName = x.UserLastName
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 
-	return resource.GetNodeResource(ctxt).InitNode(ctxt,c)
+	return resource.GetNodeResource(ctxt).InitNode(ctxt, c)
 
 }
 
 func (x *dgrzInitRepo) Execute(args []string) error {
 
-	ctxt := getCmdContext() 
+	ctxt := getCmdContext()
 
-	return resource.GetRepositoryResource(ctxt).InitRepo(ctxt,x.Positional.RepoName)
+	return resource.GetRepositoryResource(ctxt).InitRepo(ctxt, x.Positional.RepoName)
 
 }
 

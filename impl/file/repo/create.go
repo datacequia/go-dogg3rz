@@ -60,7 +60,7 @@ func (cs *fileCreateSchema) createSchema(ctxt context.Context, repoName string, 
 	}
 
 	if schemaPath, err := cs.createRepositoryResourcePath(
-		ctxt,rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
+		ctxt, rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
 		schemaReader); err != nil {
 		return err
 	} else {
