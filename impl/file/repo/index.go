@@ -111,7 +111,7 @@ func newFileRepositoryIndex(ctxt context.Context, repoName string) (*fileReposit
 
 	index.repoDir = filepath.Join(file.RepositoriesDirPath(ctxt), repoName)
 
-	index.path = filepath.Join(index.repoDir, file.IndexFileName)
+	index.path = file.IndexFilePath(ctxt,repoName) //filepath.Join(index.repoDir, file.IndexFileName)
 
 	if !file.DirExists(index.repoDir) {
 		return nil, errors.NotFound.Newf("repository directory at %s does not exist",

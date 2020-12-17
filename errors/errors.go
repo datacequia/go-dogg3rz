@@ -38,6 +38,8 @@ const (
 	UnexpectedValue
 	AssertionError
 	UnhandledValue
+	InvalidState  // ATTEMPT TO EXECUTE OPERATION IN AN INVALID STATE
+	Cancelled // OPERATION WAS CANCELLED  
 )
 
 type badDogg3rz struct {
@@ -84,7 +86,11 @@ func errorTypeToString(errType ErrorType) string {
 	case AssertionError:
 		return "AssertionError"
 	case UnhandledValue:
-		return "Unhandled Value"
+		return "UnhandledValue"
+	case InvalidState:
+		return "InvalidState"
+	case Cancelled:
+		return "Cancelled"
 	default:
 		panic("unknown error")
 	}
