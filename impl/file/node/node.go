@@ -49,3 +49,18 @@ func (node *FileNodeResource) InitNode(ctxt context.Context, c conf.Dogg3rzConfi
 	return nil
 
 }
+
+func (node *FileNodeResource) GetRepos(ctxt context.Context) ([]string, error) {
+	root :=file.RepositoriesDirPath(ctxt)
+
+	var files []string
+	var err error
+
+	if file.DirExists(root){
+		files, err = file.GetDirs(root)
+	}
+
+
+	return files, err
+}
+

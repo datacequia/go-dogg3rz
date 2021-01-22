@@ -14,6 +14,7 @@
 package cmd
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/datacequia/go-dogg3rz/errors"
@@ -46,4 +47,12 @@ func parseRepoAndPathMaybe(repoAndPath string) (string, string, error) {
 	return "", "", errors.UnexpectedValue.Newf("found '%s': want format REPO[:PATH]",
 		repoAndPath)
 
+}
+
+func PrintValues(values []string, ignoreValue string){
+
+	for _, v := range values {
+			fmt.Println(v)
+
+	}
 }
