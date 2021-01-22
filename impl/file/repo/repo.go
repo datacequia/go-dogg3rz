@@ -17,6 +17,7 @@ import (
 	"context"
 	"os"
 	"path"
+	"strings"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
@@ -120,4 +121,24 @@ func (repo *FileRepositoryResource) AddNamespaceNode(ctxt context.Context, repoN
 	}
 
 	return nil
+}
+
+func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName string) ([]string, error) {
+
+
+	repoDir := path.Join(file.RepositoriesDirPath(ctxt), repoName)
+	var files []string
+	var err error
+
+	if file.DirExists(repoDir){
+		files, err = file.GetDirs(repoDir)
+	}
+
+	for i, v := range files {
+		if strings.HasSuffix(v, file.DgrzDirName) {
+			files = append(files[:i], files[i+1:]...)
+		}
+	}
+
+		return files, err
 }
