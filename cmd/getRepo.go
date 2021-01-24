@@ -45,7 +45,7 @@ func (x *dgrzGetRepoCmd) Execute(args []string) error {
 
 
 func (o *dgrzGetRepoCmd) CommandName() string {
-	return "repo"
+	return "repository"
 }
 
 func (o *dgrzGetRepoCmd) ShortDescription() string {
