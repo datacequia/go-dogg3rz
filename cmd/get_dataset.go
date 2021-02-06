@@ -17,13 +17,13 @@ import (
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	//"github.com/datacequia/go-dogg3rz/impl/file/repo"
 	"github.com/datacequia/go-dogg3rz/resource"
-
+  "os"
 )
 
 // Command to get list of dataset in a repo
 type dgrzGetDatasetCmd struct {
 
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Repository string `long:"repo" short:"r"  env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
 
 
 }
@@ -41,21 +41,24 @@ func (x *dgrzGetDatasetCmd) Execute(args []string) error {
 	var files []string
 	var err error
 	files, err = repo.GetDataSets(ctxt, x.Repository)
-    PrintValues(files, file.DgrzDirName)
+	if err != nil {
+     return err
+    }
+    printValues(files, file.DgrzDirName, os.Stdout)
 	return err
 
 }
 
 
 
-func (o *dgrzGetDatasetCmd) CommandName() string {
-	return "dataset"
+func (x *dgrzGetDatasetCmd) CommandName() string {
+	return "get dataset"
 }
 
-func (o *dgrzGetDatasetCmd) ShortDescription() string {
+func (x *dgrzGetDatasetCmd) ShortDescription() string {
 	return "get listing of datasets in a repository"
 }
 
-func (o *dgrzGetDatasetCmd) LongDescription() string {
+func (x *dgrzGetDatasetCmd) LongDescription() string {
 	return "get listing of datasets in a repository"
 }

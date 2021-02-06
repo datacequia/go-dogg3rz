@@ -14,8 +14,10 @@
 package cmd
 
 import (
-	"fmt"
+
 	"strings"
+   "io"
+   "fmt"
 
 	"github.com/datacequia/go-dogg3rz/errors"
 )
@@ -49,10 +51,10 @@ func parseRepoAndPathMaybe(repoAndPath string) (string, string, error) {
 
 }
 
-func PrintValues(values []string, ignoreValue string){
+func printValues(values []string, ignoreValue string , out io.Writer){
 
 	for _, v := range values {
-			fmt.Println(v)
+		fmt.Fprintln(out, v)
 
 	}
 }
