@@ -24,7 +24,6 @@ import (
 	"time"
 
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/impl/file"
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 	"github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/datacequia/go-dogg3rz/resource/config"
@@ -99,46 +98,32 @@ func TestIndex(t *testing.T) {
 	//fileNodeResource = FileNo
 
 	testNewFileRepoIndexWithNonExistentRepo(t)
-	fmt.Println("testNewFileRepoIndexWithNonExistentRepo", time.Now().String())
 
 	//testNewFileRepoIndexThenCancel(t)
 
 	testNewFileRepoIndexThenScanWithNoIndexFile(t)
-	fmt.Println("testNewFileRepoIndexThenScanWithNoIndexFile", time.Now().String())
 
 	testNewFileRepoIndexThenEmptyCommit(t)
-	fmt.Println("testNewFileRepoIndexThenEmptyCommit", time.Now().String())
 
 	testNewFileRepoIndexThenEmptyRollback(t)
-	fmt.Println("testNewFileRepoIndexThenEmptyRollback", time.Now().String())
 
 	testFileRepoIndexUpdateAndReadBackInTx(t)
-	fmt.Println("testFileRepoIndexUpdateAndReadBackInTx", time.Now().String())
 
 	testFileRepoIndexUpdateCommitAndReadBack(t)
-	fmt.Println("testFileRepoIndexUpdateCommitAndReadBack", time.Now().String())
 
 	testFileRepoIndexUpdateCommitAndScanForOne(t)
-	fmt.Println("testFileRepoIndexUpdateCommitAndScanForOne", time.Now().String())
 
 	testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack(t)
-	fmt.Println("testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack", time.Now().String())
 
-	//testStageEntryFailsOnRepoDirMissing(t)
 	testRemoveSingleNodeResourceFromIndex(t)
-	fmt.Println("testRemoveSingleNodeResourceFromIndex", time.Now().String())
 
 	testLockIndexOnModify(t)
-	fmt.Println("testLockIndexOnModify", time.Now().String())
 
 	testInvalidIndexEntryValidate(t)
-	fmt.Println("testInvalidIndexEntryValidate", time.Now().String())
 
 	testNewFileRepoIndexOnNonExistentRepo(t)
-	fmt.Println("ztestNewFileRepoIndexOnNonExistentRepo", time.Now().String())
 
 	testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t)
-	fmt.Println("testRemoveSingleNamedGraphResourceWithChildrenFromIndex", time.Now().String())
 
 }
 
@@ -161,13 +146,16 @@ func newFileRepoIdxWithCancelFunc(t *testing.T) (*fileRepositoryIndex, context.C
 	// make sure index lock file not there before returning
 	// from previous test
 
-	indexLockFile := f.path + file.LOCK_FILE_SUFFIX
-	var i int
-	for i = 0; file.FileExists(indexLockFile); i++ {
-		//fmt.Printf("attempt %d: index lock file exists at %s: waiting...\n", i, indexLockFile)
-		time.Sleep(time.Millisecond * 250)
+	/*
+		indexLockFile := f.path + file.LOCK_FILE_SUFFIX
+		var i int
+		for i = 0; file.FileExists(indexLockFile); i++ {
+			//fmt.Printf("attempt %d: index lock file exists at %s: waiting...\n", i, indexLockFile)
+			time.Sleep(time.Millisecond * 250)
 
-	}
+		}
+	*/
+
 	return f, ctxt, cancelFunc
 
 }
@@ -951,33 +939,47 @@ func testLockIndexOnModify(t *testing.T) {
 	defer index.close()
 	defer os.Remove(index.path)
 
-	lockFile := index.path + file.LOCK_FILE_SUFFIX
+	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING
 
-	if err := file.Touch(lockFile); err != nil {
+	if err := index.stage(entry); err != nil {
 
-		t.Errorf("coundn't create fake lock file for test: %s", err)
+		t.Errorf("stage failed: %s", err)
 		return
 	}
 
-	defer os.Remove(lockFile)
+	// 	if here lock file is in place
 
-	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING
-	if err := index.stage(entry); err != nil {
+	index2, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index2.close()
+
+	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING in SECND OBJECT
+	if err := index2.stage(entry); err != nil {
 
 		if errors.GetType(err) != errors.TryAgain {
-			t.Errorf("Expected TryAgain error, found %s", err)
+			t.Errorf("stage failed: %s", err)
 			return
 		}
+		// IF HERE THEN LOCK WORKED
+
 	}
 
-	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING
-	if _, err := index.remove(entry); err != nil {
+	// commit first index obbject
+	if err := index.commit(); err != nil {
+		t.Errorf("commit failed: %s", err)
 
-		if errors.GetType(err) != errors.TryAgain {
-			t.Errorf("Expected TryAgain error, found %s", err)
-			return
-		}
+		return
+	}
 
+	// NOW TRY TO COMMIT FROM INDEX 2
+	entry.LastModifiedNs = 1600103677854799001
+
+	if err := index2.stage(entry); err != nil {
+		t.Errorf("expected stage success, got error: %s", err)
+		return
+	}
+
+	if err := index2.commit(); err != nil {
+		t.Errorf("commit failed: %s", err)
 	}
 
 }
@@ -1003,8 +1005,6 @@ func testInvalidIndexEntryValidate(t *testing.T) {
 		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
 			"indexEntry.Type value assigned")
 		return
-	} else {
-		fmt.Printf("testInvalidIndexEntryValidate: %s: %s\n", time.Now().String(), err)
 	}
 
 	entry.ObjectType = holdType
@@ -1016,7 +1016,6 @@ func testInvalidIndexEntryValidate(t *testing.T) {
 		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
 			"indexEntry.Type value assigned")
 	}
-	fmt.Printf("testInvalidIndexEntryValidate: %s\n", time.Now().String())
 
 	entry.DatasetPath = holdDatasetPath
 

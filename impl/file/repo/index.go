@@ -1326,6 +1326,7 @@ func (request msgIndexBaseRequest) sendResponse(response msgIndexResponse) error
 
 	select {
 	case request.responseChan <- response:
+
 	case <-time.After(channelWriteTimeoutSeconds * time.Second):
 		//close(msg.resultSetChan)
 		err = errors.TimedOut.Newf("timeout occurred after %d seconds waiting to send response message: { request = %s, response = %s }",
@@ -1333,7 +1334,6 @@ func (request msgIndexBaseRequest) sendResponse(response msgIndexResponse) error
 	}
 
 	// CLOSE RESPONSE CHANNEL AFTER WRITING RESPONSE OR TIMEOUT
-
 	close(request.responseChan)
 
 	return err
