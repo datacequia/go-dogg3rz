@@ -363,3 +363,17 @@ func PutResourceAttributeS(resPath string, attrName string,
 	return PutResourceAttribute(resPath, attrName, attrValueAsReader)
 
 }
+
+func GetDirs(root string) ([]string, error) {
+	var files []string
+
+	fileInfo, err := ioutil.ReadDir(root)
+	if err != nil {
+		return files, err
+	}
+
+	for _, file := range fileInfo {
+		files = append(files, file.Name())
+	}
+	return files, nil
+}

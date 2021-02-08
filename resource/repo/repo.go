@@ -54,6 +54,8 @@ type RepositoryResource interface {
 	InsertNode(ctxt context.Context, repoName string, datasetPath string,
 		nodeType string, nodeID string, graphName string,
 		nodeProperties []string, nodeValues []string) error
+	// Returns list of data sets in the repo
+	GetDataSets(ctxt context.Context, repoName string ) ([]string, error)
 }
 
 type GetResourceItem interface {

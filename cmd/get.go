@@ -22,9 +22,9 @@ package cmd
 //	"github.com/xeipuuv/gojsonschema"
 
 type dgrzGetCmd struct {
-	Positional struct {
-		RepoPath string `positional-arg-name:"REPO[:RESOURCE_PATH]" required:"yes" `
-	} `positional-args:"yes"`
+
+	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a repo" `
+	Repos dgrzGetRepoCmd `command:"repository" alias:"repo" description:"get list of repos" `
 }
 
 func init() {
@@ -32,18 +32,7 @@ func init() {
 	register(&dgrzGetCmd{})
 }
 
-func (x *dgrzGetCmd) Execute(args []string) error {
-	/*
-		repoName, resourcePath, err := parseRepoAndPathMaybe(x.Positional.RepoPath)
-		if err != nil {
-			return err
-		}
 
-		repo := resource.GetRepositoryResource()
-	*/
-	return nil //repo.StageResource(repoName, schemaSubpath)
-
-}
 
 func (o *dgrzGetCmd) CommandName() string {
 	return "get"
