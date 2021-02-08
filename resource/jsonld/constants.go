@@ -67,3 +67,14 @@ func (x JSONLDResourceType) String() string {
 	}
 
 }
+
+// isContiner returns true of the resourcetype can contain other resources
+func (x JSONLDResourceType) IsContainer() bool {
+
+	switch x {
+	case DatasetResource, NamedGraphResource, NodeResource:
+		return true
+	}
+	return false
+
+}
