@@ -980,6 +980,34 @@ func testLockIndexOnModify(t *testing.T) {
 
 	if err := index2.commit(); err != nil {
 		t.Errorf("commit failed: %s", err)
+		return
+	}
+
+	var req *msgIndexResultSetRequest
+	var err error
+	if req, err = index2.scan(func(x common.StagingResource) bool { return true }); err != nil {
+
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	var sr *common.StagingResource
+	var scanCnt int
+	for sr, err = req.next(); sr != nil; sr, err = req.next() {
+		scanCnt++
+		if *sr != entry {
+			t.Errorf("read back failed: expected %s, found %s", entry, *sr)
+			return
+		}
+	}
+
+	if err != nil {
+		t.Errorf("scan next() failed: %s", err)
+		return
+	}
+
+	if scanCnt != 1 {
+		t.Errorf("scan back expected 1 result, found %d", scanCnt)
 	}
 
 }
