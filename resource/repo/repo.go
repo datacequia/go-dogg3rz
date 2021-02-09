@@ -19,19 +19,12 @@ import (
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
 
-// RepositoryResource is an interface the provides all the interactions
-// a user can leverage against a repository
+// RepositoryResource is an interface the provides all the non-iterative interactions
+// a user can perform against a repository
 type RepositoryResource interface {
 	InitRepo(ctxt context.Context, repoName string) error
-	//	GetRepoIndex(repoName string) (RepositoryIndex, error)
 
-	// StageResource stages  repository object resources in repository repoName
-	// starting at startList locations
-	// and all the repository object  resources contained within each specified
-	// location, if any, and returns a slice of all the resources staged  within,
-	// and including, startList locations
-	StageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error)
-
+ 
 	CreateDataset(ctxt context.Context, repoName string, datasetPath string) error
 
 	AddNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error
@@ -62,3 +55,19 @@ type GetResourceItem interface {
 	GetPath() string // PATH TO RESOURCE
 	GetStatus() string
 }
+
+// ALLOWS USER TO STAGE (i.e. .Add() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY
+// TO REPOSITORY IDENTIFIED BY VALUE RETURNED FROM  .Repository()
+// BEFORE FLUSHING STAGED RESOURCES USING .Commit()  
+//
+// NOTE: CALLER SHOULD PASS THE SAME CANCELLABLE (context.Context.WithCancel()) CONTEXT OBJECT INSTANCE
+// TO ResourceStager METHODS WHICH REQUIRE A CONTEXT AND CALL THE CANCEL FUNCTION WHEN DONE TO ENSURE
+// ANY ALLOCATED GO-ROUTINES ALLOCATED DURING THE INTERACTION WITH THIS INTERFACE ARE DEALLOCATED
+
+type ResourceStager interface {
+	Add(ctxt context.Context, sr rescom.StagingResource)  error
+        Commit(ctxt context.Context)  error 
+        Repository() string 
+} 
+
+

@@ -24,11 +24,12 @@ import (
 type dgrzGetRepoCmd struct {
 
 }
-
+/*
 func init() {
 	// REGISTER THE 'get repo ' COMMAND
 	register(&dgrzGetRepoCmd{})
 }
+*/
 
 func (o *dgrzGetRepoCmd) Execute(args []string) error {
 

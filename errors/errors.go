@@ -38,6 +38,12 @@ const (
 	UnexpectedValue
 	AssertionError
 	UnhandledValue
+	InvalidState      // ATTEMPT TO EXECUTE OPERATION IN AN INVALID STATE
+	Cancelled         // OPERATION WAS CANCELLED
+	TimedOut          // TIMEOUT OCCURRED WHILE WAITING TO PERFORM SOME OPERATION
+	RollbackRequested // USER ISSUED A ROLLBACK
+	ChannelClosed     // A CLOSED CHANNEL WAS DETECTED
+	EmptyCommit       // AN ATTEMPT TO COMMIT A RESOURCE BUT NOTHING TO COMMIT
 )
 
 type badDogg3rz struct {
@@ -84,7 +90,19 @@ func errorTypeToString(errType ErrorType) string {
 	case AssertionError:
 		return "AssertionError"
 	case UnhandledValue:
-		return "Unhandled Value"
+		return "UnhandledValue"
+	case InvalidState:
+		return "InvalidState"
+	case Cancelled:
+		return "Cancelled"
+	case TimedOut:
+		return "TimedOut"
+	case RollbackRequested:
+		return "RollbackRequested"
+	case ChannelClosed:
+		return "ChannelClosed"
+	case EmptyCommit:
+		return "EmptyCommit"
 	default:
 		panic("unknown error")
 	}

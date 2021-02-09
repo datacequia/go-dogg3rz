@@ -17,10 +17,12 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
+	"io"
 	"math"
 	"os"
 
 	"github.com/datacequia/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/ipfs"
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
@@ -50,6 +52,23 @@ type fileStageResource struct {
 	// INDICATES IF PARSER IS CURRENTLY ITERATING THAT RESOURCE AND/OR RESOURCES
 	// WITHIN IF IT'S A CONTAINER RESOURCE
 	inCurrentStagingResourceLocation bool
+}
+
+type FileResourceStager struct {
+	running  bool // true if stager go-routine is running
+	repoName string
+	request  chan rescom.StagingResource
+	response chan fileResourceStagerResponse
+	outcome  chan fileResourceStagerOutcome
+}
+
+type fileResourceStagerResponse struct {
+	request rescom.StagingResource
+	err     error
+}
+
+type fileResourceStagerOutcome struct {
+	err error
 }
 
 func (fsr *fileStageResource) stageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error) {
@@ -271,7 +290,10 @@ func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interf
 		fmt.Println("CID", entry.ObjectCID)
 	}
 
-	return index.update(entry)
+	//return index.update(entry)
+	//	err  = index.stage(entry)
+
+	return index.stage(entry) // TODO  RUN AN INDEX UPDATE TX HERE
 
 	//return err
 }
@@ -289,5 +311,158 @@ func (fsr *fileStageResource) CollectEnd(ctxt context.Context, resource interfac
 func (fsr *fileStageResource) String() string {
 
 	return fmt.Sprintf("fileStageResource = { } ")
+
+}
+
+/////////////////////////////////////
+// FileResourceStager METHODS
+/////////////////////////////////////
+
+// CREATE NEW INSTANCE. THIS SHOOULD BE THE ONLY WAY TO
+// INTERACT WITH THIS STRUCT (I.E. CALL IT'S PUBLIC METHODS
+func NewFileResourceStager(ctxt context.Context, repoName string) *FileResourceStager {
+
+	stager := &FileResourceStager{}
+
+	// INIT MEMBERS
+	stager.repoName = repoName
+	stager.request = make(chan rescom.StagingResource)
+	stager.response = make(chan fileResourceStagerResponse)
+	stager.outcome = make(chan fileResourceStagerOutcome)
+
+	return stager
+
+}
+
+// INITIALIZE MEMBERS AND START GOLANG FUNCTION TO
+// OBTAIN LOCK ON INDEX FILE AND WAIT FOR ITEMS
+// TO STAGE FROM REQUEST CHANNEL
+func (stager *FileResourceStager) runStager(ctxt context.Context) {
+
+	stager_request := stager.request
+	stagerRunFunc := func() (io.Reader, error) {
+
+		// TODO: Read index file into memory
+
+		for keepRunning := true; keepRunning; {
+
+			select {
+
+			case stagingResource, ok := <-stager_request:
+
+				keepRunning = ok // UPDATE LOOP CONDITIONAL BASED ON CHANNEL READ
+
+				if !ok {
+					// NO MORE REQUESTS
+					continue
+				}
+				// UPDATE MEMCACHED STAGING INDEX
+				fmt.Println("runStager: need toupdate mem cached staging index here ", stagingResource)
+
+				// WRITE RESPONSE TO RESPONSE CHANNEL
+
+			case <-ctxt.Done():
+				// OPERATION CANCELLED. EXIT GO-ROUTINE
+				return nil, errors.Cancelled.New("stagerRunFunc cancelled")
+			}
+
+		}
+		// TODO: COMMIT INDEX CACHE
+
+		return nil, nil
+
+	}
+
+	repoName := stager.repoName
+
+	stager_outcome := stager.outcome
+	// START GO-ROUTINE TO STAGE NEW STAGING RESOURCES
+	go func() {
+
+		_, err := file.WriteToFileAtomic(stagerRunFunc,
+			file.IndexFilePath(ctxt, repoName))
+
+		outcome := fileResourceStagerOutcome{err: err}
+
+		select {
+		case stager_outcome <- outcome:
+			// OUTCOME WRITTEN TO OUTCOME CHANNEL
+		case <-ctxt.Done():
+		}
+
+	}()
+
+	stager.running = true
+
+}
+
+func (stager *FileResourceStager) Add(ctxt context.Context, res rescom.StagingResource) error {
+
+	if !stager.running {
+		stager.runStager(ctxt)
+	}
+
+	// SUBMIT STAGING RESOURCE TO REQUEST CHANNEL
+	select {
+	case stager.request <- res:
+		// SENT RESOURCE FOR STAGING
+	case <-ctxt.Done():
+		// OPERATION CANCELLED
+		return errors.Newf("%T operation cancelled", stager)
+
+	}
+
+	// WAIT FOR RESPONSE TO REQUEST ON RESPONSE CHANNEL
+	select {
+	case response := <-stager.response:
+		if res != response.request {
+			// TODO: WRITE ERROR BACK THAT DESCRIBES REQUEST/RESPONSE MISMATCH!
+			// THIS SHOULD NOT HAPPEN AS CHANNEL ONLY TAKES A SINGLE ENTRY
+			// BEFORE BLOCKING
+
+			return errors.UnexpectedValue.Newf("expected response to echo request value '%s', found '%s'",
+				res, response.request)
+		}
+
+		if response.err != nil {
+			return response.err
+		}
+
+	case <-ctxt.Done():
+		// OPERATION CANCELLED
+		return errors.Newf("%T operation cancelled", stager)
+
+	}
+
+	return nil
+}
+
+func (stager *FileResourceStager) Commit(ctxt context.Context) error {
+
+	if !stager.running {
+		// NOTHING TO COMMIT
+		return nil
+	}
+
+	// CLOSE REQUEST CHANNEL WHICH WILL PROMPT
+	// GO-ROUTINE TO FLUSH TO DISK
+	close(stager.request)
+
+	// WAIT FOR FINAL OUTCOME OF GO-ROUTINE
+	select {
+	case outcome := <-stager.outcome:
+		return outcome.err
+	case <-ctxt.Done():
+		// OPERATION CANCELLED
+		return errors.Newf("%T operation cancelled", stager)
+
+	}
+
+	return nil
+}
+
+func (stager *FileResourceStager) Repository() string {
+
+	return stager.repoName
 
 }

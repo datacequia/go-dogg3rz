@@ -28,10 +28,13 @@ type dgrzGetDatasetCmd struct {
 
 }
 
+/*
 func init() {
 	// REGISTER THE 'get datatset ' COMMAND
 	register(&dgrzGetDatasetCmd{})
 }
+*/
+
 
 func (x *dgrzGetDatasetCmd) Execute(args []string) error {
 
