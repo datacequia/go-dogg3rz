@@ -179,6 +179,11 @@ func RepositoriesRefsHeadsDirPath(ctxt context.Context, repoName string) string 
 	return path.Join(RepositoriesRefsDirPath(ctxt, repoName), HeadsDirName)
 }
 
+func IndexFilePath(ctxt context.Context, repoName string) string {
+	return path.Join(RepositoriesDirPath(ctxt),repoName,IndexFileName)
+}
+
+
 // returns list of directory nams that are repository dirs
 func RepositoryDirList(ctxt context.Context) ([]string, error) {
 

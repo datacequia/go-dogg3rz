@@ -13,21 +13,12 @@
 
 package cmd
 
-//	"io"
-//	"os"
-//"strings"
 import (
 	"fmt"
-
+	"context"
 	"github.com/datacequia/go-dogg3rz/resource"
-	"github.com/datacequia/go-dogg3rz/resource/common"
-	"github.com/datacequia/go-dogg3rz/resource/jsonld"
-	//	"github.com/datacequia/go-dogg3rz/util"
 )
 
-//	"github.com/datacequia/go-dogg3rz/errors"
-
-//	"github.com/xeipuuv/gojsonschema"
 
 // STAGE  DEFAULT-GRAPH | GRAPH IRI | NODE IRI
 type dgrzStageCmd struct {
@@ -79,6 +70,16 @@ func init() {
 
 func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
+	ctxt,cancelFunc := context.WithCancel(getCmdContext()) 
+
+	defer cancelFunc()
+
+
+	stager := resource.GetRepositoryStagerResource(ctxt,stageCmd.Repository)
+
+	fmt.Println("stager",stager)
+
+/*
 	ctxt := getCmdContext()
 
 	repo := resource.GetRepositoryResource(ctxt)
@@ -121,6 +122,7 @@ func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 	default:
 		panic(fmt.Sprintf("unhandled context in which 'all' sub-command is used"))
 	}
+*/
 
 	return nil
 }

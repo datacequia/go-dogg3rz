@@ -119,3 +119,20 @@ func GetRepositoryResource(ctxt context.Context) resourcerepo.RepositoryResource
 
 	}
 }
+
+func GetRepositoryStagerResource(ctxt context.Context, repoName string) resourcerepo.ResourceStager {
+
+	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
+	switch storeType {
+	case StateStoreTypeFile:
+		return filerepo.NewFileResourceStager(ctxt,repoName)
+
+	default:
+		panic(fmt.Sprintf(
+			"unknown store type assigned to '%s' app context variable: %s",
+			env.EnvDogg3rzStateStore,
+			storeType))
+
+	}
+}
+
