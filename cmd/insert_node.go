@@ -73,7 +73,7 @@ func (cmd *dgrzSubCmdNodePropertyValues) Execute(args []string) error {
 			insertCmd.Node.Into.DefaultGraph.Dataset.Positional.Path,
 			insertCmd.Node.Options.Type,
 			insertCmd.Node.Options.ID,
-			"", // GRAPH NAME
+			"default", // GRAPH NAME
 			insertDefaultGraph.Properties,
 			insertDefaultGraph.Values)
 

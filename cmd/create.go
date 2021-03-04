@@ -23,6 +23,8 @@ type dgrzCreateCmd struct {
 	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the repository"`
 
 	Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
+
+	NamedGraph dgrzCreateNamedGraph `command:"namedgraph" alias:"ng" description:"create a new named graph in the dataset"`
 }
 
 ///////////////////////////////////////////////////////////

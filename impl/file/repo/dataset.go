@@ -17,6 +17,7 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+
 	"io"
 	"os"
 	"path/filepath"
@@ -26,6 +27,8 @@ import (
 	"github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
+
+const defaultGraphID = "default"
 
 type fileDataset struct {
 	// NAME OF REPOSITORY
@@ -93,122 +96,253 @@ func (ds *fileDataset) assertState(ctxt context.Context, state bool) (bool, erro
 
 }
 
-func (fds *fileDataset) appendNodeToDefaultGraph(ctxt context.Context, newNode map[string]interface{}) error {
+func (ds *fileDataset) createNamedGraph(ctxt context.Context, graphID string, parentGraphID string) error {
 
-	// ASSERT THAT DATASET EXISTS
-	if state, err := fds.assertState(ctxt, true); !state {
+	if len(graphID) == 0 {
+		return errors.InvalidValue.New("graph id cannot be nil or blank")
+	}
+	if state, err := ds.assertState(ctxt, true); !state {
 		return err
 	}
+
+	var defaultGraph []interface{}
+
+	var err error
+
+	if _, defaultGraph, err = ds.getDefaultGraph(); err != nil {
+		return err
+	}
+
+	//	var child interface{}
+
+	if child, _ := getGraph(defaultGraph, graphID); child != nil {
+		// means that names graph with this id already exists, return error
+		return errors.InvalidValue.New("Named graph with id: " + graphID + " already exists.")
+	}
+
+	var nodeAsMap map[string]interface{}
+	nodeAsMap = make(map[string]interface{})
+	nodeAsMap["@id"] = graphID
+	nodeAsMap["@graph"] = make([]interface{}, 0)
+
+	return ds.appendNodeToGraph(ctxt, nodeAsMap, parentGraphID)
+}
+
+func (ds *fileDataset) appendNodeToDefaultGraph(ctxt context.Context, newNode map[string]interface{}) error {
+	return ds.appendNodeToGraph(ctxt, newNode, defaultGraphID)
+}
+
+func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[string]interface{}, parentGraphID string) error {
+
+	// ASSERT THAT DATASET EXISTS
+	if state, err := ds.assertState(ctxt, true); !state {
+		return err
+	}
+
+	// READ JSON-LD DOCUMENT INTO MEMORY
+	var m map[string]interface{}
+
+	var defaultGraph []interface{}
+
+	var err error
+	if m, defaultGraph, err = ds.getDefaultGraph(); err != nil {
+		return err
+	}
+
+	newNodeIDValue, err1 := getNodeID(newNode)
+	if len(newNodeIDValue) == 0 || err != nil {
+		return err1
+	}
+
+	m["@graph"], err = addNodeToGraph(defaultGraph, newNode, parentGraphID)
+
+	if err != nil {
+		return err
+	}
+	//updateMIME(m)
+
+	ds.writeNodeToFile(m)
+	// if default graph is nil and new node id value id
+
+	// if
+
+	return nil
+}
+
+func (ds *fileDataset) getDefaultGraph() (map[string]interface{}, []interface{}, error) {
 
 	// READ JSON-LD DOCUMENT INTO MEMORY
 	var doc *os.File
 	var err error
 
-	if doc, err = os.Open(fds.operatingSystemPath); err != nil {
-		return err
+	if doc, err = os.Open(ds.operatingSystemPath); err != nil {
+		return nil, nil, err
 	}
 	defer doc.Close()
 
-	// TODO: convert this func to stream changes to json-ld document
-	// instead of renderinig doc in memory
-	callback := func() (io.Reader, error) {
+	m := make(map[string]interface{})
 
-		buf := &bytes.Buffer{}
+	decoder := json.NewDecoder(doc)
 
-		m := make(map[string]interface{})
+	// DESERIALIZE JSON-LD DOC INTO MEMORY
+	if err1 := decoder.Decode(&m); err1 != nil {
+		return nil, nil, err1
+	}
 
-		decoder := json.NewDecoder(doc)
+	// GET DEFAULT GRAPH OBJECT FROM DOC
+	var defaultGraphRaw interface{}
+	var success bool
 
-		// DESERIALIZE JSON-LD DOC INTO MEMORY
-		if err1 := decoder.Decode(&m); err1 != nil {
-			return nil, err1
-		}
+	// ENSURE DEFAULT GRAPH EXISTS
+	if defaultGraphRaw, success = m["@graph"]; !success {
+		return nil, nil, errors.NotFound.New(
+			"default graph not found as outermost " +
+				"attribute '@graph' in JSON-LD document")
 
-		// GET DEFAULT GRAPH OBJECT FROM DOC
-		var defaultGraphRaw interface{}
-		var defaultGraph []interface{}
-		var success bool
-
-		// ENSURE DEFAULT GRAPH EXISTS
-		if defaultGraphRaw, success = m["@graph"]; !success {
-			return nil, errors.NotFound.New(
-				"default graph not found as outermost " +
-					"attribute '@graph' in JSON-LD document")
-
-		}
+	}
+	var defaultGraph []interface{}
+	if defaultGraphRaw == nil || defaultGraphRaw == "" {
+		defaultGraph = make([]interface{}, 0)
+	} else {
 
 		if defaultGraph, success = defaultGraphRaw.([]interface{}); !success {
-
-			return nil, errors.UnexpectedType.Newf(
-				"expected '@graph' value to be type %T , found type %T",
-				defaultGraph, m["@graph"])
+			return nil, nil, errors.InvalidValue.New(
+				"Connot convert default graph to list of interface")
 
 		}
+	}
 
-		// CHECK IF NEW NODE HAS ID
-		var newNodeIDValue string
+	return m, defaultGraph, nil
+}
 
-		if newNodeID, ok := newNode["@id"]; ok {
-			// NEW NODE HAS ID. EXTRACT AS TYPE string
-			if newNodeIDStr, ok := newNodeID.(string); ok {
-				newNodeIDValue = newNodeIDStr
+func getNodeID(newNode map[string]interface{}) (string, error) {
+	// CHECK IF NEW NODE HAS ID
+	var newNodeIDValue string
 
-			} else {
-				return nil, errors.UnexpectedType.Newf(
-					"expected @id value of node to append to be type %T, found type %T",
-					newNodeIDValue, newNodeID)
-			}
+	if newNodeID, ok := newNode["@id"]; ok {
+		// NEW NODE HAS ID. EXTRACT AS TYPE string
+		if newNodeIDStr, ok := newNodeID.(string); ok {
+			newNodeIDValue = newNodeIDStr
+
+		} else {
+			return "", errors.UnexpectedType.Newf(
+				"expected @id value of node to append to be type %T, found type %T",
+				newNodeIDValue, newNodeID)
 		}
+	} else {
+		newNodeIDValue = ""
+	}
+	return newNodeIDValue, nil
+}
 
-		for _, node := range defaultGraph {
+func addNodeToGraph(defaultGraph []interface{}, newNode map[string]interface{}, parentGraphID string) (interface{}, error) {
+	//find the parent nodeID
 
-			var nodeAsMap map[string]interface{}
-			var isMap bool
-			if nodeAsMap, isMap = node.(map[string]interface{}); !isMap {
-				continue
-			}
+	if parentGraphID == "default" {
+		return append(defaultGraph, newNode), nil
+	}
+	var parentGraphRaw interface{}
+	var err error
+	if parentGraphRaw, err = getGraph(defaultGraph, parentGraphID); err != nil {
+		return nil, err
+	}
+	var parentGraph []interface{}
+	var success bool
 
-			if curID, ok := nodeAsMap["@id"]; ok {
-				if curIDValue, ok := curID.(string); ok {
-					// TODO: need to expand id's to IRI before comparison
-					if curIDValue == newNodeIDValue {
-						return nil, errors.AlreadyExists.Newf(
-							"node with @id value of '%s' already exists in the default graph",
-							newNodeIDValue)
+	if parentGraph, success = parentGraphRaw.([]interface{}); !success {
+		return nil, errors.InvalidValue.New("Failure to convert graph object to list of graphs")
+	}
+	if nodeid, err1 := getNodeID(newNode); err1 != nil {
+		parentMap := parentGraphRaw.(map[string]interface{})
+		updateMTIME(parentMap, nodeid)
+	}
 
-					}
-				}
-			}
-		}
+	return append(parentGraph, newNode), nil
 
-		// UPDATE IN MEMORY JSON-LD DOC
-		m["@graph"] = append(defaultGraph, newNode)
+}
 
-		// UPDATE MTIME FOR THIS RESOURCE (NODE)
-		var loc common.JSONLDDocumentLocation
+func updateMTIME(m map[string]interface{}, newNodeIDValue string) error {
 
-		loc.ContainerType = jsonld.DatasetResource // SINCE IT'S DEFAULT GRAPH, CONTAINER IS DATASET
-		loc.ContainerIRI = ""
-		loc.ObjectType = jsonld.NodeResource
-		loc.ObjectIRI = newNodeIDValue
+	// UPDATE MTIME FOR THIS RESOURCE (NODE)
+	var loc common.JSONLDDocumentLocation
 
-		if err = common.UpdateResourceMtimeToNow(m, loc); err != nil {
-			return nil, err
-		}
+	loc.ContainerType = jsonld.DatasetResource // SINCE IT'S DEFAULT GRAPH, CONTAINER IS DATASET
+	loc.ContainerIRI = ""
+	loc.ObjectType = jsonld.NodeResource
+	loc.ObjectIRI = newNodeIDValue
 
-		//  SERIALIZE UPDATED  JSON-LD DOC
+	if err := common.UpdateResourceMtimeToNow(m, loc); err != nil {
+		return err
+	}
+	return nil
+}
+
+func (ds *fileDataset) writeNodeToFile(graph map[string]interface{}) error {
+	//  SERIALIZE UPDATED  JSON-LD DOC
+	callback := func() (io.Reader, error) {
+		buf := &bytes.Buffer{}
 		encoder := json.NewEncoder(buf)
 
-		if err1 := encoder.Encode(&m); err1 != nil {
+		if err1 := encoder.Encode(&graph); err1 != nil {
 			return nil, err1
 		}
 
 		return buf, nil
 	}
 
-	if _, err = file.WriteToFileAtomic(callback, fds.operatingSystemPath); err != nil {
-		return err
+	if _, err1 := file.WriteToFileAtomic(callback, ds.operatingSystemPath); err1 != nil {
+		return err1
 	}
-
 	return nil
+}
+
+func getGraph(graph []interface{}, graphID string) (interface{}, error) {
+
+	if len(graph) == 0 && graphID == defaultGraphID {
+		return make([]interface{}, 0), nil
+	}
+	for _, node := range graph {
+
+		var nodeAsMap map[string]interface{}
+		var isMap bool
+		if nodeAsMap, isMap = node.(map[string]interface{}); isMap {
+			// if graphID is blank then check that @id is not there
+
+			curID, ok := nodeAsMap["@id"]
+
+			if (graphID == defaultGraphID && !ok) || (ok && getIDValue(curID) == graphID) {
+				childGraphRaw, _ := nodeAsMap["@graph"]
+				return childGraphRaw, nil
+			}
+
+			childGraphRaw, success1 := nodeAsMap["@graph"]
+			if !success1 {
+				return nil, errors.NotFound.New(
+					"Graph node found in Graph: " + graphID)
+
+			}
+
+			childGraph, success2 := childGraphRaw.([]interface{})
+			if !success2 {
+				return nil, errors.NotFound.New(
+					"Graph: " + graphID + " graph node cannot be converted to list")
+
+			}
+			if len(childGraph) != 0 {
+				return getGraph(childGraph, graphID)
+			}
+		}
+
+	}
+	return nil, errors.NotFound.New(
+		"Graph: " + graphID + " not found in the map")
+
+}
+
+func getIDValue(id interface{}) string {
+	if value, ok := id.(string); ok {
+		return value
+	}
+	return ""
+
 }

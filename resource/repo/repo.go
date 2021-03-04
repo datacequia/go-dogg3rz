@@ -56,6 +56,11 @@ type RepositoryResource interface {
 		nodeProperties []string, nodeValues []string) error
 	// Returns list of data sets in the repo
 	GetDataSets(ctxt context.Context, repoName string ) ([]string, error)
+
+	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
+ 	// FOR DATASET datasetPath REPO repoName
+ 	CreateNamedGraph(ctxt context.Context, repoName string, datasetPath string, graphName string,
+ 		parentGraphName string) error
 }
 
 type GetResourceItem interface {

@@ -95,7 +95,7 @@ func TestIndex(t *testing.T) {
 	testReadIndexFileFailsOnUpdate(t)
 
 	// TEARDOWN CODE
-	//	indexTeardown(t)
+	indexTeardown(t)
 
 }
 
