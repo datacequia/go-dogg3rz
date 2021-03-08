@@ -15,7 +15,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
@@ -31,10 +30,6 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
 		return err
 	}
-
-	fmt.Println("FileRepositoryResource.InsertNode", repoName, datasetPath,
-		nodeType, nodeID, graphName,
-		nodeProperties, nodeValues)
 
 	node := make(map[string]interface{})
 

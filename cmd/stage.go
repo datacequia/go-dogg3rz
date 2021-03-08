@@ -14,11 +14,13 @@
 package cmd
 
 import (
-	"fmt"
 	"context"
-	"github.com/datacequia/go-dogg3rz/resource"
-)
 
+	"github.com/datacequia/go-dogg3rz/errors"
+	"github.com/datacequia/go-dogg3rz/resource"
+	rescom "github.com/datacequia/go-dogg3rz/resource/common"
+	"github.com/datacequia/go-dogg3rz/resource/jsonld"
+)
 
 // STAGE  DEFAULT-GRAPH | GRAPH IRI | NODE IRI
 type dgrzStageCmd struct {
@@ -49,18 +51,20 @@ type dgrzStageNamedGraph struct {
 	Positional struct {
 		IRI string `positional-arg-name:"IRI" required:"yes" `
 	} `positional-args:"yes"`
+	ParentGraphIRI string `long:"parent" description:"Parent graph IRI" required:"false" default:""`
 }
 
 type dgrzStageNode struct {
 	Positional struct {
 		IRI string `positional-arg-name:"IRI" required:"yes" `
 	} `positional-args:"yes"`
+	ParentGraphIRI string `long:"parent" description:"Parent graph IRI" required:"false" default:""`
 }
 
 var stageCmd = dgrzStageCmd{}
 
 func init() {
-	// REGISTER THE 'init' COMMAND
+	// REGISTER THE 'stage' COMMAND
 	register(&stageCmd)
 }
 
@@ -68,81 +72,172 @@ func init() {
 // EXECUTE ENTRYPOINTS
 /////////////////////////////////////
 
+// commaand entrypoint for staging either all 1) all datasets in a repository
+// or 2) stage all resources in a dataset
 func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
-	ctxt,cancelFunc := context.WithCancel(getCmdContext()) 
-
+	ctxt, cancelFunc := context.WithCancel(getCmdContext())
 	defer cancelFunc()
 
+	stager, err := resource.GetRepositoryResourceStager(ctxt, stageCmd.Repository)
+	if err != nil {
+		return err
+	}
+	defer stager.Close(ctxt)
 
-	stager := resource.GetRepositoryStagerResource(ctxt,stageCmd.Repository)
+	stageDataset := func(ctxt context.Context, datasetName string) error {
 
-	fmt.Println("stager",stager)
+		srl := rescom.StagingResourceLocation{}
+		srl.ContainerType = jsonld.DatasetResource
+		srl.ContainerIRI = "" // n/a  for type
+		srl.ObjectType = jsonld.DatasetResource
+		srl.ObjectIRI = "" // n/a for type
+		srl.DatasetPath = datasetName
 
-/*
-	ctxt := getCmdContext()
+		// STAGE DATASET
+		if err := stager.Add(ctxt, srl); err != nil {
+			if err2 := stager.Rollback(ctxt); err2 != nil {
+				return errors.Wrap(err, err2.Error())
+			}
+			return err
 
-	repo := resource.GetRepositoryResource(ctxt)
-
-	var err error
-	var stageAllCmd *dgrzStageAllCmd = &stageCmd.All
-	var stageDatasetAllCmd *dgrzStageAllCmd = &stageCmd.Dataset.All
-
-	// DIFFERENTIATE THE CONTEXT IN WHICH THE 'ALL' COMMAND WAS USED
-	// BY COMPARING IT'S (RECEIVER) POINTER VALUE TO THE TWO CONTEXTS IN WHICH IT
-	// IS KNOWN TO BE USED
-	switch cmd {
-
-	case stageAllCmd:
-
-	case stageDatasetAllCmd:
-
-		var stagingList = []common.StagingResourceLocation{
-			common.StagingResourceLocation{
-				JSONLDDocumentLocation: common.JSONLDDocumentLocation{
-					ObjectType:    jsonld.DatasetResource,
-					ObjectIRI:     "",
-					ContainerType: jsonld.DatasetResource,
-					ContainerIRI:  "",
-				},
-				DatasetPath: stageCmd.Dataset.Positional.DatasetPath,
-			},
 		}
 
-		var srl []common.StagingResource
-		if srl, err = repo.StageResources(ctxt, stageCmd.Repository, stagingList); err != nil {
+		return nil
+
+	}
+
+	switch cmd {
+	case &stageCmd.All:
+		// STAGE ALL DATASETS IN A REPOSITORY
+
+		repo := resource.GetRepositoryResource(ctxt)
+
+		datasets, err := repo.GetDataSets(ctxt, stageCmd.Repository)
+		if err != nil {
 			return err
 		}
 
-		for _, sr := range srl {
+		if len(datasets) < 1 {
+			return errors.NotFound.New("no datasets to stage")
+		}
 
-			fmt.Printf("staged %s\n", sr)
+		for _, ds := range datasets {
+			if err := stageDataset(ctxt, ds); err != nil {
+				return err
+			}
+		}
+
+	case &stageCmd.Dataset.All:
+
+		// STAGE A SPECIFIC DATASET WITHIN A REPOSITORY
+
+		if err := stageDataset(ctxt, stageCmd.Dataset.Positional.DatasetPath); err != nil {
+			return err
 		}
 
 	default:
-		panic(fmt.Sprintf("unhandled context in which 'all' sub-command is used"))
+		panic("unhandled 'stage all' command context")
 	}
-*/
 
-	return nil
+	return stager.Commit(ctxt)
 }
 
-// function dgrzStageContext.Execute is the entrypoint function to
-// stage the outermost context of a JSON-LD dataset
+// command entrypoint for staging outermost context in a json-ld dataset
 func (c *dgrzStageContext) Execute(args []string) error {
 
-	return nil
+	ctxt, cancelFunc := context.WithCancel(getCmdContext())
+	defer cancelFunc()
+
+	var datasetName = stageCmd.Dataset.Positional.DatasetPath
+
+	srl := rescom.StagingResourceLocation{}
+	srl.ContainerType = jsonld.DatasetResource
+	srl.ContainerIRI = "" // n/a  for type
+	srl.ObjectType = jsonld.ContextResource
+	srl.ObjectIRI = "" // n/a for type
+	srl.DatasetPath = datasetName
+
+	return stageResourceLocation(ctxt, srl)
 
 }
 
+// command entrypoint for staging a named graph within a dataset and all
+// the resources therein
 func (c *dgrzStageNamedGraph) Execute(args []string) error {
 
-	return nil
+	ctxt, cancelFunc := context.WithCancel(getCmdContext())
+	defer cancelFunc()
+
+	datasetName := stageCmd.Dataset.Positional.DatasetPath
+	iri := stageCmd.Dataset.NamedGraph.Positional.IRI
+	parentIRI := stageCmd.Dataset.NamedGraph.ParentGraphIRI
+
+	srl := rescom.StagingResourceLocation{}
+	if len(parentIRI) > 0 {
+		srl.ContainerType = jsonld.NamedGraphResource
+		srl.ContainerIRI = parentIRI
+	} else {
+		srl.ContainerType = jsonld.DatasetResource
+		srl.ContainerIRI = "" // n/a for Datset type
+	}
+
+	srl.ObjectType = jsonld.NamedGraphResource
+	srl.ObjectIRI = iri
+	srl.DatasetPath = datasetName
+
+	return stageResourceLocation(ctxt, srl)
+
 }
 
+// command entrypoint for staging a single node within a dataset
 func (c *dgrzStageNode) Execute(args []string) error {
 
-	return nil
+	ctxt, cancelFunc := context.WithCancel(getCmdContext())
+	defer cancelFunc()
+
+	datasetName := stageCmd.Dataset.Positional.DatasetPath
+	iri := stageCmd.Dataset.Node.Positional.IRI
+	parentIRI := stageCmd.Dataset.Node.ParentGraphIRI
+
+	srl := rescom.StagingResourceLocation{}
+	if len(parentIRI) > 0 {
+		// NODE IS IN THE DEFAULT GRAPH
+		srl.ContainerType = jsonld.NamedGraphResource
+		srl.ContainerIRI = parentIRI
+	} else {
+		// NODE IS WITHIN A NAMED GRAPH
+		srl.ContainerType = jsonld.DatasetResource
+		srl.ContainerIRI = "" // n/a for Datset type
+	}
+
+	srl.ObjectType = jsonld.NodeResource
+	srl.ObjectIRI = iri
+	srl.DatasetPath = datasetName
+
+	return stageResourceLocation(ctxt, srl)
+
+}
+
+func stageResourceLocation(ctxt context.Context, srl rescom.StagingResourceLocation) error {
+
+	stager, err := resource.GetRepositoryResourceStager(ctxt, stageCmd.Repository)
+	if err != nil {
+		return err
+	}
+	defer stager.Close(ctxt)
+
+	// Stage outermost context
+	if err := stager.Add(ctxt, srl); err != nil {
+		if err2 := stager.Rollback(ctxt); err2 != nil {
+			return errors.Wrap(err, err2.Error())
+		}
+		return err
+
+	}
+
+	return stager.Commit(ctxt)
+
 }
 
 ///////////
@@ -156,5 +251,5 @@ func (o *dgrzStageCmd) ShortDescription() string {
 }
 
 func (o *dgrzStageCmd) LongDescription() string {
-	return "stage a new JSON-LD repository resource from your working tree"
+	return "stage a new JSON-LD repository resource from your workspace"
 }

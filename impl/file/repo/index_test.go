@@ -33,10 +33,6 @@ import (
 var dogg3rzHome string
 var fileRepoIdx *fileRepositoryIndex
 
-const (
-	testRepoName = "index_test"
-)
-
 // returns a cancellable cnotext that inits DOGG3RZ_HOME
 // to package var dogg3rzHome
 func getContext() context.Context {

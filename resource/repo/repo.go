@@ -24,7 +24,6 @@ import (
 type RepositoryResource interface {
 	InitRepo(ctxt context.Context, repoName string) error
 
- 
 	CreateDataset(ctxt context.Context, repoName string, datasetPath string) error
 
 	AddNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error
@@ -48,26 +47,22 @@ type RepositoryResource interface {
 		nodeType string, nodeID string, graphName string,
 		nodeProperties []string, nodeValues []string) error
 	// Returns list of data sets in the repo
-	GetDataSets(ctxt context.Context, repoName string ) ([]string, error)
+	GetDataSets(ctxt context.Context, repoName string) ([]string, error)
 }
 
-type GetResourceItem interface {
-	GetPath() string // PATH TO RESOURCE
-	GetStatus() string
-}
-
-// ALLOWS USER TO STAGE (i.e. .Add() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY
+// ALLOWS USER TO STAGE/UNSTAGE (i.e. .Add(), Remove() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY
 // TO REPOSITORY IDENTIFIED BY VALUE RETURNED FROM  .Repository()
-// BEFORE FLUSHING STAGED RESOURCES USING .Commit()  
+// BEFORE FLUSHING STAGED RESOURCES USING .Commit()
 //
 // NOTE: CALLER SHOULD PASS THE SAME CANCELLABLE (context.Context.WithCancel()) CONTEXT OBJECT INSTANCE
 // TO ResourceStager METHODS WHICH REQUIRE A CONTEXT AND CALL THE CANCEL FUNCTION WHEN DONE TO ENSURE
 // ANY ALLOCATED GO-ROUTINES ALLOCATED DURING THE INTERACTION WITH THIS INTERFACE ARE DEALLOCATED
 
-type ResourceStager interface {
-	Add(ctxt context.Context, sr rescom.StagingResource)  error
-        Commit(ctxt context.Context)  error 
-        Repository() string 
-} 
-
-
+type RepositoryResourceStager interface {
+	Add(ctxt context.Context, sr rescom.StagingResourceLocation) error    // stage an new/existing resource (from workspace)
+	Remove(ctxt context.Context, sr rescom.StagingResourceLocation) error // remove resource from staging
+	Commit(ctxt context.Context) error                                    // save changes to staging
+	Rollback(ctxt context.Context) error                                  // undo changes since last commit
+	Close(ctxt context.Context) error                                     // release all resources
+	Repository() string                                                   // return repository context for staging operations
+}
