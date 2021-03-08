@@ -123,7 +123,9 @@ func TestIndex(t *testing.T) {
 
 	testNewFileRepoIndexOnNonExistentRepo(t)
 
+
 	testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t)
+  indexTeardown(t)
 
 }
 

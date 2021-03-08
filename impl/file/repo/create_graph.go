@@ -11,39 +11,25 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package cmd
+package repo
 
-//	"io"
-//	"os"
-//"strings"
+import (
+	"context"
+	"fmt"
+)
 
-//	"github.com/datacequia/go-dogg3rz/errors"
+func (repo *FileRepositoryResource) CreateNamedGraph(ctxt context.Context, repoName string, datasetPath string, graphName string,
+	parentGraphName string) error {
+	var fds *fileDataset
+	var err error
+	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+		return err
+	}
 
-//	"github.com/xeipuuv/gojsonschema"
+	if err = fds.createNamedGraph(ctxt, graphName, parentGraphName); err != nil {
+		fmt.Println(err)
+		return err
 
-type dgrzGetCmd struct {
-
-	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a repo" `
-
-	Repos dgrzGetRepoCmd `command:"repository" alias:"repo" description:"get list of repos" `
-
-}
-
-func init() {
-	// REGISTER THE 'init' COMMAND
-	register(&dgrzGetCmd{})
-}
-
-
-
-func (o *dgrzGetCmd) CommandName() string {
-	return "get"
-}
-
-func (o *dgrzGetCmd) ShortDescription() string {
-	return "get listing of repository resources"
-}
-
-func (o *dgrzGetCmd) LongDescription() string {
-	return "get listing of repository resources"
+	}
+	return nil
 }

@@ -13,37 +13,45 @@
 
 package cmd
 
-//	"io"
-//	"os"
-//"strings"
+import (
+	"github.com/datacequia/go-dogg3rz/impl/file"
+	//"github.com/datacequia/go-dogg3rz/impl/file/repo"
+	"github.com/datacequia/go-dogg3rz/resource"
+)
 
-//	"github.com/datacequia/go-dogg3rz/errors"
-
-//	"github.com/xeipuuv/gojsonschema"
-
-type dgrzGetCmd struct {
-
-	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a repo" `
-
-	Repos dgrzGetRepoCmd `command:"repository" alias:"repo" description:"get list of repos" `
+// Command to get list of repos
+type dgrzGetRepoCmd struct {
 
 }
 
 func init() {
-	// REGISTER THE 'init' COMMAND
-	register(&dgrzGetCmd{})
+	// REGISTER THE 'get repo ' COMMAND
+	register(&dgrzGetRepoCmd{})
+}
+
+func (x *dgrzGetRepoCmd) Execute(args []string) error {
+
+
+	ctxt := getCmdContext()
+	node := resource.GetNodeResource(ctxt)
+	var files []string
+	var err error
+	files, err = node.GetRepos(ctxt)
+    PrintValues(files, file.DgrzDirName)
+	return err 
+
 }
 
 
 
-func (o *dgrzGetCmd) CommandName() string {
-	return "get"
+func (o *dgrzGetRepoCmd) CommandName() string {
+	return "repo"
 }
 
-func (o *dgrzGetCmd) ShortDescription() string {
+func (o *dgrzGetRepoCmd) ShortDescription() string {
 	return "get listing of repository resources"
 }
 
-func (o *dgrzGetCmd) LongDescription() string {
+func (o *dgrzGetRepoCmd) LongDescription() string {
 	return "get listing of repository resources"
 }

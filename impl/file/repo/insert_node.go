@@ -15,7 +15,6 @@ package repo
 
 import (
 	"context"
-	"fmt"
 
 	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
@@ -32,10 +31,6 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 		return err
 	}
 
-	fmt.Println("FileRepositoryResource.InsertNode", repoName, datasetPath,
-		nodeType, nodeID, graphName,
-		nodeProperties, nodeValues)
-
 	node := make(map[string]interface{})
 
 	if len(nodeType) > 0 {
@@ -50,11 +45,6 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 
 	}
 
-	if len(graphName) > 0 {
-		// TODO: need to implement inserting node into named graaph
-		return errors.AssertionError.Newf("have not implemented inserting node into named graph")
-	}
-
 	if len(nodeProperties) != len(nodeValues) {
 		return errors.OutOfRange.Newf("the number of node properties/values "+
 			"provided must be equal. %d node properties provided, %d node values provided",
@@ -65,14 +55,19 @@ func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
 	for i, _ := range nodeProperties {
 		prop := nodeProperties[i]
 		val := nodeValues[i]
-
 		node[prop] = val
 
 	}
 
-	if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
-		return err
-	}
+	if len(graphName) > 0 {
+		if err = fds.appendNodeToGraph(ctxt, node, graphName); err != nil {
+			return err
+		}
+	} else {
 
+		if err = fds.appendNodeToDefaultGraph(ctxt, node); err != nil {
+			return err
+		}
+	}
 	return nil
 }
