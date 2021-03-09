@@ -28,9 +28,6 @@ const indexFileName = "index"
 type FileRepositoryResource struct {
 }
 
-
-
-
 func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) error {
 
 	repoDir := path.Join(file.RepositoriesDirPath(ctxt), name)
@@ -70,8 +67,6 @@ func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) 
 	return nil
 
 }
-
-
 
 func (repo *FileRepositoryResource) CreateSnapshot(ctxt context.Context, repoName string) error {
 
@@ -119,12 +114,11 @@ func (repo *FileRepositoryResource) AddNamespaceNode(ctxt context.Context, repoN
 
 func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName string) ([]string, error) {
 
-
 	repoDir := path.Join(file.RepositoriesDirPath(ctxt), repoName)
 	var files []string
 	var err error
 
-	if file.DirExists(repoDir){
+	if file.DirExists(repoDir) {
 		files, err = file.GetDirs(repoDir)
 	}
 
@@ -134,5 +128,5 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 		}
 	}
 
-		return files, err
+	return files, err
 }

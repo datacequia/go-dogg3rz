@@ -90,6 +90,10 @@ func (sr StagingResourceLocation) AssertValid() error {
 		return err
 	}
 
+	if len(sr.DatasetPath) < 1 {
+		return errors.InvalidValue.Newf("empty DatasetPath: %s", sr)
+	}
+
 	switch sr.ObjectType {
 
 	case jsonld.ContextResource:

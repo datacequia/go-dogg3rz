@@ -14,6 +14,7 @@
 package common
 
 import (
+	"context"
 	"reflect"
 	"testing"
 
@@ -25,7 +26,7 @@ type testStagingResourceCollector struct {
 	resources []interface{}
 }
 
-func (o *testStagingResourceCollector) CollectStart(resource interface{}, location StagingResourceLocation) error {
+func (o *testStagingResourceCollector) CollectStart(ctxt context.Context, resource interface{}, location StagingResourceLocation) error {
 
 	o.locations = append(o.locations, location)
 	o.resources = append(o.resources, resource)
@@ -34,7 +35,7 @@ func (o *testStagingResourceCollector) CollectStart(resource interface{}, locati
 
 }
 
-func (o *testStagingResourceCollector) CollectEnd(resource interface{}, location StagingResourceLocation) {
+func (o *testStagingResourceCollector) CollectEnd(ctxt context.Context, resource interface{}, location StagingResourceLocation) {
 	// NOTHIING TO CLEANUP FOR THIS IMPL.
 
 }
@@ -118,7 +119,7 @@ func TestFindStageableResources(t *testing.T) {
 	}
 
 	const datasetPath = "a/b/c"
-	if err := FindStageableResources(datasetPath, doc, &c); err != nil {
+	if err := FindStageableResources(context.Background(), datasetPath, doc, &c); err != nil {
 		t.Errorf("FindStageableResources failed on good doc: %s", err)
 	}
 
