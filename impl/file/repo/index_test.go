@@ -71,7 +71,7 @@ func indexSetup(t *testing.T) {
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		t.Error(err)
 	}
-	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
+//	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
 	fileRepositoryResource := FileRepositoryResource{}
 
@@ -123,9 +123,8 @@ func TestIndex(t *testing.T) {
 
 	testNewFileRepoIndexOnNonExistentRepo(t)
 
-
 	testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t)
-  indexTeardown(t)
+	indexTeardown(t)
 
 }
 

@@ -14,7 +14,10 @@
 package repo
 
 import (
+	"fmt"
 	"testing"
+
+	"github.com/datacequia/go-dogg3rz/resource/common"
 )
 
 func TestCreateNamedGraph(t *testing.T) {
@@ -34,7 +37,7 @@ func TestCreateNamedGraph(t *testing.T) {
 // Add new named graph to default graph
 func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "d2")
+	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test1")
 	fileDataset.create(ctxt)
 	var childGraph = "test1"
 	err := fileDataset.createNamedGraph(ctxt, childGraph, "default")
@@ -42,8 +45,8 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 		t.FailNow()
 	}
-	_, defaultGraph, _ := fileDataset.getDefaultGraph()
-	createdGraph, err1 := getGraph(defaultGraph, childGraph)
+	_, defaultGraph, _ := fileDataset.readDefaultGraph()
+	createdGraph, err1 := common.GetGraph(defaultGraph, childGraph)
 	if err1 != nil {
 		t.Errorf("unexpected error: %v", err1)
 		t.FailNow()
@@ -57,7 +60,7 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 // Add new named graph to another named graph
 func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "d2")
+	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
 	fileDataset.create(ctxt)
 	var parentGraph = "testParent2"
 	var childGraph = "childGraphTest2"
@@ -72,8 +75,8 @@ func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 		t.Errorf("unexpected error: %v", err)
 		t.FailNow()
 	}
-	_, defaultGraph, _ := fileDataset.getDefaultGraph()
-	createdGraph, err1 := getGraph(defaultGraph, childGraph)
+	_, defaultGraph, _ := fileDataset.readDefaultGraph()
+	createdGraph, err1 := common.GetGraph(defaultGraph, childGraph)
 	if err1 != nil {
 		t.Errorf("unexpected error: %v", err1)
 
@@ -87,10 +90,10 @@ func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 
 // Add duplicate named graph to default graph
 func testDuplicateCreateNamedGraphInDefaultGraph(t *testing.T) {
-
+	fmt.Println("------------------Start of new test-----------------------")
 	// TEST NEW REPO INDEX WITH BAD REPO NAME
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "d2")
+	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
 	fileDataset.create(ctxt)
 
 	var childGraph = "childGraphTest3"
@@ -113,7 +116,7 @@ func testDuplicateCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 
 	// TEST NEW REPO INDEX WITH BAD REPO NAME
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "d2")
+	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test4")
 	fileDataset.create(ctxt)
 
 	var parentGraph = "testParent5"

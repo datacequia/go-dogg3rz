@@ -17,6 +17,8 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	//"encoding/json"
+	//"fmt"
 
 	"io"
 	"os"
@@ -25,7 +27,6 @@ import (
 	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/resource/common"
-	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
 const defaultGraphID = "default"
@@ -109,14 +110,15 @@ func (ds *fileDataset) createNamedGraph(ctxt context.Context, graphID string, pa
 
 	var err error
 
-	if _, defaultGraph, err = ds.getDefaultGraph(); err != nil {
+	if _, defaultGraph, err = ds.readDefaultGraph(); err != nil {
 		return err
 	}
 
 	//	var child interface{}
 
-	if child, _ := getGraph(defaultGraph, graphID); child != nil {
+	if child, _ := common.GetGraph(defaultGraph, graphID); child != nil {
 		// means that names graph with this id already exists, return error
+
 		return errors.InvalidValue.New("Named graph with id: " + graphID + " already exists.")
 	}
 
@@ -142,19 +144,17 @@ func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[strin
 	// READ JSON-LD DOCUMENT INTO MEMORY
 	var m map[string]interface{}
 
-	var defaultGraph []interface{}
-
 	var err error
-	if m, defaultGraph, err = ds.getDefaultGraph(); err != nil {
+	if m, _, err = ds.readDefaultGraph(); err != nil {
 		return err
 	}
 
-	newNodeIDValue, err1 := getNodeID(newNode)
-	if len(newNodeIDValue) == 0 || err != nil {
+	newNodeIDValue, err1 := common.GetNodeID(newNode)
+	if len(newNodeIDValue) == 0 || err1 != nil {
 		return err1
 	}
 
-	m["@graph"], err = addNodeToGraph(defaultGraph, newNode, parentGraphID)
+	err = common.AddNodeToGraph(&m, newNode, parentGraphID)
 
 	if err != nil {
 		return err
@@ -169,7 +169,7 @@ func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[strin
 	return nil
 }
 
-func (ds *fileDataset) getDefaultGraph() (map[string]interface{}, []interface{}, error) {
+func (ds *fileDataset) readDefaultGraph() (map[string]interface{}, []interface{}, error) {
 
 	// READ JSON-LD DOCUMENT INTO MEMORY
 	var doc *os.File
@@ -189,95 +189,11 @@ func (ds *fileDataset) getDefaultGraph() (map[string]interface{}, []interface{},
 		return nil, nil, err1
 	}
 
-	// GET DEFAULT GRAPH OBJECT FROM DOC
-	var defaultGraphRaw interface{}
-	var success bool
-
-	// ENSURE DEFAULT GRAPH EXISTS
-	if defaultGraphRaw, success = m["@graph"]; !success {
-		return nil, nil, errors.NotFound.New(
-			"default graph not found as outermost " +
-				"attribute '@graph' in JSON-LD document")
-
-	}
-	var defaultGraph []interface{}
-	if defaultGraphRaw == nil || defaultGraphRaw == "" {
-		defaultGraph = make([]interface{}, 0)
-	} else {
-
-		if defaultGraph, success = defaultGraphRaw.([]interface{}); !success {
-			return nil, nil, errors.InvalidValue.New(
-				"Connot convert default graph to list of interface")
-
-		}
-	}
-
-	return m, defaultGraph, nil
-}
-
-func getNodeID(newNode map[string]interface{}) (string, error) {
-	// CHECK IF NEW NODE HAS ID
-	var newNodeIDValue string
-
-	if newNodeID, ok := newNode["@id"]; ok {
-		// NEW NODE HAS ID. EXTRACT AS TYPE string
-		if newNodeIDStr, ok := newNodeID.(string); ok {
-			newNodeIDValue = newNodeIDStr
-
-		} else {
-			return "", errors.UnexpectedType.Newf(
-				"expected @id value of node to append to be type %T, found type %T",
-				newNodeIDValue, newNodeID)
-		}
-	} else {
-		newNodeIDValue = ""
-	}
-	return newNodeIDValue, nil
-}
-
-func addNodeToGraph(defaultGraph []interface{}, newNode map[string]interface{}, parentGraphID string) (interface{}, error) {
-	//find the parent nodeID
-
-	if parentGraphID == "default" {
-		return append(defaultGraph, newNode), nil
-	}
-	var parentGraphRaw interface{}
-	var err error
-	if parentGraphRaw, err = getGraph(defaultGraph, parentGraphID); err != nil {
-		return nil, err
-	}
-	var parentGraph []interface{}
-	var success bool
-
-	if parentGraph, success = parentGraphRaw.([]interface{}); !success {
-		return nil, errors.InvalidValue.New("Failure to convert graph object to list of graphs")
-	}
-	if nodeid, err1 := getNodeID(newNode); err1 != nil {
-		parentMap := parentGraphRaw.(map[string]interface{})
-		updateMTIME(parentMap, nodeid)
-	}
-
-	return append(parentGraph, newNode), nil
-
-}
-
-func updateMTIME(m map[string]interface{}, newNodeIDValue string) error {
-
-	// UPDATE MTIME FOR THIS RESOURCE (NODE)
-	var loc common.JSONLDDocumentLocation
-
-	loc.ContainerType = jsonld.DatasetResource // SINCE IT'S DEFAULT GRAPH, CONTAINER IS DATASET
-	loc.ContainerIRI = ""
-	loc.ObjectType = jsonld.NodeResource
-	loc.ObjectIRI = newNodeIDValue
-
-	if err := common.UpdateResourceMtimeToNow(m, loc); err != nil {
-		return err
-	}
-	return nil
+	return common.GetDefaultGraph(m)
 }
 
 func (ds *fileDataset) writeNodeToFile(graph map[string]interface{}) error {
+
 	//  SERIALIZE UPDATED  JSON-LD DOC
 	callback := func() (io.Reader, error) {
 		buf := &bytes.Buffer{}
@@ -294,55 +210,4 @@ func (ds *fileDataset) writeNodeToFile(graph map[string]interface{}) error {
 		return err1
 	}
 	return nil
-}
-
-func getGraph(graph []interface{}, graphID string) (interface{}, error) {
-
-	if len(graph) == 0 && graphID == defaultGraphID {
-		return make([]interface{}, 0), nil
-	}
-	for _, node := range graph {
-
-		var nodeAsMap map[string]interface{}
-		var isMap bool
-		if nodeAsMap, isMap = node.(map[string]interface{}); isMap {
-			// if graphID is blank then check that @id is not there
-
-			curID, ok := nodeAsMap["@id"]
-
-			if (graphID == defaultGraphID && !ok) || (ok && getIDValue(curID) == graphID) {
-				childGraphRaw, _ := nodeAsMap["@graph"]
-				return childGraphRaw, nil
-			}
-
-			childGraphRaw, success1 := nodeAsMap["@graph"]
-			if !success1 {
-				return nil, errors.NotFound.New(
-					"Graph node found in Graph: " + graphID)
-
-			}
-
-			childGraph, success2 := childGraphRaw.([]interface{})
-			if !success2 {
-				return nil, errors.NotFound.New(
-					"Graph: " + graphID + " graph node cannot be converted to list")
-
-			}
-			if len(childGraph) != 0 {
-				return getGraph(childGraph, graphID)
-			}
-		}
-
-	}
-	return nil, errors.NotFound.New(
-		"Graph: " + graphID + " not found in the map")
-
-}
-
-func getIDValue(id interface{}) string {
-	if value, ok := id.(string); ok {
-		return value
-	}
-	return ""
-
 }
