@@ -48,6 +48,15 @@ func newFileDataset(ctxt context.Context, repoName string, datasetPath string) (
 
 	var err error
 
+	if len(repoName) < 1 {
+		return nil, errors.InvalidValue.New("empty repoName")
+	}
+
+	if len(datasetPath) < 1 {
+		return nil, errors.InvalidValue.New("emtpy datasetPath")
+
+	}
+
 	fds := &fileDataset{}
 
 	fds.repoName = repoName
