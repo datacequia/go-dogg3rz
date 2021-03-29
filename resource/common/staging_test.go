@@ -24,6 +24,7 @@ import (
 type testStagingResourceCollector struct {
 	locations []StagingResourceLocation
 	resources []interface{}
+	ctxt      context.Context
 }
 
 func (o *testStagingResourceCollector) CollectStart(ctxt context.Context, resource interface{}, location StagingResourceLocation) error {
@@ -119,7 +120,9 @@ func TestFindStageableResources(t *testing.T) {
 	}
 
 	const datasetPath = "a/b/c"
+
 	if err := FindStageableResources(context.Background(), datasetPath, doc, &c); err != nil {
+
 		t.Errorf("FindStageableResources failed on good doc: %s", err)
 	}
 
