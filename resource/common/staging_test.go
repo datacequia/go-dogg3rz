@@ -120,7 +120,9 @@ func TestFindStageableResources(t *testing.T) {
 	}
 
 	const datasetPath = "a/b/c"
-	if err := FindStageableResources(c.ctxt, datasetPath, doc, &c); err != nil {
+
+	if err := FindStageableResources(context.Background(), datasetPath, doc, &c); err != nil {
+
 		t.Errorf("FindStageableResources failed on good doc: %s", err)
 	}
 

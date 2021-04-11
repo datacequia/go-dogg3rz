@@ -17,12 +17,10 @@ import (
 	"context"
 	"encoding/json"
 	"fmt"
-	"io"
 	"math"
 	"os"
 
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/ipfs"
 	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
@@ -34,12 +32,14 @@ type stagingResourceLocationFile struct {
 	fileDataset *fileDataset
 }
 
-type fileStageResource struct {
+type FileRepositoryResourceStager struct {
 	repoName string
 
-	stagedResources []rescom.StagingResource
+	index *fileRepositoryIndex
 
-	startList []stagingResourceLocationFile
+	//stagedResources []rescom.StagingResource
+
+	//startList []stagingResourceLocationFile
 
 	// CONTAINS MAP OF ALL IN-MEMORY PARSED DATASETS FOR repoName
 	jsonLDParsedDocMap map[string]map[string]interface{} // key = REPO_NAME:DATASET_PATH
@@ -52,171 +52,74 @@ type fileStageResource struct {
 	// INDICATES IF PARSER IS CURRENTLY ITERATING THAT RESOURCE AND/OR RESOURCES
 	// WITHIN IF IT'S A CONTAINER RESOURCE
 	inCurrentStagingResourceLocation bool
+
+	// Counter of number of resources staged since last commit
+	count int
 }
 
-type FileResourceStager struct {
-	running  bool // true if stager go-routine is running
-	repoName string
-	request  chan rescom.StagingResource
-	response chan fileResourceStagerResponse
-	outcome  chan fileResourceStagerOutcome
+type stageCmdCollector struct {
+	stager *FileRepositoryResourceStager
 }
 
-type fileResourceStagerResponse struct {
-	request rescom.StagingResource
-	err     error
+type removeCmdCollector struct {
+	stager *FileRepositoryResourceStager
 }
 
-type fileResourceStagerOutcome struct {
-	err error
-}
-
-func (fsr *fileStageResource) stageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error) {
+// Create new file repository stager instance
+func NewFileRepositoryResourceStager(ctxt context.Context, repoName string) (*FileRepositoryResourceStager, error) {
 
 	var err error
+	stager := &FileRepositoryResourceStager{}
 
-	// INIT ARRAY THAT WILL HOLD STAGED resources
-	fsr.stagedResources = make([]rescom.StagingResource, 0)
-	fsr.startList = make([]stagingResourceLocationFile, len(startList))
-	fsr.jsonLDParsedDocMap = make(map[string]map[string]interface{})
+	stager.repoName = repoName
 
-	fsr.repoName = repoName
-
-	// VALIDATE START LIST
-	for i, srl := range startList {
-		// copy over to internal start list
-		fsr.startList[i].StagingResourceLocation = srl
-
-		// CREATE NEW (FILE) DATASET OBJECT AND ASSERT IT'S VALID (PATH ETC.)
-		if fsr.startList[i].fileDataset, err = newFileDataset(ctxt, repoName, srl.DatasetPath); err != nil {
-			return fsr.stagedResources, err
-		}
-
-		var datasetExists bool
-
-		// ENSURE REPO /  DATASET JSON-LD DOCUMENT FILE EXIST
-		if datasetExists, err = fsr.startList[i].fileDataset.assertState(ctxt, true); !datasetExists {
-			return fsr.stagedResources, err
-		}
-
-		// IS CURENT RESOURCE STAGEABLE?
-		if err = fsr.startList[i].StagingResourceLocation.AssertValid(); err != nil {
-			// NOT STAGEABLE OR ILLEGAL STATE
-			return fsr.stagedResources, err
-		}
-
-		// PARSE JSON-LD DATASET, IF NOT ALREADY NOT ALREADY PARSED
-		repoDatasetKey := makeJSONLDParsedDocMapKey(repoName, fsr.startList[i].fileDataset)
-
-		// POPULATE MAP OF PARSED JSON-LD DOCUMENTS IDENTIFIED BY KEY
-		if _, found := fsr.jsonLDParsedDocMap[repoDatasetKey]; !found {
-			var parsedJSONDoc map[string]interface{}
-
-			if parsedJSONDoc, err = parseJSONFile(fsr.startList[i].fileDataset.operatingSystemPath); err != nil {
-				return fsr.stagedResources, err
-			}
-
-			// POPULATE PARSED JSON-LD DOC MAP
-			fsr.jsonLDParsedDocMap[repoDatasetKey] = parsedJSONDoc
-
-		}
-
-	}
-
-	// ITERATE STAGED RESOURCED LOCATIONS IN startList AND STAGE
-	// EACH LOCATION IN THE LIST
-	for _, srlf := range fsr.startList {
-		if err = fsr.stageResource(ctxt, srlf); err != nil {
-			return fsr.stagedResources, err
-		}
-	}
-
-	return fsr.stagedResources, nil
-
-}
-
-// makeJSONLDParsedDocMapKey produces a a unique key using
-// repoName and fileDataset as input
-func makeJSONLDParsedDocMapKey(repoName string, ds *fileDataset) string {
-
-	return fmt.Sprintf("%s:%s", repoName, ds.datasetPath.ToString())
-}
-
-func parseJSONFile(path string) (map[string]interface{}, error) {
-
-	var fp *os.File
-	var err error
-	var m map[string]interface{}
-
-	if fp, err = os.Open(path); err != nil {
+	if stager.index, err = newFileRepositoryIndex(ctxt, repoName); err != nil {
 		return nil, err
 	}
 
-	m = make(map[string]interface{})
+	stager.jsonLDParsedDocMap = make(map[string]map[string]interface{})
 
-	decoder := json.NewDecoder(fp)
-
-	if err = decoder.Decode(&m); err != nil {
-		return nil, err
-	}
-
-	return m, nil
+	return stager, nil
 
 }
 
-func (fsr *fileStageResource) stageResource(ctxt context.Context, srlf stagingResourceLocationFile) error {
+// Add new resource (location) to staging index
+func (stager *FileRepositoryResourceStager) Add(ctxt context.Context, srl rescom.StagingResourceLocation) error {
 
-	//	var err error
-
-	var jsonLDDoc map[string]interface{}
-	var ok bool
-	var datasetPath = srlf.fileDataset.datasetPath.ToString()
 	var err error
 
-	mapKey := makeJSONLDParsedDocMapKey(fsr.repoName, srlf.fileDataset)
+	oldCount := stager.count
 
-	// GET PARSED DATASET FROM MAP
-	if jsonLDDoc, ok = fsr.jsonLDParsedDocMap[mapKey]; !ok {
-		// SOMETHING HAPPENED UP CALL CHAIN WHERE THE DATASET WAS
-		// NOT RETRIEVED
-		return errors.NotFound.Newf("expected to find parsed dataset '%s', repository '%s'",
-			datasetPath, fsr.repoName)
-
-	}
-	// SET CONOTEEXT BEFORE FINDING STAGEABLE REESOURCS WITHIN DOC
-	fsr.currentJSONLDParsedDoc = jsonLDDoc
-	fsr.currentStagingResourceLocation = srlf.StagingResourceLocation
-	fsr.inCurrentStagingResourceLocation = false
-	if err = rescom.FindStageableResources(ctxt, datasetPath, jsonLDDoc, fsr); err != nil {
+	if err = stager.stageResource(ctxt, srl); err != nil {
+		//fsr.index.rollback()
 
 		return err
 	}
 
-	return nil
+	if stager.count == oldCount {
+		// COUNT DID NOT CHANGE
+		return errors.NotFound.Newf("staging resource not found: %s", srl)
+	}
+
+	return err
 
 }
 
-func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) error {
+// CollectStart implements the StagingResourceCollector interface CollectStart method
+func (collector stageCmdCollector) CollectStart(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) error {
 
-	if location == fsr.currentStagingResourceLocation {
-		fsr.inCurrentStagingResourceLocation = true
+	if location == collector.stager.currentStagingResourceLocation {
+		// flag that current location is the current staging resource location
+		collector.stager.inCurrentStagingResourceLocation = true
 	}
 
-	if !fsr.inCurrentStagingResourceLocation {
+	if !collector.stager.inCurrentStagingResourceLocation {
 		// NOT ITERATING WITHIN CURRENT TAARGETE STAGING RESOURCE
 		// RETURN
-		//fmt.Println("!fsr.inCurrentStagingResourceLocation")
 		return nil
 	}
 
-	//fmt.Println("in fileStageResource.CollectStart", location)
-
 	var err error
-	var index *fileRepositoryIndex
-
-	if index, err = newFileRepositoryIndex(ctxt, fsr.repoName); err != nil {
-		return err
-	}
 
 	var entry rescom.StagingResource
 
@@ -227,21 +130,19 @@ func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interf
 	var ok bool
 
 	// GET MTIMES MAP FROM PARSED JSON-LD DOC
-	if i, ok = fsr.currentJSONLDParsedDoc[jsonld.MtimesEntryKeyName]; !ok {
+	if i, ok = collector.stager.currentJSONLDParsedDoc[jsonld.MtimesEntryKeyName]; !ok {
 		return errors.NotFound.Newf("can't find parsed mtimes map within parsed "+
 			"JSON-LD document for dataset '%s', repository '%s'",
 			location.DatasetPath,
-			fsr.repoName)
-	} else {
+			collector.stager.repoName)
+	}
 
-		if mtimesMap, ok = i.(map[string]interface{}); !ok {
-			return errors.UnexpectedType.Newf("expected parsed JSON-LD document "+
-				"entry '%s' value type to be"+
-				" type %T, found type %T: %s",
-				jsonld.MtimesEntryKeyName,
-				mtimesMap, i, location.String())
-		}
-
+	if mtimesMap, ok = i.(map[string]interface{}); !ok {
+		return errors.UnexpectedType.Newf("expected parsed JSON-LD document "+
+			"entry '%s' value type to be"+
+			" type %T, found type %T: %s",
+			jsonld.MtimesEntryKeyName,
+			mtimesMap, i, location.String())
 	}
 
 	// GET LAST MODIFIED TIME FOR LOCATION
@@ -277,9 +178,8 @@ func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interf
 
 	entry.LastModifiedNs = int64(lastModifiedAsFloat64)
 
-	// STAGE OBJECT INTO IPFS AND GET CID
+	// STAGE OBJECT INTO IPFS AS AN IPLD OBJECT AND GET CID
 	if location.WantsCID() {
-		//fmt.Println("wants cid ", location)
 
 		// SUBMIT TO IPFS ONLY IF THE RESOURCE LOCATION
 		// INDICATES THAT IT WANTS TO HAVE A CID
@@ -287,28 +187,34 @@ func (fsr *fileStageResource) CollectStart(ctxt context.Context, resource interf
 
 			return err
 		}
+
 		fmt.Println("CID", entry.ObjectCID)
 	}
 
-	//return index.update(entry)
-	//	err  = index.stage(entry)
-
-	return index.stage(entry) // TODO  RUN AN INDEX UPDATE TX HERE
-
-	//return err
-}
-
-func (fsr *fileStageResource) CollectEnd(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) {
-
-	if location == fsr.currentStagingResourceLocation {
-		fsr.inCurrentStagingResourceLocation = false
+	if collector.stager.index == nil {
+		panic("fileStageResource.index is uninitialized!")
 	}
 
-	return
+	err = collector.stager.index.stage(entry)
+	if err == nil {
+		collector.stager.count++
+
+	}
+	return err
 
 }
 
-func (fsr *fileStageResource) String() string {
+// // CollectStart implements the StagingResourceCollector interface CollectEnd method
+func (collector stageCmdCollector) CollectEnd(ctxt context.Context, resource interface{}, location rescom.StagingResourceLocation) {
+
+	if location == collector.stager.currentStagingResourceLocation {
+		collector.stager.inCurrentStagingResourceLocation = false
+	}
+
+}
+
+// String renders FileRepositoryResource instance as a string
+func (stager *FileRepositoryResourceStager) String() string {
 
 	return fmt.Sprintf("fileStageResource = { } ")
 
@@ -318,151 +224,177 @@ func (fsr *fileStageResource) String() string {
 // FileResourceStager METHODS
 /////////////////////////////////////
 
-// CREATE NEW INSTANCE. THIS SHOOULD BE THE ONLY WAY TO
-// INTERACT WITH THIS STRUCT (I.E. CALL IT'S PUBLIC METHODS
-func NewFileResourceStager(ctxt context.Context, repoName string) *FileResourceStager {
-
-	stager := &FileResourceStager{}
-
-	// INIT MEMBERS
-	stager.repoName = repoName
-	stager.request = make(chan rescom.StagingResource)
-	stager.response = make(chan fileResourceStagerResponse)
-	stager.outcome = make(chan fileResourceStagerOutcome)
-
-	return stager
-
-}
-
-// INITIALIZE MEMBERS AND START GOLANG FUNCTION TO
-// OBTAIN LOCK ON INDEX FILE AND WAIT FOR ITEMS
-// TO STAGE FROM REQUEST CHANNEL
-func (stager *FileResourceStager) runStager(ctxt context.Context) {
-
-	stager_request := stager.request
-	stagerRunFunc := func() (io.Reader, error) {
-
-		// TODO: Read index file into memory
-
-		for keepRunning := true; keepRunning; {
-
-			select {
-
-			case stagingResource, ok := <-stager_request:
-
-				keepRunning = ok // UPDATE LOOP CONDITIONAL BASED ON CHANNEL READ
-
-				if !ok {
-					// NO MORE REQUESTS
-					continue
-				}
-				// UPDATE MEMCACHED STAGING INDEX
-				fmt.Println("runStager: need toupdate mem cached staging index here ", stagingResource)
-
-				// WRITE RESPONSE TO RESPONSE CHANNEL
-
-			case <-ctxt.Done():
-				// OPERATION CANCELLED. EXIT GO-ROUTINE
-				return nil, errors.Cancelled.New("stagerRunFunc cancelled")
-			}
-
-		}
-		// TODO: COMMIT INDEX CACHE
-
-		return nil, nil
-
-	}
-
-	repoName := stager.repoName
-
-	stager_outcome := stager.outcome
-	// START GO-ROUTINE TO STAGE NEW STAGING RESOURCES
-	go func() {
-
-		_, err := file.WriteToFileAtomic(stagerRunFunc,
-			file.IndexFilePath(ctxt, repoName))
-
-		outcome := fileResourceStagerOutcome{err: err}
-
-		select {
-		case stager_outcome <- outcome:
-			// OUTCOME WRITTEN TO OUTCOME CHANNEL
-		case <-ctxt.Done():
-		}
-
-	}()
-
-	stager.running = true
-
-}
-
-func (stager *FileResourceStager) Add(ctxt context.Context, res rescom.StagingResource) error {
-
-	if !stager.running {
-		stager.runStager(ctxt)
-	}
-
-	// SUBMIT STAGING RESOURCE TO REQUEST CHANNEL
-	select {
-	case stager.request <- res:
-		// SENT RESOURCE FOR STAGING
-	case <-ctxt.Done():
-		// OPERATION CANCELLED
-		return errors.Newf("%T operation cancelled", stager)
-
-	}
-
-	// WAIT FOR RESPONSE TO REQUEST ON RESPONSE CHANNEL
-	select {
-	case response := <-stager.response:
-		if res != response.request {
-			// TODO: WRITE ERROR BACK THAT DESCRIBES REQUEST/RESPONSE MISMATCH!
-			// THIS SHOULD NOT HAPPEN AS CHANNEL ONLY TAKES A SINGLE ENTRY
-			// BEFORE BLOCKING
-
-			return errors.UnexpectedValue.Newf("expected response to echo request value '%s', found '%s'",
-				res, response.request)
-		}
-
-		if response.err != nil {
-			return response.err
-		}
-
-	case <-ctxt.Done():
-		// OPERATION CANCELLED
-		return errors.Newf("%T operation cancelled", stager)
-
-	}
+// Removes a resource (and its children) from the staging index
+func (stager *FileRepositoryResourceStager) Remove(ctxt context.Context, sr rescom.StagingResourceLocation) error {
 
 	return nil
 }
 
-func (stager *FileResourceStager) Commit(ctxt context.Context) error {
+// Commits changes to the staging index
+func (stager *FileRepositoryResourceStager) Commit(ctxt context.Context) error {
 
-	if !stager.running {
-		// NOTHING TO COMMIT
-		return nil
+	err := stager.index.commit()
+	if err == nil {
+		stager.count = 0
 	}
+	return err
+}
 
-	// CLOSE REQUEST CHANNEL WHICH WILL PROMPT
-	// GO-ROUTINE TO FLUSH TO DISK
-	close(stager.request)
+// Rollbacks discards any changes to the staging index since last call
+// to Commit
+func (stager *FileRepositoryResourceStager) Rollback(ctxt context.Context) error {
 
-	// WAIT FOR FINAL OUTCOME OF GO-ROUTINE
-	select {
-	case outcome := <-stager.outcome:
-		return outcome.err
-	case <-ctxt.Done():
-		// OPERATION CANCELLED
-		return errors.Newf("%T operation cancelled", stager)
-
+	err := stager.index.rollback()
+	if err == nil {
+		stager.count = 0
 	}
+	return err
+}
 
+// Close closes all resources associated with the staging index file
+// Note: this must be called after the object is not longer needed
+func (stager *FileRepositoryResourceStager) Close(ctxt context.Context) error {
+	stager.index.close()
 	return nil
 }
 
-func (stager *FileResourceStager) Repository() string {
+// Repository returns the repository name for this staging index
+func (stager *FileRepositoryResourceStager) Repository() string {
 
 	return stager.repoName
+
+}
+
+//////////////////////////
+// UNEXPORTED METHODS
+/////////////////////////
+
+// loadUnderlyingDatasetToCache loads dataset identified within srl
+// into memory and place into stager's map of cached datasets
+// Returns the dataset as a map if successful, otherwise returns an error
+func (stager *FileRepositoryResourceStager) loadUnderlyingDatasetToCache(ctxt context.Context, srl rescom.StagingResourceLocation) (map[string]interface{}, error) {
+
+	var err error
+
+	var fds *fileDataset
+
+	// CREATE NEW (FILE) DATASET OBJECT AND ASSERT IT'S VALID (PATH ETC.)
+	if fds, err = newFileDataset(ctxt, stager.repoName, srl.DatasetPath); err != nil {
+		return nil, err
+	}
+
+	var datasetExists bool
+
+	// ENSURE REPO /  DATASET JSON-LD DOCUMENT FILE EXIST
+	if datasetExists, err = fds.assertState(ctxt, true); !datasetExists {
+		return nil, err
+	}
+
+	// IS CURENT RESOURCE LOCATION ASSIGNED A VALID STATE?
+	if err = srl.AssertValid(); err != nil {
+		// NOT STAGEABLE OR ILLEGAL STATE
+		return nil, err
+	}
+
+	// IS RESOURCE STAGEABLE?
+	if !srl.CanStage() {
+		return nil, errors.InvalidValue.Newf("resource not stageable: %s",
+			srl.String())
+	}
+
+	// PARSE JSON-LD DATASET, IF NOT ALREADY NOT ALREADY PARSED
+	repoDatasetKey := makeJSONLDParsedDocMapKey(stager.repoName, srl.DatasetPath)
+
+	// POPULATE MAP OF PARSED JSON-LD DOCUMENTS IDENTIFIED BY KEY
+	//	if _, found := stager.jsonLDParsedDocMap[repoDatasetKey]; !found {
+	var parsedJSONDoc map[string]interface{}
+
+	if parsedJSONDoc, err = parseJSONFile(fds.operatingSystemPath); err != nil {
+		return nil, err
+	}
+
+	//fmt.Println("parseJSONDoc", parsedJSONDoc, fds.operatingSystemPath)
+	//fmt.Println("repoDatasetKey", repoDatasetKey)
+	// POPULATE PARSED JSON-LD DOC MAP
+	stager.jsonLDParsedDocMap[repoDatasetKey] = parsedJSONDoc
+
+	//	}
+
+	return parsedJSONDoc, nil
+
+}
+
+// makeJSONLDParsedDocMapKey produces a a unique key using
+// repoName and datasetName as input
+func makeJSONLDParsedDocMapKey(repoName string, datasetName string) string {
+
+	return fmt.Sprintf("%s:%s", repoName, datasetName)
+}
+
+// parseJSONFile parses json-ld document specified by path.
+// Returns a parsed map representation of the parsed json-ld document
+func parseJSONFile(path string) (map[string]interface{}, error) {
+
+	var fp *os.File
+	var err error
+	var m map[string]interface{}
+
+	if fp, err = os.Open(path); err != nil {
+		return nil, err
+	}
+	defer fp.Close()
+
+	m = make(map[string]interface{})
+
+	decoder := json.NewDecoder(fp)
+
+	if err = decoder.Decode(&m); err != nil {
+		return nil, err
+	}
+
+	return m, nil
+
+}
+
+// stageResource stages a resoource location into a file based index
+func (stager *FileRepositoryResourceStager) stageResource(ctxt context.Context, srl rescom.StagingResourceLocation) error {
+
+	var jsonLDDoc map[string]interface{}
+	var ok bool
+
+	var err error
+
+	if err = srl.AssertValid(); err != nil {
+		return err
+	}
+
+	mapKey := makeJSONLDParsedDocMapKey(stager.repoName, srl.DatasetPath)
+
+	// GET PARSED DATASET FROM MAP
+	if jsonLDDoc, ok = stager.jsonLDParsedDocMap[mapKey]; !ok {
+		// DATASET NOT CACHED. LOAD IT.
+
+		jsonLDDoc, err = stager.loadUnderlyingDatasetToCache(ctxt, srl)
+		if err != nil {
+			return err
+		}
+
+	}
+
+	// SET CONTEXT BEFORE FINDING STAGEABLE REESOURCS WITHIN DOC
+	stager.currentJSONLDParsedDoc = jsonLDDoc
+	stager.currentStagingResourceLocation = srl
+	stager.inCurrentStagingResourceLocation = false
+
+	// CREATE JSON-LD DOC COLLECTOR FROM THIS STAGER OBJECT
+	// TO ITERATE THE DOCUMENT
+	collector := stageCmdCollector{stager}
+
+	// USE COLLECTOR TO LOCATE RESOURCE AND IT'S CHILDREN (IF ANY) AND STAGE
+	if err = rescom.FindStageableResources(ctxt, srl.DatasetPath, jsonLDDoc, collector); err != nil {
+		return err
+	}
+
+	return nil
 
 }
