@@ -123,7 +123,7 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 	}
 
 	for i, v := range files {
-		if strings.HasSuffix(v, file.DgrzDirName) {
+		if strings.HasSuffix(v, file.DgrzDirName) || strings.HasSuffix(v, file.IndexFileName) {
 			files = append(files[:i], files[i+1:]...)
 		}
 	}
