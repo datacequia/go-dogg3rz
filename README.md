@@ -1,22 +1,20 @@
-# Dogg3rz is the Git for Metadata
+# Welcome to Dogg3rz 
 
-Welcome to the Dogg3rz project! Dogg3rz is data's best friend :)
+Welcome to the Dogg3rz Project. Dogg3rz is data's best friend!
+
+## Vision 
+
+The Dogg3rz Project seeks to enable  the orchestration of living knowledge through self-service cross-organizational collaboration of composable Data Products that fulfill [FAIR Principles](https://www.nature.com/articles/sdata201618.pdf) and embody the [architectural quantum of Data Mesh that defines the Data Product](https://martinfowler.com/articles/data-mesh-principles.html#LogicalArchitecturedataProductTheArchitecturalQuantum).
 
 ## Overview
 
-Dogg3rz (pronounced Dog-erz) is a decentralized version control management tool for Metadata. Dogg3rz seeks to address the disparity that exists between the development of logic and data in our digital knowledge infrastructure.
+Dogg3rz is a tool to create, build, self-publish, deploy and collaborate on versioned linked data products on the decentralized web.  Linked data products are portable meta-containers  of all the data, metadata, and polyglot logic necessary to function independently.  Dogg3rz  also enables the discovery and use of other linked data products in a composable way on the open internet. 
 
-Through Open Source, with Git as it's catalyzing agent, the software development community has at their disposal unfettered access to a plethora of software libraries, components, and frameworks  with no barriers to discover, use, and share source code for their projects.
-
-However, no equivalent  exists for the worldwide data community to share in the development of a global metadata commons. Dogg3rz seeks to address the visibility, accessibility, and usability issues of metadata and the data it describes.
-
-The realization of these goals will result in a community curated environmentfor metadata that spans utility across organizations, industries, and domains.
 
 ## Approach
 
-The Dogg3rz project views logic and data as intrinsically intertwined elements that compose our digital knowledge infrastructure. They share fundamentally common characteristics in composability through their respective building blocks.   As such, the Dogg3rz Project seeks to leverage these common characteristics to provide an equivalent development environment to develop metadata projects where data developers can curate, version, relate, share,  and combine metadata with other Dogg3rz projects to collectively stitch together a global metadata commons.  
+Dogg3rz  leverages a combination of W3C  standards and common cloud native services in conjunction with emergent  Web 3 Technologies.  The [JSON-LD](https://www.w3.org/TR/json-ld/) document  is used as a representational data model for linked data; whereas [decentralized identifiers](https://www.w3.org/TR/did-core/) (DIDs) serve as self-sovereign, globally unique, and verifiable identifiers for the data products and those who use them.  Dogg3rz uses container and Serverless technologies to apply reactive behavior to your data .   The final packaging, delivery, and streaming update notifications  of your linked data product  are performed by the [Interplanetary File System](https://ipfs.io) (IPFS).  IPFS encapsulates and persists your linked data product components through an immutable snapshot that can be referenced and used anywhere through its verifiable [content identifiers](https://docs.ipfs.io/concepts/content-addressing/) (CIDs). 
 
-![Logic & Data](img/logic-metadata-puzzle.png)
 
 ## Contributing
 
