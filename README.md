@@ -4,7 +4,7 @@ Welcome to the Dogg3rz Project. Dogg3rz is data's best friend!
 
 ## Vision 
 
-The Dogg3rz Project seeks to enable  the orchestration of living knowledge through self-service cross-organizational collaboration of composable Data Products that fulfill [FAIR Principles](https://www.nature.com/articles/sdata201618.pdf) and embody the [architectural quantum of Data Mesh that defines the Data Product](https://martinfowler.com/articles/data-mesh-principles.html#LogicalArchitecturedataProductTheArchitecturalQuantum).
+The Dogg3rz Project seeks to enable  the orchestration of living knowledge through self-service cross-organizational collaboration of composable linked data products that fulfill [FAIR Principles](https://www.nature.com/articles/sdata201618.pdf) and embody the [architectural quantum of Data Mesh that defines the Data Product](https://martinfowler.com/articles/data-mesh-principles.html#LogicalArchitecturedataProductTheArchitecturalQuantum).
 
 ## Overview
 
