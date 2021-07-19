@@ -1,4 +1,5 @@
 # Welcome to Dogg3rz 
+![Discord](https://img.shields.io/discord/866696425597042718?label=Discord&logo=Discord&style=plastic)
 
 Welcome to the Dogg3rz Project. Dogg3rz is data's best friend!
 
