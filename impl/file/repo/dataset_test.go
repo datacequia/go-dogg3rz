@@ -39,7 +39,7 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 	ctxt := getContext()
 	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test1")
 	fileDataset.create(ctxt)
-	mOriginal, _, _ := fileDataset.readDefaultGraph()
+
 	var childGraph = "test1"
 	err := fileDataset.createNamedGraph(ctxt, childGraph, "default")
 	if err != nil {

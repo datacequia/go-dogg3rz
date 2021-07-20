@@ -18,7 +18,7 @@ import (
 	"context"
 	"encoding/json"
 	//"encoding/json"
-	//"fmt"
+	//	"fmt"
 
 	"io"
 	"os"
@@ -140,6 +140,7 @@ func (ds *fileDataset) createNamedGraph(ctxt context.Context, graphID string, pa
 }
 
 func (ds *fileDataset) appendNodeToDefaultGraph(ctxt context.Context, newNode map[string]interface{}) error {
+
 	return ds.appendNodeToGraph(ctxt, newNode, defaultGraphID)
 }
 
@@ -170,12 +171,8 @@ func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[strin
 	}
 	//updateMIME(m)
 
-	ds.writeNodeToFile(m)
-	// if default graph is nil and new node id value id
+	return ds.writeNodeToFile(m)
 
-	// if
-
-	return nil
 }
 
 func (ds *fileDataset) readDefaultGraph() (map[string]interface{}, []interface{}, error) {
