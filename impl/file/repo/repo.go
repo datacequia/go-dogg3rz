@@ -122,8 +122,12 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 		files, err = file.GetDirs(repoDir)
 	}
 
+	// Ignore any dogg3rz internal dirs and files.
 	for i, v := range files {
-		if strings.HasSuffix(v, file.DgrzDirName) || strings.HasSuffix(v, file.IndexFileName) {
+
+		if strings.HasPrefix(v, ".") {
+
+
 			files = append(files[:i], files[i+1:]...)
 		}
 	}
