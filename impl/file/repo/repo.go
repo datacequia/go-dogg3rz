@@ -125,20 +125,20 @@ func (repo *FileRepositoryResource) AddNamespaceNode(ctxt context.Context, repoN
 
 func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName string) ([]string, error) {
 
-
 	repoDir := path.Join(file.RepositoriesDirPath(ctxt), repoName)
 	var files []string
 	var err error
 
-	if file.DirExists(repoDir){
+	if file.DirExists(repoDir) {
 		files, err = file.GetDirs(repoDir)
 	}
 
+	// Ignore any dogg3rz internal dirs and files.
 	for i, v := range files {
-		if strings.HasSuffix(v, file.DgrzDirName) {
+		if strings.HasPrefix(v, ".") {
 			files = append(files[:i], files[i+1:]...)
 		}
 	}
 
-		return files, err
+	return files, err
 }
