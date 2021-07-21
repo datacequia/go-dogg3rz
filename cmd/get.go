@@ -24,15 +24,15 @@ package cmd
 type dgrzGetCmd struct {
 
 	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a repo" `
-	Repos dgrzGetRepoCmd `command:"repo" alias:"r" description:"get list of repos" `
+
+	Repos dgrzGetRepoCmd `command:"repository" alias:"repo" description:"get list of repos" `
+
 }
 
 func init() {
 	// REGISTER THE 'init' COMMAND
 	register(&dgrzGetCmd{})
 }
-
-
 
 
 

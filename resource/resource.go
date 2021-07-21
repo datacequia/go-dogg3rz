@@ -45,31 +45,9 @@ var repoResource resourcerepo.RepositoryResource
 //const EnvDogg3rzStateStore = "DOGG3RZ_STATE_STORE"
 const StateStoreTypeFile = "file"
 
-/*
-func init() {
-
-	// DETERRMINE STORE TYPE
-	storeType := os.Getenv("DOGG3RZ_STATE_STORE")
-	if len(storeType) < 1 {
-		// DEFAULT TO FILE
-		storeType = "file"
-	}
-
-	switch storeType {
-	case "file":
-		nodeResource = &filenode.FileNodeResource{}
-		configResource = &fileconfig.FileConfigResource{}
-		repoResource = &filerepo.FileRepositoryResource{}
-	default:
-
-		fmt.Fprintf(os.Stderr,
-			"unknown store type assigned to DOGG3RZ_STATE_STORE environment variable: %s", storeType)
-		os.Exit(1)
-	}
-
-}
-*/
-
+/// GetConfigResource returns a ConfigResource which allows the caller
+// to interact with the node configuration at runtime for all supported
+// configuration type operations
 func GetConfigResource(ctxt context.Context) resourceconfig.ConfigResource {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) // , defaultValue)appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
@@ -88,6 +66,9 @@ func GetConfigResource(ctxt context.Context) resourceconfig.ConfigResource {
 	//	return configResource
 }
 
+// GetNodeResource returns a NodeResource which allows the caller
+// to interact with the node at runtime for all supported
+// node type operations
 func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) // appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
@@ -104,12 +85,35 @@ func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
 	}
 }
 
+// GetRepositoryResource returns a RepositoryResource which allows the caller
+// to interact with the configured repository type at runtime for most
+// repository operations
 func GetRepositoryResource(ctxt context.Context) resourcerepo.RepositoryResource {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
 	switch storeType {
 	case StateStoreTypeFile:
 		return &filerepo.FileRepositoryResource{}
+
+	default:
+		panic(fmt.Sprintf(
+			"unknown store type assigned to '%s' app context variable: %s",
+			env.EnvDogg3rzStateStore,
+			storeType))
+
+	}
+}
+
+// GetRepositoryResourceStager returns a RepositoryResourceStager which allows the caller
+// to interact with the configured repository type at runtime for staging type
+// repository operations
+func GetRepositoryResourceStager(ctxt context.Context, repoName string) (resourcerepo.RepositoryResourceStager, error) {
+
+	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
+	switch storeType {
+	case StateStoreTypeFile:
+
+		return filerepo.NewFileRepositoryResourceStager(ctxt, repoName)
 
 	default:
 		panic(fmt.Sprintf(

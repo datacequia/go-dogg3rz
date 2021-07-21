@@ -17,19 +17,21 @@ import (
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	//"github.com/datacequia/go-dogg3rz/impl/file/repo"
 	"github.com/datacequia/go-dogg3rz/resource"
+	"os"
 )
 
 // Command to get list of repos
 type dgrzGetRepoCmd struct {
 
 }
-
+/*
 func init() {
 	// REGISTER THE 'get repo ' COMMAND
 	register(&dgrzGetRepoCmd{})
 }
+*/
 
-func (x *dgrzGetRepoCmd) Execute(args []string) error {
+func (o *dgrzGetRepoCmd) Execute(args []string) error {
 
 
 	ctxt := getCmdContext()
@@ -37,21 +39,24 @@ func (x *dgrzGetRepoCmd) Execute(args []string) error {
 	var files []string
 	var err error
 	files, err = node.GetRepos(ctxt)
-    PrintValues(files, file.DgrzDirName)
-	return err 
+	if err != nil {
+      return err
+    }
+    printValues(files, file.DgrzDirName, os.Stdout)
+	return err
 
 }
 
 
 
 func (o *dgrzGetRepoCmd) CommandName() string {
-	return "repo"
+	return "get repository"
 }
 
 func (o *dgrzGetRepoCmd) ShortDescription() string {
-	return "get listing of repository resources"
+	return "get listing of repositories"
 }
 
 func (o *dgrzGetRepoCmd) LongDescription() string {
-	return "get listing of repository resources"
+	return "get listing of repositories"
 }

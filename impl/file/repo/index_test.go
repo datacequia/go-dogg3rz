@@ -23,6 +23,7 @@ import (
 	"testing"
 	"time"
 
+	"github.com/datacequia/go-dogg3rz/errors"
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 	"github.com/datacequia/go-dogg3rz/resource/common"
 	"github.com/datacequia/go-dogg3rz/resource/config"
@@ -32,11 +33,14 @@ import (
 var dogg3rzHome string
 var fileRepoIdx *fileRepositoryIndex
 
-const (
-	testRepoName = "index_test"
-)
-
+// returns a cancellable cnotext that inits DOGG3RZ_HOME
+// to package var dogg3rzHome
 func getContext() context.Context {
+
+	if len(dogg3rzHome) < 1 {
+		panic("dogg3rzHome not set")
+	}
+
 	ctxt := context.Background()
 
 	ctxt = context.WithValue(ctxt, "DOGG3RZ_HOME", dogg3rzHome)
@@ -44,6 +48,7 @@ func getContext() context.Context {
 	return ctxt
 }
 
+// setup temp dogg3rz env to test index
 func indexSetup(t *testing.T) {
 
 	dogg3rzHome = filepath.Join(os.TempDir(),
@@ -62,7 +67,7 @@ func indexSetup(t *testing.T) {
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		t.Error(err)
 	}
-	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
+//	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
 	fileRepositoryResource := FileRepositoryResource{}
 
@@ -72,114 +77,998 @@ func indexSetup(t *testing.T) {
 
 }
 
+// removes all file resources created in tmp dir
 func indexTeardown(t *testing.T) {
 
 	os.RemoveAll(dogg3rzHome)
 
 }
+
+// main index test. all other tests called sequentially from here
 func TestIndex(t *testing.T) {
 
 	// SETUP CODE
 	indexSetup(t)
+	defer indexTeardown(t)
 
 	//fileNodeResource = FileNo
-	testNewFileRepoIndex(t)
 
-	testFileRepoIndexUpdateAndReadBack(t)
+	testNewFileRepoIndexWithNonExistentRepo(t)
 
-	testUpdateExistingAndReadBack(t)
+	//testNewFileRepoIndexThenCancel(t)
+
+	testNewFileRepoIndexThenScanWithNoIndexFile(t)
+
+	testNewFileRepoIndexThenEmptyCommit(t)
+
+	testNewFileRepoIndexThenEmptyRollback(t)
+
+	testFileRepoIndexUpdateAndReadBackInTx(t)
+
+	testFileRepoIndexUpdateCommitAndReadBack(t)
+
+	testFileRepoIndexUpdateCommitAndScanForOne(t)
+
+	testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack(t)
+
+	testRemoveSingleNodeResourceFromIndex(t)
+
+	testLockIndexOnModify(t)
 
 	testInvalidIndexEntryValidate(t)
 
 	testNewFileRepoIndexOnNonExistentRepo(t)
-	testReadIndexFileFailsOnUpdate(t)
 
-	// TEARDOWN CODE
+	testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t)
 	indexTeardown(t)
 
 }
 
-// ADD 3 NEW ENTRIES TO THE INDEX AND READ THEM
-// BACK FROM INDEX AND COMPARE . SHOULD BE EXACTLY SAME
-func testNewFileRepoIndex(t *testing.T) {
-
+// returns a new index object with a context supplied cancel callback
+func newFileRepoIdxWithCancelFunc(t *testing.T) (*fileRepositoryIndex, context.Context, context.CancelFunc) {
 	// TEST NEW REPO INDEX WITH BAD REPO NAME
 	ctxt := getContext()
 
-	if _, err := newFileRepositoryIndex(ctxt, testRepoName+"-badName"); err == nil {
+	var cancelFunc context.CancelFunc
+
+	ctxt, cancelFunc = context.WithCancel(ctxt)
+
+	var f *fileRepositoryIndex
+	var err error
+
+	if f, err = newFileRepositoryIndex(ctxt, testRepoName); err != nil {
+		t.Errorf("newFileRepoIdxWithCancelFunc(): %s", err)
+	}
+
+	// make sure index lock file not there before returning
+	// from previous test
+
+	/*
+		indexLockFile := f.path + file.LOCK_FILE_SUFFIX
+		var i int
+		for i = 0; file.FileExists(indexLockFile); i++ {
+			//fmt.Printf("attempt %d: index lock file exists at %s: waiting...\n", i, indexLockFile)
+			time.Sleep(time.Millisecond * 250)
+
+		}
+	*/
+
+	return f, ctxt, cancelFunc
+
+}
+
+// test that failure occurs when attempt to instantiate index object from
+// non-existent repo
+func testNewFileRepoIndexWithNonExistentRepo(t *testing.T) {
+
+	if _, err := newFileRepositoryIndex(getContext(), testRepoName+"-noExist"); err == nil {
 		t.Errorf("newFileRepositoryIndex(): succeeded with non-existent repo (name)")
 	}
 
-	if fri, err := newFileRepositoryIndex(ctxt, testRepoName); err != nil {
-		t.Errorf("newFileRepositoryIndex(): failed  with existing repo (name): %v", err)
-	} else {
-		fileRepoIdx = fri
-	}
-
-	if fileRepoIdx == nil {
-		t.Errorf("newFileRepositoryIndex(): returnd nil object on success")
-	}
 }
 
-func testFileRepoIndexUpdateAndReadBack(t *testing.T) {
+// tests to make sure that
+// scan() will respond with success even thoough a
+// new repository will not yet have an index file
+// created because no commits have been issued yet on the index
+func testNewFileRepoIndexThenScanWithNoIndexFile(t *testing.T) {
 
-	entry, entry2, entry3 := getThreeEntries()
+	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer f.close()
 
-	if err := fileRepoIdx.update(entry); err != nil {
-		t.Errorf("testFileRepoIndexUpdate(): fileRepositoryIndex.update() failed: %s", err)
-	}
-	if err := fileRepoIdx.update(entry2); err != nil {
-		t.Errorf("testFileRepoIndexUpdate(): fileRepositoryIndex.update() failed: %s", err)
-	}
-	if err := fileRepoIdx.update(entry3); err != nil {
-		t.Errorf("testFileRepoIndexUpdate(): fileRepositoryIndex.update() failed: %s", err)
+	var req *msgIndexResultSetRequest
+	var err error
+
+	if req, err = f.scan(func(arg1 common.StagingResource) bool {
+		return false
+	}); err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
 	}
 
-	//fileRepoIdx.
-	if indexEntries, err := fileRepoIdx.readIndexFile(); err != nil {
-		t.Errorf("testFileRepoIndexUpdate(): readIndexFile() failed after update(): %v", err)
+	var result *common.StagingResource
+	//	var err error
+
+	for result, err = req.next(); result != nil && err == nil; result, err = req.next() {
+		// NOT EXPECTING ANY RESULTS
+		t.Errorf("Not expecting results, found %s", result)
+
+	}
+
+	if err != nil {
+
+		t.Errorf("scan() failed: %s", err)
+	}
+
+}
+
+// tests a new instance followed by a commit with no prior pending changes
+func testNewFileRepoIndexThenEmptyCommit(t *testing.T) {
+	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer f.close()
+
+	if _, err := os.Stat(f.path); err == nil {
+		t.Errorf("expected index file at %s to NOT exist", f.path)
+		return
+	}
+
+	if err := f.commit(); err != nil {
+		if errors.GetType(err) != errors.EmptyCommit {
+			t.Errorf("expected EmptyCommit error, found %s", err)
+			return
+		}
 	} else {
+		t.Errorf("expected Empty commit to produce error, returned nil")
+		return
+	}
 
-		if len(indexEntries) != 3 {
-			t.Errorf("testFileRepoIndexUpdate(): expected 3 entries, found %d", len(indexEntries))
+	if _, err := os.Stat(f.path); err == nil {
+		t.Errorf("expected index file at %s to NOT exist", f.path)
+		return
+	}
+
+}
+
+// tests that rollback operation is a no-op on non-existent index and
+// does not throw an error
+func testNewFileRepoIndexThenEmptyRollback(t *testing.T) {
+
+	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer f.close()
+
+	if _, err := os.Stat(f.path); err == nil {
+		t.Errorf("expected index file at %s to NOT exist", f.path)
+	}
+
+	if err := f.rollback(); err != nil {
+
+		t.Errorf("expected empty rollback to have no errors, found %s", err)
+
+	}
+
+	if _, err := os.Stat(f.path); err == nil {
+		t.Errorf("index file at %s exists after empty rollback", f.path)
+	}
+
+}
+
+// tests that index stage on empty index followed by rollback and rescan
+// results in zero entries in the index
+func testFileRepoIndexUpdateAndReadBackInTx(t *testing.T) {
+
+	var requests [3]common.StagingResource
+
+	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	// stage 3 requests
+	for _, r := range requests {
+
+		if err := index.stage(r); err != nil {
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
 		}
 
-		// COMPARE THE INDEX ENTRIES RETRIEEVE FROM THE Index
-		// WITH THE 3 USED TO UPDATE INDEX. COMPARE THOSE entries
-		// WITH THE SAME UUID
+	}
 
-		for _, e := range indexEntries {
+	// READ BACK EVERYTHING
+	scanReq, err := index.scan(func(sr common.StagingResource) bool { return true })
 
-			switch e.ObjectType {
-			case jsonld.ContextResource:
-				if e != entry {
-					t.Errorf("testFileRepoIndexUpdate(): "+
-						"single updated entry retrieved != entry updated: { update entry = %s, retrieve entry = %s }",
-						entry, e)
-				}
+	var result *common.StagingResource
+	//var err error
+	var matchCnt int
+	var iterateCnt int
 
-			case jsonld.NamedGraphResource:
-				if e != entry2 {
-					t.Errorf("testFileRepoIndexUpdate(): "+
-						"single updated entry retrieved != entry updated: { update entry = %s, retrieve entry = %s }",
-						entry2, e)
-				}
-
-			case jsonld.NodeResource:
-
-				if e != entry3 {
-					t.Errorf("testFileRepoIndexUpdate(): "+
-						"single updated entry retrieved != entry updated: { update entry = %s, retrieve entry = %s }",
-						entry3, e)
-				}
-
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		for _, r := range requests {
+			//t.Logf("cmp %s == %s", *result, r)
+			if *result == r {
+				matchCnt++
 			}
 		}
+	}
+
+	if err != nil {
+		t.Errorf("error result from scan request: %s", err)
+		return
+	}
+
+	if matchCnt != 3 {
+		t.Errorf("failed retrieve uncommitted staged requests back via scan(): { matchCnt = %d, iterateCount = %d }",
+			matchCnt, iterateCnt)
+		return
+	}
+
+	// ROLLBACK CHANGES
+	if err := index.rollback(); err != nil {
+		t.Errorf("failed to rollback changes")
+	}
+
+	// SCAN AGAIN SHOULD HAVE ZERO ELEMENTS
+	scanReq, err = index.scan(func(sr common.StagingResource) bool { return true })
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	iterateCnt = 0
+	matchCnt = 0
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		for _, r := range requests {
+			//t.Logf("cmp %s == %s", *result, r)
+			if *result == r {
+				matchCnt++
+			}
+		}
+	}
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	if iterateCnt != 0 {
+		t.Errorf("expected zero results after rollback found %d: { matched results = %d }",
+			iterateCnt, matchCnt)
+	}
+
+}
+
+// tests that staged and commmitted changes to index can be scanned back
+func testFileRepoIndexUpdateCommitAndReadBack(t *testing.T) {
+
+	var requests [3]common.StagingResource
+
+	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	//t.Logf("testFileRepoIndexUpdateAndReadBack() ...")
+	//defer t.Logf("testFileRepoIndexUpdateAndReadBack() !")
+	for _, r := range requests {
+
+		if err := index.stage(r); err != nil {
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
+		}
+
+	}
+
+	// READ BACK EVERYTHING
+	scanReq, err := index.scan(func(sr common.StagingResource) bool { return true })
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+	}
+
+	var result *common.StagingResource
+	//	var err error
+	var matchCnt int
+	var iterateCnt int
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		for _, r := range requests {
+			//t.Logf("cmp %s == %s", *result, r)
+			if *result == r {
+				matchCnt++
+			}
+		}
+	}
+
+	if err != nil {
+		t.Errorf("error result from scan request: %s", err)
+		return
+	}
+
+	if matchCnt != 3 {
+		t.Errorf("failed retrieve uncommitted staged requests back via scan(): { matchCnt = %d, iterateCount = %d }",
+			matchCnt, iterateCnt)
+		return
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes")
+		return
+	}
+
+	// CHECK THAT INDEX FILE EXIST
+	if _, err := os.Stat(index.path); err != nil {
+		t.Errorf("index file at %s does NOT exist after commit", index.path)
+		return
+	}
+
+	t.Logf("index file exists at %s", index.path)
+
+	//fmt.Println("doing re-scan after rollback ")
+
+	// SCAN AGAIN SHOULD HAVE THREE ELEMENTS
+	scanReq, err = index.scan(func(sr common.StagingResource) bool { return true })
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	iterateCnt = 0
+	matchCnt = 0
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		for _, r := range requests {
+			//t.Logf("cmp %s == %s", *result, r)
+			if *result == r {
+				matchCnt++
+			}
+		}
+	}
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	if iterateCnt != 3 || matchCnt != 3 {
+		t.Errorf("expected three results after commit found %d: { matched results = %d }",
+			iterateCnt, matchCnt)
+		return
+	}
+
+}
+
+// tests that issuing a filtered  scan for one committed resource of multiple can be scanned
+// back after committing said resources
+func testFileRepoIndexUpdateCommitAndScanForOne(t *testing.T) {
+
+	var requests [3]common.StagingResource
+
+	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	//t.Logf("testFileRepoIndexUpdateAndReadBack() ...")
+	//defer t.Logf("testFileRepoIndexUpdateAndReadBack() !")
+	for _, r := range requests {
+
+		if err := index.stage(r); err != nil {
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
+		}
+
+	}
+
+	searchReq := requests[2]
+
+	// READ BACK EVERYTHING
+	filterFunc := func(sr common.StagingResource) bool {
+		if sr == searchReq {
+			return true
+		}
+		return false
+	}
+
+	scanReq, err := index.scan(filterFunc)
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	var result *common.StagingResource
+	//var err error
+	var matchCnt int
+	var iterateCnt int
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		//	for _, r := range requests {
+		//t.Logf("cmp %s == %s", *result, r)
+		if *result == searchReq {
+			matchCnt++
+		}
+		//	}
+	}
+
+	if err != nil {
+		t.Errorf("error result from scan request: %s", err)
+		return
+	}
+
+	if matchCnt != 1 {
+		t.Errorf("failed scan filtered single staged request back via scan(): { matchCnt = %d, iterateCount = %d }",
+			matchCnt, iterateCnt)
+		return
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes")
+		return
+	}
+
+	// CHECK THAT INDEX FILE EXIST
+	if _, err := os.Stat(index.path); err != nil {
+		t.Errorf("index file at %s does NOT exist after commit", index.path)
+		return
+	}
+
+	t.Logf("index file exists at %s", index.path)
+
+	//fmt.Println("doing re-scan after rollback ")
+
+	// SCAN AGAIN SHOULD HAVE THREE ELEMENTS
+	scanReq, err = index.scan(filterFunc)
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	iterateCnt = 0
+	matchCnt = 0
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		//	for _, r := range requests {
+		//t.Logf("cmp %s == %s", *result, r)
+		if *result == searchReq {
+			matchCnt++
+		}
+		//	}
+	}
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	if matchCnt != 1 {
+		t.Errorf("expected three results after commit found %d: { matched results = %d }",
+			iterateCnt, matchCnt)
+	}
+
+}
+
+func testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack(t *testing.T) {
+
+	var requests [3]common.StagingResource
+
+	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	// Stage 3 entries
+	for _, r := range requests {
+
+		if err := index.stage(r); err != nil {
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
+		}
+
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes")
+	}
+
+	// CHECK THAT INDEX FILE EXIST
+	if _, err := os.Stat(index.path); err != nil {
+		t.Errorf("index file at %s does NOT exist after commit", index.path)
+		return
+	}
+
+	//t.Logf("index file exists at %s", index.path)
+
+	// UPDATAE A SINGLE NODE RESOURCE CID  previously staged
+	updatedSR := requests[2]
+	updatedSR.ObjectCID = "bafyreigqrowux55fl53qzozsy3wrc3r56xeav246cnyoscjmg7lavuwe7e"
+
+	if err := index.stage(updatedSR); err != nil {
+		t.Logf("request failed: { request = %s, err = %s} ", updatedSR, err)
+	}
+
+	filterFunc := func(sr common.StagingResource) bool {
+		return true
+	}
+
+	//fmt.Println("doing re-scan after rollback ")
+
+	// SCAN AGAIN SHOULD HAVE THREE ELEMENTS
+	scanReq, err := index.scan(filterFunc)
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	iterateCnt := 0
+	matchCnt := 0
+
+	var result *common.StagingResource
+	//	var err error
+
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		//	for _, r := range requests {
+		//t.Logf("cmp %s == %s", *result, r)
+		if *result == updatedSR {
+			matchCnt++
+		}
+		//	}
+	}
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	if matchCnt != 1 || iterateCnt != 3 {
+		t.Errorf("expected one result, found %d: { matched results = %d }",
+			iterateCnt, matchCnt)
+		return
+	}
+
+	// COMMIT STAGED UPDATE
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes")
+		return
+	}
+
+	requests[2] = updatedSR // UPDATE SECOND ENTRY TO UPDATED VALUE
+
+	// scan back everything, and ensure update there
+	// READ BACK EVERYTHING
+
+	scanReq, err = index.scan(filterFunc)
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	iterateCnt = 0
+	matchCnt = 0
+
+	// SCAN ALL STAGED REQUESTS AND TRY MATCHING UUPDATED ONE
+	for result, err = scanReq.next(); result != nil && err == nil; result, err = scanReq.next() {
+		iterateCnt++
+		//	for _, r := range requests {
+		//t.Logf("cmp %s == %s", *result, r)
+		if *result == updatedSR {
+			matchCnt++
+		}
+		//	}
+	}
+
+	if err != nil {
+		t.Errorf("error result from scan request: %s", err)
+		return
+	}
+
+	if matchCnt != 1 || iterateCnt != 3 {
+		t.Errorf("failed retrieve uncommitted staged requests back via scan(): { matchCnt = %d, iterateCount = %d }",
+			matchCnt, iterateCnt)
+		return
 
 	}
 
 }
 
+// tests that a removed resource from a previously committed collection
+// is in fact removed
+func testRemoveSingleNodeResourceFromIndex(t *testing.T) {
+
+	var requests [3]common.StagingResource
+
+	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	// Stage 3 entries
+	for _, r := range requests {
+
+		if err := index.stage(r); err != nil {
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
+		}
+
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes: %s", err)
+		return
+	}
+
+	nodeResource := requests[2]
+
+	// REMOVE NODE RESOURCE
+	removeReq, err := index.remove(nodeResource)
+	if err != nil {
+		t.Errorf("remove failed: %s", err)
+		return
+	}
+
+	var result *common.StagingResource
+	//var err error
+	for result, err = removeReq.next(); result != nil; result, err = removeReq.next() {
+		t.Logf("removed %s", result)
+
+	}
+
+	if err != nil {
+		t.Errorf("failed to remove node resource:  %s", err)
+		return
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes: %s", err)
+		return
+	}
+	iterateCnt := 0
+	resultCnt := 0
+	scanReq, err := index.scan(func(common.StagingResource) bool { return true })
+	if err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	for r, e := scanReq.next(); r != nil; r, e = scanReq.next() {
+		iterateCnt++
+		if *r == requests[0] {
+			resultCnt++
+		}
+		if *r == requests[1] {
+			resultCnt++
+		}
+		err = e
+	}
+
+	if err != nil {
+		t.Errorf("failed on scan after remove: %s", err)
+		return
+	}
+
+	if resultCnt != 2 {
+		t.Errorf("expected 2 entries after index.remove(), found %d: iterateCnt = %d", resultCnt, iterateCnt)
+	}
+
+}
+
+// tests if the remove operation will remove a container based resource and
+// its children from the index
+func testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t *testing.T) {
+
+	var requests []common.StagingResource
+	var entry common.StagingResource
+
+	// OUTERMOST 'document' @context
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.ContextResource
+	entry.ObjectIRI = ""
+	entry.ContainerType = jsonld.DatasetResource
+	entry.ContainerIRI = ""
+	entry.LastModifiedNs = 1600103677854799000
+	entry.ObjectCID = "bafyreigcm277jvvdmenqkudvan3mn7icvzdj2a3eygtgilkf2mypcrkgvi"
+
+	requests = append(requests, entry)
+
+	// NODE IN DEFAULT GRAPH
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.NodeResource
+	entry.ObjectIRI = "mynode1" // DEFAULT GRAPH. NO NAME
+	entry.ContainerType = jsonld.DatasetResource
+	entry.ContainerIRI = ""
+	entry.LastModifiedNs = 1600103677853633000
+	entry.ObjectCID = "bafyreie5h75u3kv47vywgzsohnqlmxowfv4herxrj6ezdlttx47wrkpbkm"
+
+	requests = append(requests, entry)
+
+	// NAMED GRAPH AS CHILD WITHIN DEFAULT GRAPH
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.NamedGraphResource
+	entry.ObjectIRI = "myNamedGraph"
+	entry.ContainerType = jsonld.DatasetResource
+	entry.ContainerIRI = ""
+	entry.LastModifiedNs = 1600103677853633999
+	entry.ObjectCID = "" //"bafyreiffn3ktxl4xdhtha4bvqx5ezganq5mwk4lbp3yhjyw7phle4kgc4m"
+
+	requests = append(requests, entry)
+
+	myNamedGraph := entry
+
+	// NODE WITHIN NAMED GRAPH
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.NodeResource
+	entry.ObjectIRI = "subNode1"
+	entry.ContainerType = jsonld.NamedGraphResource
+	entry.ContainerIRI = "myNamedGraph"
+	entry.LastModifiedNs = 1600103677853633888
+	entry.ObjectCID = "bafyreiffn3ktxl4xdhtha4bvqx5ezganq5mwk4lbp3yhjyw7phle4kgc4m"
+
+	requests = append(requests, entry)
+
+	// SECOND NODE WITHIN NAMED GRAPH
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.NodeResource
+	entry.ObjectIRI = "subNode2"
+	entry.ContainerType = jsonld.NamedGraphResource
+	entry.ContainerIRI = "myNamedGraph"
+	entry.LastModifiedNs = 1600103677853633123
+	entry.ObjectCID = "bafyreiffn3ktxl4xdhtha4bvqx5ezganq5mwk4lbp3yhjyw7phle4kgc4m"
+
+	requests = append(requests, entry)
+
+	//	requests[0], requests[1], requests[2] = getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	t.Logf("about to stage %d msgs to be later removed...", len(requests))
+	// Stage  entries
+	for _, r := range requests {
+		t.Logf("staging %s", r)
+		if err := index.stage(r); err != nil {
+			//	panic("here")
+			t.Errorf("request failed: { request = %s, err = %s} ", r, err)
+			return
+		}
+
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes: %s", err)
+
+		return
+	}
+
+	scanCnt := 0
+
+	if scanReq, err := index.scan(func(sr common.StagingResource) bool { return true }); err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	} else {
+		for x, _ := scanReq.next(); x != nil; x, _ = scanReq.next() {
+			scanCnt++
+		}
+	}
+
+	if scanCnt != len(requests) {
+		t.Errorf("expected %d test index entries. found %d", len(requests), scanCnt)
+		return
+	}
+
+	// REMOVE NODE RESOURCE
+	removeReq, err := index.remove(myNamedGraph)
+	if err != nil {
+		t.Errorf("remove failed: %s", err)
+		return
+	}
+
+	var result *common.StagingResource
+	//	var err error
+
+	// iterate filtered remove matches
+	var removeCnt int
+	for result, err = removeReq.next(); result != nil; result, err = removeReq.next() {
+		t.Logf("removing %s", result)
+		removeCnt++
+	}
+
+	if err != nil {
+		t.Errorf("failed to remove node resource:  %s", err)
+		return
+	}
+
+	if removeCnt != 3 {
+		t.Errorf("expected 3 staging resouorces to be removed, %d were removed instead", removeCnt)
+		return
+	}
+
+	// COMMIT CHANGES
+	if err := index.commit(); err != nil {
+		t.Errorf("failed to commit changes: %s", err)
+
+	}
+
+	// SCAN ALL AGAIN
+	scanCnt = 0
+	if scanReq, err := index.scan(func(sr common.StagingResource) bool { return true }); err != nil {
+		t.Errorf("scan failed: %s", err)
+		return
+	} else {
+		for x, _ := scanReq.next(); x != nil; x, _ = scanReq.next() {
+			scanCnt++
+		}
+	}
+
+	if scanCnt != len(requests)-removeCnt {
+		t.Errorf("expected %d test index entries. found %d", len(requests)-removeCnt, scanCnt)
+		return
+	}
+
+}
+
+func testLockIndexOnModify(t *testing.T) {
+
+	var entry common.StagingResource
+
+	// OUTERMOST 'document' @context
+	entry.DatasetPath = "data1"
+	entry.ObjectType = jsonld.ContextResource
+	entry.ObjectIRI = ""
+	entry.ContainerType = jsonld.DatasetResource
+	entry.ContainerIRI = ""
+	entry.LastModifiedNs = 1600103677854799000
+	entry.ObjectCID = "bafyreigcm277jvvdmenqkudvan3mn7icvzdj2a3eygtgilkf2mypcrkgvi"
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING
+
+	if err := index.stage(entry); err != nil {
+
+		t.Errorf("stage failed: %s", err)
+		return
+	}
+
+	// 	if here lock file is in place
+
+	index2, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index2.close()
+
+	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING in SECND OBJECT
+	if err := index2.stage(entry); err != nil {
+
+		if errors.GetType(err) != errors.TryAgain {
+			t.Errorf("stage failed: %s", err)
+			return
+		}
+		// IF HERE THEN LOCK WORKED
+
+	}
+
+	// commit first index obbject
+	if err := index.commit(); err != nil {
+		t.Errorf("commit failed: %s", err)
+
+		return
+	}
+
+	// NOW TRY TO COMMIT FROM INDEX 2
+	entry.LastModifiedNs = 1600103677854799001
+
+	if err := index2.stage(entry); err != nil {
+		t.Errorf("expected stage success, got error: %s", err)
+		return
+	}
+
+	if err := index2.commit(); err != nil {
+		t.Errorf("commit failed: %s", err)
+		return
+	}
+
+	var req *msgIndexResultSetRequest
+	var err error
+	if req, err = index2.scan(func(x common.StagingResource) bool { return true }); err != nil {
+
+		t.Errorf("scan failed: %s", err)
+		return
+	}
+
+	var sr *common.StagingResource
+	var scanCnt int
+	for sr, err = req.next(); sr != nil; sr, err = req.next() {
+		scanCnt++
+		if *sr != entry {
+			t.Errorf("read back failed: expected %s, found %s", entry, *sr)
+			return
+		}
+	}
+
+	if err != nil {
+		t.Errorf("scan next() failed: %s", err)
+		return
+	}
+
+	if scanCnt != 1 {
+		t.Errorf("scan back expected 1 result, found %d", scanCnt)
+	}
+
+}
+
+// tests that malformed index entries or otherwise in an illegal state
+// can be caught
+func testInvalidIndexEntryValidate(t *testing.T) {
+
+	entry, _, _ := getThreeEntries()
+
+	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	defer index.close()
+	defer os.Remove(index.path)
+
+	// SET BAD TYPE. SELF ASSIGNED AND NOT ALLOCATED IN primitives PACKAGE
+	//var badType string = "dogg3rz.badtype"
+	var badObjectType jsonld.JSONLDResourceType = math.MaxInt8
+
+	// TEST BAD OBJECT TYPE
+	holdType := entry.ObjectType
+	entry.ObjectType = badObjectType
+	if err := index.stage(entry); err == nil {
+		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
+			"indexEntry.Type value assigned")
+		return
+	}
+
+	entry.ObjectType = holdType
+
+	// TEST BAD DATASETPATH
+	holdDatasetPath := entry.DatasetPath
+	entry.DatasetPath = "%badPathElement/$foo"
+	if err := index.stage(entry); err == nil {
+		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
+			"indexEntry.Type value assigned")
+	}
+
+	entry.DatasetPath = holdDatasetPath
+
+	if err := index.rollback(); err != nil {
+		t.Errorf("error on rollback: %s", err)
+	}
+
+}
+
+// tests that creating a new index object on a non existent repo fails
+func testNewFileRepoIndexOnNonExistentRepo(t *testing.T) {
+
+	var nonExistRepo = "not." + testRepoName
+
+	ctxt := getContext()
+
+	if index, err := newFileRepositoryIndex(ctxt, nonExistRepo); err == nil {
+		index.close()
+		t.Errorf("testNewFileRepoIndexOnNonExistentRepo(): did not fail "+
+			"on non-existent repository: %s", nonExistRepo)
+	} else {
+
+		t.Logf("testNewFileRepoIndexOnNonExistentRepo: %s", err)
+	}
+
+}
+
+// getThreeEntries returns test index resources for testing
 func getThreeEntries() (common.StagingResource, common.StagingResource, common.StagingResource) {
 
 	var entry = common.StagingResource{}
@@ -194,7 +1083,7 @@ func getThreeEntries() (common.StagingResource, common.StagingResource, common.S
 
 	var entry2 = common.StagingResource{}
 
-	entry2.DatasetPath = "data/two"
+	entry2.DatasetPath = "data2"
 	entry2.ObjectType = jsonld.NamedGraphResource
 	entry2.ObjectIRI = ""
 	entry2.ContainerType = jsonld.DatasetResource
@@ -204,7 +1093,7 @@ func getThreeEntries() (common.StagingResource, common.StagingResource, common.S
 
 	var entry3 = common.StagingResource{}
 
-	entry3.DatasetPath = "data/is/three"
+	entry3.DatasetPath = "data3"
 	entry3.ObjectType = jsonld.NodeResource
 	entry3.ObjectIRI = "http://www.doggg3rz.com/my/test#me"
 	entry3.ContainerType = jsonld.NamedGraphResource
@@ -213,116 +1102,5 @@ func getThreeEntries() (common.StagingResource, common.StagingResource, common.S
 	entry3.ObjectCID = "bafyreiffn3ktxl4xdhtha4bvqx5ezganq5mwk4lbp3yhjyw7phle4kgc4m"
 
 	return entry, entry2, entry3
-
-}
-
-func testUpdateExistingAndReadBack(t *testing.T) {
-
-	// ENTRY ALREADY EXISTS BUT WILL CHANGE SOME VALUES
-	entry, entry2, entry3 := getThreeEntries()
-
-	entry2.DatasetPath = "data/two"
-	entry2.ObjectType = jsonld.NamedGraphResource
-	entry2.ObjectIRI = ""
-	entry2.ContainerType = jsonld.DatasetResource
-	entry2.ContainerIRI = ""
-	entry2.LastModifiedNs = time.Now().UnixNano()
-	entry2.ObjectCID = "" //"bafyreidwx2fvfdiaox32v2mnn6sxu3j4qoxeqcuenhtgrv5qv6litfnmoe"
-
-	if err := fileRepoIdx.update(entry2); err != nil {
-		t.Errorf("testUpdateExistingAndReadBack(): %s", err)
-	}
-
-	if indexEntries, err := fileRepoIdx.readIndexFile(); err != nil {
-		t.Errorf("testUpdateExistingAndReadBack(): %s", err)
-	} else {
-		if len(indexEntries) != 3 {
-			t.Errorf("testUpdateExistingAndReadBack(): expected 3 entries after updating "+
-				"existing entry. found %d", len(indexEntries))
-		}
-
-		for _, e := range indexEntries {
-			if e.ObjectType == entry2.ObjectType {
-				if e != entry2 {
-					t.Errorf("testUpdateExistingAndReadBack(): updated index entry "+
-						"changed after read: {expected: %v, found: %v } ", entry2, e)
-				}
-			} else if e.ObjectType == entry.ObjectType {
-				if e != entry {
-					t.Errorf("testUpdateExistingAndReadBack(): non-updated index entry "+
-						"changed after read. { expected %v, found %v }", entry, e)
-				}
-			} else if e.ObjectType == entry3.ObjectType {
-				if e != entry3 {
-					t.Errorf("testUpdateExistingAndReadBack(): non-updated index entry "+
-						"changed after read. { expected %v, found %v }", entry3, e)
-				}
-			}
-		}
-	}
-
-}
-
-func testInvalidIndexEntryValidate(t *testing.T) {
-
-	entry, _, _ := getThreeEntries()
-
-	// SET BAD TYPE. SELF ASSIGNED AND NOT ALLOCATED IN primitives PACKAGE
-	//var badType string = "dogg3rz.badtype"
-	var badObjectType jsonld.JSONLDResourceType = math.MaxInt8
-
-	// TEST BAD OBJECT TYPE
-	holdType := entry.ObjectType
-	entry.ObjectType = badObjectType
-
-	if err := fileRepoIdx.update(entry); err == nil {
-		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
-			"indexEntry.Type value assigned")
-	}
-	entry.ObjectType = holdType
-
-	// TEST BAD DATASETPATH
-	holdDatasetPath := entry.DatasetPath
-	entry.DatasetPath = "%badPathElement/$foo"
-	if err := fileRepoIdx.update(entry); err == nil {
-		t.Errorf("testInvalidIndexEntryValidate(): update did not fail on bad " +
-			"indexEntry.Type value assigned")
-	}
-	entry.DatasetPath = holdDatasetPath
-
-}
-
-func testNewFileRepoIndexOnNonExistentRepo(t *testing.T) {
-
-	var nonExistRepo = "not." + testRepoName
-
-	ctxt := getContext()
-
-	if _, err := newFileRepositoryIndex(ctxt, nonExistRepo); err == nil {
-		t.Errorf("testNewFileRepoIndexOnNonExistentRepo(): did not fail "+
-			"on non-existent repository: %s", nonExistRepo)
-	}
-
-}
-
-func testReadIndexFileFailsOnUpdate(t *testing.T) {
-
-	// MOVE REPO DIR AND THEN CALL UPDATE
-	moveDir := fileRepoIdx.repoDir + ".move"
-	if err := os.Rename(fileRepoIdx.repoDir, moveDir); err != nil {
-		t.Fail()
-	}
-
-	e, _, _ := getThreeEntries()
-
-	if err := fileRepoIdx.update(e); err == nil {
-		t.Errorf("testReadIndexFileFailsOnUpdate(): did not fail "+
-			"when repo dir moved to %s", moveDir)
-	}
-	// MOVE REPO DIR BACK
-
-	if err := os.Rename(moveDir, fileRepoIdx.repoDir); err != nil {
-		t.Fail()
-	}
 
 }

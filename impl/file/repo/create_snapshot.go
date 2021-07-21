@@ -123,7 +123,7 @@ func (cs *fileCreateSnapshot) getIndexEntries(ctxt context.Context) (*[]snapshot
 	}
 
 	var indexEntries []rescom.StagingResource
-	if ie, err := fileRepoIdx.readIndexFile(); err != nil {
+	if ie, _, err := fileRepoIdx.readIndexFile(); err != nil {
 		return nil, err
 	} else {
 		indexEntries = ie

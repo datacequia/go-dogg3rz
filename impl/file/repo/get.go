@@ -13,10 +13,7 @@
 
 package repo
 
-import (
-	"github.com/datacequia/go-dogg3rz/resource/repo"
-)
-
+/*
 type fileGetResourcesContext struct {
 	repoName     string
 	resourcePath string
@@ -43,3 +40,4 @@ func (i fileGetResourceItem) GetStatus() string {
 	return i.status
 
 }
+*/

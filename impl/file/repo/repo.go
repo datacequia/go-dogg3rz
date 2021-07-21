@@ -21,7 +21,6 @@ import (
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
 
 const indexFileName = "index"
@@ -67,16 +66,6 @@ func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) 
 
 	return nil
 
-}
-
-// StageResources stages resources starting with and contained within the location
-// specified by startList .
-// Returns list of staged resources
-func (repo *FileRepositoryResource) StageResources(ctxt context.Context, repoName string, startList []rescom.StagingResourceLocation) ([]rescom.StagingResource, error) {
-
-	sr := &fileStageResource{}
-
-	return sr.stageResources(ctxt, repoName, startList)
 }
 
 func (repo *FileRepositoryResource) CreateSnapshot(ctxt context.Context, repoName string) error {
@@ -135,7 +124,10 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 
 	// Ignore any dogg3rz internal dirs and files.
 	for i, v := range files {
+
 		if strings.HasPrefix(v, ".") {
+
+
 			files = append(files[:i], files[i+1:]...)
 		}
 	}
