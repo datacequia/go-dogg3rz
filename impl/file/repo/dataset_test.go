@@ -14,10 +14,10 @@
 package repo
 
 import (
-	"fmt"
 	"testing"
 
 	"github.com/datacequia/go-dogg3rz/resource/common"
+	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
 func TestCreateNamedGraph(t *testing.T) {
@@ -39,13 +39,14 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 	ctxt := getContext()
 	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test1")
 	fileDataset.create(ctxt)
+
 	var childGraph = "test1"
 	err := fileDataset.createNamedGraph(ctxt, childGraph, "default")
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
 		t.FailNow()
 	}
-	_, defaultGraph, _ := fileDataset.readDefaultGraph()
+	m, defaultGraph, _ := fileDataset.readDefaultGraph()
 	createdGraph, err1 := common.GetGraph(defaultGraph, childGraph)
 	if err1 != nil {
 		t.Errorf("unexpected error: %v", err1)
@@ -53,6 +54,11 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 	}
 	if createdGraph == nil {
 		t.Errorf("Newly created graph not found: %v", childGraph)
+		t.FailNow()
+	}
+	mtime := m[jsonld.MtimesEntryKeyName]
+	if mtime == nil {
+		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
 		t.FailNow()
 	}
 }
@@ -90,7 +96,7 @@ func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 
 // Add duplicate named graph to default graph
 func testDuplicateCreateNamedGraphInDefaultGraph(t *testing.T) {
-	fmt.Println("------------------Start of new test-----------------------")
+
 	// TEST NEW REPO INDEX WITH BAD REPO NAME
 	ctxt := getContext()
 	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")

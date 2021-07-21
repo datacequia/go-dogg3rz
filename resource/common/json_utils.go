@@ -166,31 +166,28 @@ func updateDefaultGraph(parentMap *map[string]interface{}, graphIDToUpdate strin
 			// if graphID is blank then check that @id is not there
 
 			childGraphRaw, success1 := nodeAsMap["@graph"]
-			if !success1 {
-				return errors.NotFound.New(
-					"Parent Graph node found in Graph: " + graphIDToUpdate)
-
-			}
-
-			childGraph, success2 := childGraphRaw.([]interface{})
-			if !success2 {
-				return errors.NotFound.New(
-					"Parent Graph: " + graphIDToUpdate + " graph node cannot be converted to list")
-
-			}
 			curID, ok := nodeAsMap["@id"]
 
-			if ok && getIDValue(curID) == graphIDToUpdate {
-				err := appendToGraph(&nodeAsMap, newNode)
-				return err
+			if success1 && ok {
 
-			}
+				childGraph, success2 := childGraphRaw.([]interface{})
+				if !success2 {
+					return errors.NotFound.New(
+						"Parent Graph: " + graphIDToUpdate + " graph node cannot be converted to list")
 
-			if len(childGraph) != 0 {
-				if err1 := updateDefaultGraph(&nodeAsMap, graphIDToUpdate, newNode); err1 == nil {
-					return nil
 				}
 
+				if ok && getIDValue(curID) == graphIDToUpdate {
+					err := appendToGraph(&nodeAsMap, newNode)
+					return err
+
+				}
+
+				if len(childGraph) != 0 {
+					if err1 := updateDefaultGraph(&nodeAsMap, graphIDToUpdate, newNode); err1 == nil {
+						return nil
+					}
+				}
 			}
 		}
 
