@@ -152,10 +152,10 @@ func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[strin
 	}
 
 	// READ JSON-LD DOCUMENT INTO MEMORY
-	var m map[string]interface{}
+	var defaultGraphMap map[string]interface{}
 
 	var err error
-	if m, _, err = ds.readDefaultGraph(); err != nil {
+	if defaultGraphMap, _, err = ds.readDefaultGraph(); err != nil {
 		return err
 	}
 
@@ -164,14 +164,13 @@ func (ds *fileDataset) appendNodeToGraph(ctxt context.Context, newNode map[strin
 		return err1
 	}
 
-	err = common.AddNodeToGraph(&m, newNode, parentGraphID)
+	err = common.AddNodeToGraph(&defaultGraphMap, newNode, parentGraphID)
 
 	if err != nil {
 		return err
 	}
-	//updateMIME(m)
 
-	return ds.writeNodeToFile(m)
+	return ds.writeNodeToFile(defaultGraphMap)
 
 }
 

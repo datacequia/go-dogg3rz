@@ -33,29 +33,19 @@ func nodeRepoSetup(t *testing.T, prefix string) string {
 	dogg3rzHome := filepath.Join(os.TempDir(),
 		fmt.Sprintf("%s_%d", prefix, time.Now().UnixNano()))
 
-	//os.Setenv("DOGG3RZ_HOME", dogg3rzHome)
-
-	//fileNodeResource := &FileNodeResource{}
-
-	var dgrzConf config.Dogg3rzConfig
+    var dgrzConf config.Dogg3rzConfig
 
 	// REQUIRED CONF
 	dgrzConf.User.Email = "test@dogg3rz.com"
 
-	if err := fileNodeResource.InitNode(dgrzConf); err != nil {
-		t.Error(err)
-	}
 	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
-	fileRepositoryResource := FileRepositoryResource{}
-
-	if err := fileRepositoryResource.InitRepo(testRepoName); err != nil {
-		t.Error(err)
-	}
 
 	return dogg3rzHome
 
 }
+
+
 
 func nodeRepoTeardown(t *testing.T, dogg3rzHome string) {
 
