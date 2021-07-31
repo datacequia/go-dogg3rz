@@ -15,7 +15,6 @@ package repo
 
 import (
 	"testing"
-
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
@@ -26,7 +25,7 @@ func TestInsertNodeIntoGraph(t *testing.T) {
 
 	testInsertNodeIntoDefaultGraph(t)
 	testInsertNodeIntoNamedGraph(t)
-
+	testInsertNodeIntoNGAfterDefaultGraph(t)
 	// TEARDOWN CODE
 	indexTeardown(t)
 
@@ -77,8 +76,8 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 	ctxt := getContext()
 	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
 	fileDataset.create(ctxt)
-	var parentGraph = "testParent2"
-	err1 := fileDataset.createNamedGraph(ctxt, parentGraph, "default")
+	var namedGraphName = "namedGraph1"
+	err1 := fileDataset.createNamedGraph(ctxt, namedGraphName, "default")
 	if err1 != nil {
 		t.Errorf("unexpected error: %v", err1)
 		t.FailNow()
@@ -86,7 +85,7 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 	keys := []string{"key2"}
 	values := []string{"value2"}
 	var fileRe FileRepositoryResource
-	err := fileRe.InsertNode(ctxt, testRepoName, "test2", "", "", parentGraph, keys, values)
+	err := fileRe.InsertNode(ctxt, testRepoName, "test2", "", "", namedGraphName, keys, values)
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -94,7 +93,7 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 	}
 	m, defaultGraph, _ := fileDataset.readDefaultGraph()
 	if defaultGraph == nil || len(defaultGraph) == 0 {
-		t.Errorf("Attributes not added to default graph : %v", defaultGraph)
+		t.Errorf(" default graph not found: %v", defaultGraph)
 		t.FailNow()
 	}
 
@@ -114,6 +113,89 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 	}
 
 	mtime := m[jsonld.MtimesEntryKeyName]
+	if mtime == nil {
+		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
+		t.FailNow()
+	}
+}
+
+// Add new named graph to default graph
+func testInsertNodeIntoNGAfterDefaultGraph(t *testing.T) {
+	ctxt := getContext()
+	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test3")
+	fileDataset.create(ctxt)
+
+	var namedGraphName = "namedGraph2"
+	err1 := fileDataset.createNamedGraph(ctxt, namedGraphName, "default")
+	if err1 != nil {
+		t.Errorf("unexpected error: %v", err1)
+		t.FailNow()
+	}
+	keys := []string{"key4"}
+	values := []string{"value4"}
+	var fileRe FileRepositoryResource
+	err := fileRe.InsertNode(ctxt, testRepoName, "test3", "", "", "", keys, values)
+
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+		t.FailNow()
+	}
+	m, defaultGraph, _ := fileDataset.readDefaultGraph()
+	if defaultGraph == nil || len(defaultGraph) == 0 {
+		t.Errorf("Attributes not added to default graph : %v", defaultGraph)
+		t.FailNow()
+	}
+
+	m2 := defaultGraph[1]
+	nodeAsMap, _ := m2.(map[string]interface{})
+	if nodeAsMap["@id"] == nil {
+		t.Errorf("Id not added for new property  : %v", defaultGraph)
+		t.FailNow()
+	}
+
+	if nodeAsMap["key4"] == nil || nodeAsMap["key4"] != "value4" {
+		t.Errorf("New attributes not added to the default graph  : %v", defaultGraph)
+		t.FailNow()
+	}
+
+	mtime := m[jsonld.MtimesEntryKeyName]
+	if mtime == nil {
+		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
+		t.FailNow()
+	}
+
+	keys = []string{"key3"}
+	values = []string{"value3"}
+
+	err = fileRe.InsertNode(ctxt, testRepoName, "test3", "", "", namedGraphName, keys, values)
+
+	if err != nil {
+		t.Errorf("unexpected error: %v", err)
+		t.FailNow()
+	}
+
+	m, defaultGraph, _ = fileDataset.readDefaultGraph()
+	if defaultGraph == nil || len(defaultGraph) == 0 {
+		t.Errorf(" default graph not found: %v", defaultGraph)
+		t.FailNow()
+	}
+
+	m2 = defaultGraph[0]
+	nodeAsMap, _ = m2.(map[string]interface{})
+
+	childnodeAsMap, _ := nodeAsMap["@graph"].([]interface{})[0].(map[string]interface{})
+
+	if childnodeAsMap["@id"] == nil {
+		t.Errorf("Id not added for new property  : %v", childnodeAsMap)
+		t.FailNow()
+	}
+
+	if childnodeAsMap["key3"] == nil || childnodeAsMap["key3"] != "value3" {
+		t.Errorf("New attributes not added to the Named graph  : %v", childnodeAsMap)
+		t.FailNow()
+	}
+
+	mtime = m[jsonld.MtimesEntryKeyName]
 	if mtime == nil {
 		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
 		t.FailNow()

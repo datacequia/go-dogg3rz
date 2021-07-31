@@ -78,15 +78,14 @@ func (cmd *dgrzSubCmdNodePropertyValues) Execute(args []string) error {
 			insertDefaultGraph.Values)
 
 	case insertNamedGraph:
-		//fmt.Printf("insert named graph ")
 		err = repo.InsertNode(ctxt,
 			insertCmd.Repository,
 			insertCmd.Node.Into.NamedGraph.Dataset.Positional.Path, //.DefaultGraph.Dataset.Positional.Path,
 			insertCmd.Node.Options.Type,
 			insertCmd.Node.Options.ID,
 			insertCmd.Node.Into.NamedGraph.Positional.GraphName, // GRAPH NAME
-			insertDefaultGraph.Properties,
-			insertDefaultGraph.Values)
+			insertNamedGraph.Properties,
+			insertNamedGraph.Values)
 
 	default:
 		panic("dgrzSubCmdNodePropertyValues.Execute: unhandled sub-command")
