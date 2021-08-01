@@ -14,8 +14,8 @@
 package repo
 
 import (
-	"testing"
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
+	"testing"
 )
 
 func TestInsertNodeIntoGraph(t *testing.T) {
@@ -64,11 +64,16 @@ func testInsertNodeIntoDefaultGraph(t *testing.T) {
 		t.FailNow()
 	}
 
-	mtime := m[jsonld.MtimesEntryKeyName]
+	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface {})
 	if mtime == nil {
-		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
+		t.Errorf("Newly created graph Mtime not updated expected size of MTime to be 3 but was  : %v", mtime)
 		t.FailNow()
 	}
+	if len(mtime) != 3 {
+		t.Errorf("Mtime node not updated correctly: %v", mtime)
+		t.FailNow()
+	}
+
 }
 
 // Add new named graph to Named graph
@@ -112,9 +117,13 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 		t.FailNow()
 	}
 
-	mtime := m[jsonld.MtimesEntryKeyName]
+	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface {})
 	if mtime == nil {
-		t.Errorf("Newly created graph Mtime not updated : %v", mtime)
+		t.Errorf("Newly created graph Mtime not updated expected size of MTime to be 3 but was  : %v", mtime)
+		t.FailNow()
+	}
+	if len(mtime) != 4 { // 2 dataset creating, 1 for named graph node and 1 for adding properties to names graph
+		t.Errorf("Mtime node not updated correctly: %v", mtime)
 		t.FailNow()
 	}
 }
