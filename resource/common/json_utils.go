@@ -134,7 +134,7 @@ func GetGraph(graph []interface{}, graphID string) (interface{}, error) {
 func updateDefaultGraph(defaultGraphMap *map[string]interface{}, graphIDToUpdate string, newNode map[string]interface{}) error {
 
 	if graphIDToUpdate == defaultGraphID {
-		err := appendToGraph(defaultGraphMap, newNode)
+		err := appendToGraph(defaultGraphMap,defaultGraphMap, newNode)
 		return err
 	}
 
@@ -178,16 +178,9 @@ func updateDefaultGraph(defaultGraphMap *map[string]interface{}, graphIDToUpdate
 				}
 
 				if ok && getIDValue(curID) == graphIDToUpdate {
-					err := appendToGraph(&nodeAsMap, newNode)
-					if err!=nil {
-						return err
-					}
-					// update the MTIME
-					 nodeID, err2 := GetNodeID(newNode)
-					 if err2 != nil {
-						return err2
-					 }
-					return updateMTIME(defaultGraphMap, nodeID)
+					return  appendToGraph(defaultGraphMap,&nodeAsMap, newNode)
+
+
 
 				}
 
@@ -205,12 +198,12 @@ func updateDefaultGraph(defaultGraphMap *map[string]interface{}, graphIDToUpdate
 
 }
 
-func appendToGraph(m *map[string]interface{}, newNode map[string]interface{}) error {
+func appendToGraph(defaultGraphMap *map[string]interface{},parentNodeMap *map[string]interface{}, newNode map[string]interface{}) error {
 
 	var graphRaw interface{}
 	var success bool
 
-	if graphRaw, success = (*m)["@graph"]; !success {
+	if graphRaw, success = (*parentNodeMap)["@graph"]; !success {
 		return errors.NotFound.New(
 			" graph not found as outermost " +
 				"attribute '@graph' in JSON-LD document")
@@ -228,9 +221,15 @@ func appendToGraph(m *map[string]interface{}, newNode map[string]interface{}) er
 		}
 	}
 
-	(*m)["@graph"] = append(graph, newNode)
+	(*parentNodeMap)["@graph"] = append(graph, newNode)
 
-	return nil
+	// update the MTIME
+	nodeID, err2 := GetNodeID(newNode)
+	if err2 != nil {
+		return err2
+	}
+	return updateMTIME(defaultGraphMap, nodeID)
+
 	
 }
 
