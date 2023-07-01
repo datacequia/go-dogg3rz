@@ -18,16 +18,21 @@ package ipfs
 import (
 	"bytes"
 	"encoding/json"
-	//	"fmt"
+	"fmt"
 
 	shell "github.com/ipfs/go-ipfs-api"
+)
+
+const (
+    ipfsDefaultApiListenPort  = 5001
+    ipfsDefaultApiListenHost = "127.0.0.1"
 )
 
 // DagPut takes a data construct  'data' and commits to IPFS as
 // an IPLD object. Returns CID
 func DagPut(data interface{}) (string, error) {
 
-	sh := newShell()
+	sh := newShellDefault()
 
 	// handle error coming from sh.DagPut() where it does not
 	// accept map[string] interface {} by converting to a byte buffer (io.Reader)
@@ -50,8 +55,19 @@ func DagPut(data interface{}) (string, error) {
 
 }
 
-func newShell() *shell.Shell {
+
+
+
+func newShellDefault() *shell.Shell {
 
 	// TODO GET IPFS HOST FROM CONFIG
-	return shell.NewShell("localhost:5001")
+	return newShell(ipfsDefaultApiListenHost, ipfsDefaultApiListenPort);
+}
+
+func newShell(ipfsHostname string, ipfsApiListenPort int) *shell.Shell {
+
+    hostPort := fmt.Sprintf("%s:%d", ipfsHostname, ipfsApiListenPort)
+
+    return shell.NewShell(hostPort);
+
 }

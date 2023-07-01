@@ -47,13 +47,15 @@ type RepositoryResource interface {
 		nodeType string, nodeID string, graphName string,
 		nodeProperties []string, nodeValues []string) error
 	// Returns list of data sets in the repo
-	GetDataSets(ctxt context.Context, repoName string ) ([]string, error)
+	GetDataSets(ctxt context.Context, repoName string) ([]string, error)
 
 	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
- 	// FOR DATASET datasetPath REPO repoName
- 	CreateNamedGraph(ctxt context.Context, repoName string, datasetPath string, graphName string,
- 		parentGraphName string) error
+	// FOR DATASET datasetPath REPO repoName
+	CreateNamedGraph(ctxt context.Context, repoName string, datasetPath string, graphName string,
+		parentGraphName string) error
 
+	// ADD DATASET TO REPOSITORY
+	Add(ctxt context.Context, repoName string, path string) error
 }
 
 // ALLOWS USER TO STAGE/UNSTAGE (i.e. .Add(), Remove() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY

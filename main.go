@@ -15,10 +15,28 @@ package main
 
 import (
 	"github.com/datacequia/go-dogg3rz/cmd"
+	"github.com/datacequia/go-dogg3rz/env/dev"
 )
 
 func main() {
 
+	checkDevEnvVars()
+
 	cmd.Run()
+
+}
+
+func checkDevEnvVars() {
+
+	if len(dev.GitCommitHash) < 1 {
+
+		panic(dev.PackageName() + ".GitCommitHash not assigned")
+	}
+	if len(dev.GitRemoteName) < 1 {
+		panic(dev.PackageName() + ".GitRemoteName not assigned")
+	}
+	if len(dev.GitRemoteURL) < 1 {
+		panic(dev.PackageName() + ".GitRemoteURL not assigned")
+	}
 
 }

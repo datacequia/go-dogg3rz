@@ -41,7 +41,7 @@ const repositoriesDirName = "repositories"
 const DgrzDirName = ".dgrz"
 const RefsDirName = "refs"
 const HeadsDirName = "heads"
-const MasterBranchName = "master"
+const MasterBranchName = "main"
 const IndexFileName = ".index"
 const DirLockFileName = ".__dirlock__"
 const ResourceCacheSignature = "RESC"
@@ -167,19 +167,19 @@ func RepositoriesDirPath(ctxt context.Context) string {
 	return path.Join(DataDirPath(ctxt), repositoriesDirName)
 
 }
-func RepositoriesDgrzDirPath(ctxt context.Context, repoName string) string {
+func RepositoryDgrzDirPath(ctxt context.Context, repoName string) string {
 	return path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName)
 }
 
-func RepositoriesRefsDirPath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoriesDgrzDirPath(ctxt, repoName), RefsDirName)
+func RepositoryRefsDirPath(ctxt context.Context, repoName string) string {
+	return path.Join(RepositoryDgrzDirPath(ctxt, repoName), RefsDirName)
 }
 
-func RepositoriesRefsHeadsDirPath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoriesRefsDirPath(ctxt, repoName), HeadsDirName)
+func RepositoryRefsHeadsDirPath(ctxt context.Context, repoName string) string {
+	return path.Join(RepositoryRefsDirPath(ctxt, repoName), HeadsDirName)
 }
 
-func RepositoriesDatasetDirPath(ctxt context.Context, repoName string, datasetName string) string {
+func RepositoryDatasetDirPath(ctxt context.Context, repoName string, datasetName string) string {
 
 	return path.Join(RepositoriesDirPath(ctxt), repoName, datasetName)
 }

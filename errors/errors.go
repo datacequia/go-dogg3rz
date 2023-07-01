@@ -38,12 +38,14 @@ const (
 	UnexpectedValue
 	AssertionError
 	UnhandledValue
-	InvalidState      // ATTEMPT TO EXECUTE OPERATION IN AN INVALID STATE
-	Cancelled         // OPERATION WAS CANCELLED
-	TimedOut          // TIMEOUT OCCURRED WHILE WAITING TO PERFORM SOME OPERATION
-	RollbackRequested // USER ISSUED A ROLLBACK
-	ChannelClosed     // A CLOSED CHANNEL WAS DETECTED
-	EmptyCommit       // AN ATTEMPT TO COMMIT A RESOURCE BUT NOTHING TO COMMIT
+	InvalidState       // ATTEMPT TO EXECUTE OPERATION IN AN INVALID STATE
+	Cancelled          // OPERATION WAS CANCELLED
+	TimedOut           // TIMEOUT OCCURRED WHILE WAITING TO PERFORM SOME OPERATION
+	RollbackRequested  // USER ISSUED A ROLLBACK
+	ChannelClosed      // A CLOSED CHANNEL WAS DETECTED
+	EmptyCommit        // AN ATTEMPT TO COMMIT A RESOURCE BUT NOTHING TO COMMIT
+	ExternalError      // EXTERNAL RESOURCE FAILED
+	UnexpectedBehavior // ENCOUNTERED UNEXPECTED BEHAVIOR WHEN INTERACTING WITH A RESOURCE
 )
 
 type badDogg3rz struct {
@@ -103,6 +105,10 @@ func errorTypeToString(errType ErrorType) string {
 		return "ChannelClosed"
 	case EmptyCommit:
 		return "EmptyCommit"
+	case ExternalError:
+		return "ExternalError"
+	case UnexpectedBehavior:
+		return "UnexpectedBehavior"
 	default:
 		panic("unknown error")
 	}
@@ -113,7 +119,14 @@ func (error badDogg3rz) Error() string {
 
 	if len(error.contextInfo) > 0 {
 		context, _ := json.Marshal(error.contextInfo)
-		return fmt.Sprintf("%s - %s:  %v", errorTypeToString(error.errorType), string(context), error.originalError)
+		if error.errorType == NoType {
+			return fmt.Sprintf("%v: context = { %s }", error.originalError, string(context))
+		}
+		return fmt.Sprintf("%s - %v: context = %s ", errorTypeToString(error.errorType), error.originalError, string(context))
+	}
+
+	if error.errorType == NoType {
+		fmt.Sprintf("%v", error.originalError)
 	}
 
 	return fmt.Sprintf("%s: %v", errorTypeToString(error.errorType), error.originalError)
@@ -186,7 +199,10 @@ func AddErrorContext(err error, field string, message string) error {
 		return myErr //return badDogg3rz{errorType: myErr.errorType, originalError: myErr.originalError, context: context}
 	}
 
-	return badDogg3rz{errorType: NoType, originalError: err, contextInfo: make(map[string]string)}
+	m := make(map[string]string)
+	m[field] = message
+
+	return badDogg3rz{errorType: NoType, originalError: err, contextInfo: m}
 }
 
 // GetErrorContext returns the error context

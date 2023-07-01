@@ -1,5 +1,6 @@
 {
   "ipfs": {
+    "deployment":"standalone",
     "apiEndpoint":"http://localhost:5001/"
   },
   "user": {

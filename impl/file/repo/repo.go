@@ -31,13 +31,17 @@ type FileRepositoryResource struct {
 func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) error {
 
 	repoDir := path.Join(file.RepositoriesDirPath(ctxt), name)
+
+	// CREATE DEFAULT BRANCH DIR
+	mainBranchDir := path.Join(repoDir, file.MasterBranchName)
+
 	// CREATE 'refs/heads' SUBDIR
 	// CREATE '.dgrz' DIR AS SUBDI OF BASE REPO DIR
 	dgrzDir := path.Join(repoDir, file.DgrzDirName)
 	refsDir := path.Join(dgrzDir, file.RefsDirName)
 	headsDir := path.Join(refsDir, file.HeadsDirName)
 
-	dirsList := []string{repoDir, dgrzDir, refsDir, headsDir}
+	dirsList := []string{repoDir, mainBranchDir, dgrzDir, refsDir, headsDir}
 
 	for _, d := range dirsList {
 
@@ -127,10 +131,15 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 
 		if strings.HasPrefix(v, ".") {
 
-
 			files = append(files[:i], files[i+1:]...)
 		}
 	}
 
 	return files, err
+}
+
+func (repo *FileRepositoryResource) Add(ctxt context.Context, repoName string, path string) error {
+
+	return add(ctxt, repoName, path)
+
 }
