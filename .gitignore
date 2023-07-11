@@ -1,3 +1,4 @@
 dist/
 go-dogg3rz
 .DS_Store
+*.code-workspace

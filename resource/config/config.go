@@ -21,23 +21,54 @@ import (
 
 const CONFIG_JSON_SCHEMA = `
 {
-	"$id": "https://www.datacequia.com/dogg3rz.config.schema.json",
-	"$schema": "http://json-schema.org/draft-07/schema#",
-  "title": "Dogg3rz configuration",
-  "description": "Configuration schema for dogg3rz",
-  "type": "object",
-  "properties": {
-    "ipfs": {
-      "description": "IPFS Node Configuration Section",
-      "type": "object",
+    "$id": "https://www.datacequia.com/dogg3rz.config.schema.json",
+    "$schema": "http://json-schema.org/draft-07/schema#",
+    "title": "Dogg3rz configuration",
+    "description": "Configuration schema for dogg3rz",
+    "definitions": {
+       
+    },
+    "type": "object",
+    "properties": {
+        "ipfs": {
+            "description": "IPFS Node Configuration Section",
+            "type": "object",
+
 			"properties": {
 				"apiEndpoint": {
 					"description":"IPFS Node REST API Endpoint",
 					"type": "string"
 				}
-			},
-			"required": ["apiEndpoint"]
-    },
+		    },
+            "oneOf": [
+                {
+                    "properties": {
+                        "deployment": {
+                            "description":"deployment type",
+                            "type": "string",
+                            "enum": ["standalone"]
+                        },
+                        "apiEndpoint": {
+                            "description":"IPFS Node REST API Endpoint",
+                            "type":"string"
+                        }
+                        
+                    },
+                    "required":["apiEndpoint"]
+                },
+                {
+                    "properties": {
+                        "deployment": {
+                            "description":"deployment type",
+                            "type": "string",
+                            "enum": ["embedded"]
+                        }
+                    },
+                    "required":["deployment"]
+                    
+                }
+            ]
+        },
 		"user": {
 			"description":"User Information Section",
 			"type": "object",
@@ -66,6 +97,7 @@ const CONFIG_JSON_SCHEMA = `
 const CONFIG_JSON_DEFAULT_TEMPLATE = `
 {
     "ipfs": {
+      "deployment":"standalone",
       "apiEndpoint":"{{ .IPFS.ApiEndpoint }}"
     },
 		"user": {
@@ -76,6 +108,10 @@ const CONFIG_JSON_DEFAULT_TEMPLATE = `
 
 }
 `
+const (
+    IPFSDeploymentStandalone = "standalone"
+    IPFSDeploymentEmbedded = "embedded"
+)
 
 type Dogg3rzConfig struct {
 	IPFS IPFSConfig `json:"ipfs"`
@@ -83,7 +119,11 @@ type Dogg3rzConfig struct {
 }
 
 type IPFSConfig struct {
+    Deployment string `json:"deployment"`
+    // standalone deployment properties
 	ApiEndpoint string `json:"apiEndpoint"`
+    // embedded deployment properties
+
 }
 
 type UserConfig struct {
@@ -103,8 +143,16 @@ func GenerateDefault(config Dogg3rzConfig) (string, error) {
 	var tmpl *template.Template
 	var err error
 
-	// DEFAULT TO localhost:5001 if not provided
-	if len(config.IPFS.ApiEndpoint) == 0 {
+    // IF IPFS DEPLOYMENT TYPE NOT SPECIFIED
+    // DEFAULT TO STANDALONE 
+    if len(config.IPFS.Deployment) == 0 {
+        config.IPFS.Deployment = IPFSDeploymentStandalone
+    }	
+
+    // DEFAULT TO localhost:5001 if not provided
+    // AND DEPLOYMENT TYPE IS STANDALONE
+	if config.IPFS.Deployment == IPFSDeploymentStandalone && 
+       len(config.IPFS.ApiEndpoint) == 0 {
 		config.IPFS.ApiEndpoint = "http://localhost:5001/"
 	}
 
@@ -113,6 +161,10 @@ func GenerateDefault(config Dogg3rzConfig) (string, error) {
 	if err != nil {
 		return "", err
 	}
+
+    // TODO: MAKE SURE DEFAULT CONFORMS TO JSON SCHEMA
+    
+
 	err = tmpl.Execute(&buf, config)
 	if err != nil {
 		return "", err

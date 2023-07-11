@@ -20,11 +20,12 @@ func TestFileRepositoryResourceStager(t *testing.T) {
 
 	//ctxt, _ := context.WithCancel(context.Background())
 
-	ctxt, err := initTestNode("FileRepositoryResourceStager")
+	ctxt, cancelFunc, err := initTestNode("FileRepositoryResourceStager")
 	if err != nil {
 		t.Error(err)
 		return
 	}
+    defer cancelFunc() 
 
 	//dogg3rzHome, _ := ctxt.Value(env.EnvDogg3rzHome).(string)
 	repoName, _ := ctxt.Value(env.EnvDogg3rzRepo).(string)

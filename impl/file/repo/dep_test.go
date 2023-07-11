@@ -15,6 +15,7 @@ import (
 	"github.com/datacequia/go-dogg3rz/impl/file"
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 	"github.com/datacequia/go-dogg3rz/resource/config"
+    "github.com/datacequia/go-dogg3rz/ipfs"
 )
 
 const (
@@ -23,10 +24,12 @@ const (
 
 func TestInitTestNode(t *testing.T) {
 
-	ctxt, err := initTestNode("myprefix")
+	ctxt, cancelFunc,err := initTestNode("myprefix")
 	if err != nil {
 		t.Error(err)
 	}
+    defer cancelFunc()
+
 
 	homeDir, ok := ctxt.Value(env.EnvDogg3rzHome).(string)
 	if !ok {
@@ -57,21 +60,27 @@ func TestInitTestNode(t *testing.T) {
 // Initialize a new dogg3rz node in a temp dir
 // Returns non-cancellable context with value for DOGG3RZ_HOME and DOGG3RZ_REPO assigned
 // or error initialized if failed
-func initTestNode(dogg3rzHomePrefix string) (context.Context, error) {
+func initTestNode(dogg3rzHomePrefix string) (context.Context, context.CancelFunc, error) {
 
 	if len(dogg3rzHomePrefix) < 1 {
-		return nil, errors.New("dogg3rzHomePrefix len must be > 0")
+		return nil, nil,errors.New("dogg3rzHomePrefix len must be > 0")
 	}
 
 	//testRepoName := "test"
 
+  
 	dogg3rzHome := filepath.Join(os.TempDir(),
 		fmt.Sprintf("%s_%d", dogg3rzHomePrefix, time.Now().UnixNano()))
 
-	ctxt := context.Background()
+
+	ctxt,cancelFunc := context.WithCancel(context.Background())
 
 	ctxt = context.WithValue(ctxt, env.EnvDogg3rzHome, dogg3rzHome)
 	ctxt = context.WithValue(ctxt, env.EnvDogg3rzRepo, testRepoName)
+
+
+    // SPAWN AN EPHEMERAL IPFS NODE TO INTERACT W/ DOGG3RZ TEST NODE
+    ipfs.SpawnEphemeral(ctxt)
 
 	// os.Setenv("DOGG3RZ_HOME", dogg3rzHome)
 
@@ -84,7 +93,7 @@ func initTestNode(dogg3rzHomePrefix string) (context.Context, error) {
 
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		//t.Error(err)
-		return nil, err
+		return ctxt,cancelFunc, err
 	}
 
 	//t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
@@ -92,9 +101,9 @@ func initTestNode(dogg3rzHomePrefix string) (context.Context, error) {
 	fileRepositoryResource := FileRepositoryResource{}
 
 	if err := fileRepositoryResource.InitRepo(ctxt, testRepoName); err != nil {
-		return nil, err
+		return ctxt, cancelFunc,err
 	}
 
-	return ctxt, nil
+	return ctxt, cancelFunc, nil
 
 }

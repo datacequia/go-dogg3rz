@@ -16,6 +16,7 @@ package env
 import (
 	"context"
 	"os"
+	"path/filepath"
 )
 
 const (
@@ -29,6 +30,15 @@ const (
 	// (CURRENTLY DEFAULTS TO 'file' IF NOT SET)
 	EnvDogg3rzStateStore = EnvDogg3rzPrefix + "STATE_STORE"
 )
+
+var (
+	applicationName string
+)
+
+func init() {
+	applicationName = filepath.Base(os.Args[0])
+
+}
 
 var envNames = []string{
 	EnvDogg3rzRepo,
@@ -49,4 +59,8 @@ func InitContextFromEnv(ctxt context.Context) context.Context {
 
 	return ctxt
 
+}
+
+func ApplicationName() string {
+	return applicationName
 }
