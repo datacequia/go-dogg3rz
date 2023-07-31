@@ -161,7 +161,7 @@ func newFileGrapplicationIndex(ctxt context.Context, grappName string) (*fileGra
 
 	index.grappName = grappName
 
-	index.grappDir = filepath.Join(file.GrapplicationDirPath(ctxt), grappName)
+	index.grappDir = filepath.Join(file.GrapplicationsDirPath(ctxt), grappName)
 
 	index.path = file.IndexFilePath(ctxt, grappName)
 
