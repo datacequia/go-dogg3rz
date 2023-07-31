@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"bytes"
@@ -31,18 +31,18 @@ import (
 )
 
 type fileCreateSnapshot struct {
-	repoName    string
+	grappName   string
 	snapshotMap map[uuid.UUID]snapshotResource
 
-	fileRepoIdx  *fileRepositoryIndex
+	fileGrappIdx *fileGrapplicationIndex
 	indexEntries []rescom.StagingResource
 
 	createTreePathElementContext []string
 }
 
 type snapshotIndexEntry struct {
-	entry    *rescom.StagingResource
-	repoPath *rescom.RepositoryPath
+	entry     *rescom.StagingResource
+	grappPath *rescom.GrapplicationPath
 }
 
 type snapshotResource struct {
@@ -59,14 +59,14 @@ type stagingResource struct {
 type snapshotHeadResource struct {
 }
 
-func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName string) error {
+func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, grappName string) error {
 
-	if !file.RepositoryExist(ctxt, repoName) {
-		return errors.NotFound.Newf("repository '%s' does not exist", repoName)
+	if !file.GrapplicationExist(ctxt, grappName) {
+		return errors.NotFound.Newf("grapplication '%s' does not exist", grappName)
 	}
 
-	// REPO VALID. ASSIGN REPO NAME TO COMMAND STRUCT
-	cs.repoName = repoName
+	// GRAPP VALID. ASSIGN GRAPP NAME TO COMMAND STRUCT
+	cs.grappName = grappName
 
 	var ssIndexEntries *[]snapshotIndexEntry
 	if i, err := cs.getIndexEntries(ctxt); err != nil {
@@ -75,7 +75,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 		ssIndexEntries = i
 	}
 
-	if rootTree, err := cs.createTree(nil, 0, ssIndexEntries, cs.repoName); err != nil {
+	if rootTree, err := cs.createTree(nil, 0, ssIndexEntries, cs.grappName); err != nil {
 		return err
 	} else {
 
@@ -83,7 +83,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 
 		var dgrzSnapshotObject *map[string]interface{}
 
-		if p, err := createSnapshotObject(ctxt, cs.repoName, rootTree); err != nil {
+		if p, err := createSnapshotObject(ctxt, cs.grappName, rootTree); err != nil {
 			return err
 		} else {
 			dgrzSnapshotObject = p
@@ -102,7 +102,7 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 			return err
 		} else {
 
-			if err := file.WriteCommitHashToCurrentBranchHeadFile(ctxt, cs.repoName, cid); err != nil {
+			if err := file.WriteCommitHashToCurrentBranchHeadFile(ctxt, cs.grappName, cid); err != nil {
 				return err
 			}
 
@@ -115,15 +115,15 @@ func (cs *fileCreateSnapshot) createSnapshot(ctxt context.Context, repoName stri
 
 func (cs *fileCreateSnapshot) getIndexEntries(ctxt context.Context) (*[]snapshotIndexEntry, error) {
 
-	var fileRepoIdx *fileRepositoryIndex
-	if i, err := newFileRepositoryIndex(ctxt, cs.repoName); err != nil {
+	var fileGrappIdx *fileGrapplicationIndex
+	if i, err := newFileGrapplicationIndex(ctxt, cs.grappName); err != nil {
 		return nil, err
 	} else {
-		fileRepoIdx = i
+		fileGrappIdx = i
 	}
 
 	var indexEntries []rescom.StagingResource
-	if ie, _, err := fileRepoIdx.readIndexFile(); err != nil {
+	if ie, _, err := fileGrappIdx.readIndexFile(); err != nil {
 		return nil, err
 	} else {
 		indexEntries = ie
@@ -136,7 +136,7 @@ func (cs *fileCreateSnapshot) getIndexEntries(ctxt context.Context) (*[]snapshot
 		for i := 0; i < len(indexEntries); i++ {
 			var err error
 			ssIndexEntries[i].entry = &indexEntries[i]
-			ssIndexEntries[i].repoPath, err = rescom.RepositoryPathNew(indexEntries[i].Subpath)
+			ssIndexEntries[i].grappPath, err = rescom.GrapplicationPathNew(indexEntries[i].Subpath)
 			if err != nil {
 				return nil, err
 			}
@@ -197,9 +197,9 @@ func (cs *fileCreateSnapshot) createTree(parent *map[string]interface{},
 
 	/* commented out temporarily untix fix
 	for _, entry := range *pathList {
-		entryPathElements := entry.repoPath.PathElements()
-		if level < entry.repoPath.Size() {
-			if level == entry.repoPath.Size()-1 {
+		entryPathElements := entry.grappPath.PathElements()
+		if level < entry.grappPath.Size() {
+			if level == entry.grappPath.Size()-1 {
 				// THIS IS A LEAF ELEMENT (A NON TREE DOGG3RZ OBJECT)
 
 				if _, ok := (*createdTree)[entryPathElements[level]]; ok {
@@ -209,7 +209,7 @@ func (cs *fileCreateSnapshot) createTree(parent *map[string]interface{},
 				}
 				(*createdTree)[entryPathElements[level]] = map[string]string{"/": entry.entry.Multihash}
 			} else {
-				// level < entry.RepoPath.Size()
+				// level < entry.GrappPath.Size()
 				var entryListOfOne []snapshotIndexEntry = []snapshotIndexEntry{entry}
 
 				if _, err := cs.createTree(createdTree,
@@ -253,7 +253,7 @@ func getStringValueFromKey(m *map[string]interface{}, key string) (string, bool)
 	}
 }
 
-func createSnapshotObject(ctxt context.Context, repoName string, rootTree *map[string]interface{}) (*map[string]interface{}, error) {
+func createSnapshotObject(ctxt context.Context, grappName string, rootTree *map[string]interface{}) (*map[string]interface{}, error) {
 
 	dogg3rzObject := make(map[string]interface{})
 
@@ -267,8 +267,8 @@ func createSnapshotObject(ctxt context.Context, repoName string, rootTree *map[s
 
 	meta := make(map[string]string)
 
-	meta[primitives.META_ATTR_REPO_NAME] = repoName
-	//meta[primitives.META_ATTR_REPO_ID] = ""
+	meta[primitives.META_ATTR_GRAPP_NAME] = grappName
+
 	meta[primitives.META_ATTR_EMAIL_ADDR] = c.User.Email
 
 	body := make(map[string]interface{})

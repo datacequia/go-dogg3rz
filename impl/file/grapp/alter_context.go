@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"bytes"
@@ -37,12 +37,12 @@ type addNamespaceNode struct {
 
 }
 
-func addNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error {
+func addNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error {
 
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 
@@ -145,12 +145,12 @@ func addNamespaceDataset(ctxt context.Context, repoName string, datasetPath stri
 }
 
 // TODO: need to implement this
-func (o *addNamespaceNode) execute(ctxt context.Context, repoName string, datasetPath string, nodeID string, term string, iri string) error {
+func (o *addNamespaceNode) execute(ctxt context.Context, grappName string, datasetPath string, nodeID string, term string, iri string) error {
 
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 

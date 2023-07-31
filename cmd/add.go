@@ -5,7 +5,7 @@ import (
 )
 
 type dgrzAddCmd struct {
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Positional struct {
 		Path string `positional-arg-name:"FILE" description:"path to resource file (.jsonld)" required:"yes" `
@@ -27,24 +27,21 @@ func (o *dgrzAddCmd) CommandName() string {
 }
 
 func (o *dgrzAddCmd) ShortDescription() string {
-	return "add a new data(set) resource into a repository"
+	return "add a new data(set) resource into a grapplication"
 }
 
 func (o *dgrzAddCmd) LongDescription() string {
-	return "add a new data(set) resource into a repository"
+	return "add a new data(set) resource into a grapplication"
 }
 
 func (x *dgrzAddCmd) Execute(args []string) error {
 
-	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
+	//	fmt.Printf("hello snapshot: { grapplication = %s }\n", x.Positional.Grapplication)
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	//return repo.CreateSnapshot(ctxt, createCmd.Repository)
+	return grapp.Add(ctxt, x.Grapplication, x.Positional.Path)
 
-	return repo.Add(ctxt, x.Repository, x.Positional.Path)
-
-	
 }

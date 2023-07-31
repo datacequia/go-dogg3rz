@@ -19,7 +19,7 @@ import (
 )
 
 type dgrzCreateSnapshot struct {
-	//	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 }
 
 ///////////////////////////////////////////////////////////
@@ -32,13 +32,13 @@ type dgrzCreateSnapshot struct {
 
 func (x *dgrzCreateSnapshot) Execute(args []string) error {
 
-	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
+	//	fmt.Printf("hello snapshot: { grapp = %s }\n", x.Positional.Grapplication)
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	return repo.CreateSnapshot(ctxt, createCmd.Repository)
+	return grapp.CreateSnapshot(ctxt, createCmd.Grapplication)
 
 }
 
@@ -47,9 +47,9 @@ func (o *dgrzCreateSnapshot) CommandName() string {
 }
 
 func (o *dgrzCreateSnapshot) ShortDescription() string {
-	return "create a repository snapshot"
+	return "create a grapplication snapshot"
 }
 
 func (o *dgrzCreateSnapshot) LongDescription() string {
-	return "create a repository snapshot"
+	return "create a grapplication snapshot"
 }

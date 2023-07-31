@@ -24,7 +24,7 @@ import (
 )
 
 type dgrzAlterContext struct {
-	//	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//subcommands-optional:"true"
 	Dataset dgrzAlterContextDataset `command:"dataset" alias:"ds" description:"the dataset object in which to alter the context"`
@@ -70,15 +70,15 @@ func (o *dgrzAddNamespace) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
 	if len(alterCmd.Context.Dataset.Node.Positional.NodeID) > 0 {
 		// alter context dataset <DATASET> node <NODEID> WAS CALLED
 		// BECAUSE ABOVE WAS INITIALIZED
-		//	AddNamespaceNode(repoName string, datasetPath string, nodeID string, term string, iri string) error
+		//	AddNamespaceNode(grappName string, datasetPath string, nodeID string, term string, iri string) error
 
-		err = repo.AddNamespaceNode(ctxt,
-			alterCmd.Repository,
+		err = grapp.AddNamespaceNode(ctxt,
+			alterCmd.Grapplication,
 			alterCmd.Context.Dataset.Positional.DatasetPath,
 			alterCmd.Context.Dataset.Node.Positional.NodeID,
 			alterCmd.Context.Dataset.Node.Add.Namespace.Positional.Term,
@@ -86,8 +86,8 @@ func (o *dgrzAddNamespace) Execute(args []string) error {
 
 	} else {
 
-		err = repo.AddNamespaceDataset(ctxt,
-			alterCmd.Repository,
+		err = grapp.AddNamespaceDataset(ctxt,
+			alterCmd.Grapplication,
 			alterCmd.Context.Dataset.Positional.DatasetPath,
 			alterCmd.Context.Dataset.Add.Namespace.Positional.Term,
 			alterCmd.Context.Dataset.Add.Namespace.Positional.IRI)

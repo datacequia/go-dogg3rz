@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"testing"
@@ -37,7 +37,7 @@ func TestCreateNamedGraph(t *testing.T) {
 // Add new named graph to default graph
 func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test1")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test1")
 	fileDataset.create(ctxt)
 
 	var childGraph = "test1"
@@ -66,7 +66,7 @@ func testCreateNamedGraphInDefaultGraph(t *testing.T) {
 // Add new named graph to another named graph
 func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test2")
 	fileDataset.create(ctxt)
 	var parentGraph = "testParent2"
 	var childGraph = "childGraphTest2"
@@ -97,9 +97,9 @@ func testCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 // Add duplicate named graph to default graph
 func testDuplicateCreateNamedGraphInDefaultGraph(t *testing.T) {
 
-	// TEST NEW REPO INDEX WITH BAD REPO NAME
+	// TEST NEW GRAPP INDEX WITH BAD GRAPP NAME
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test2")
 	fileDataset.create(ctxt)
 
 	var childGraph = "childGraphTest3"
@@ -120,9 +120,9 @@ func testDuplicateCreateNamedGraphInDefaultGraph(t *testing.T) {
 // Add duplicate named graph to default graph
 func testDuplicateCreateNamedGraphInAnotherNamedGraph(t *testing.T) {
 
-	// TEST NEW REPO INDEX WITH BAD REPO NAME
+	// TEST NEW GRAPP INDEX WITH BAD GRAPP NAME
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test4")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test4")
 	fileDataset.create(ctxt)
 
 	var parentGraph = "testParent5"

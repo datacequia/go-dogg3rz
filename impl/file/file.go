@@ -35,9 +35,9 @@ import (
 const dotDirName = ".dogg3rz"
 const LOCK_FILE_SUFFIX = ".lock"
 const dataDirName = "data"
-const repositoriesDirName = "repositories"
+const grapplicationsDirName = "grapplications"
 
-// BASE REPO DIR FOR ALL STATE FILES
+// BASE GRAP DIR FOR ALL STATE FILES
 const DgrzDirName = ".dgrz"
 const RefsDirName = "refs"
 const HeadsDirName = "heads"
@@ -47,7 +47,7 @@ const DirLockFileName = ".__dirlock__"
 const ResourceCacheSignature = "RESC"
 const IndexFormatVersion = uint32(1)
 const HeadFileName = "HEAD"
-const RepositoryIdFileName = "ID"
+const GrapplicationIdFileName = "ID"
 const JSONLDDocumentName = ".document.jsonld"
 
 var validPathElementRegex = regexp.MustCompilePOSIX("^[a-z][-a-z0-9]*$")
@@ -163,54 +163,52 @@ func DataDirPath(ctxt context.Context) string {
 	return path.Join(DotDirPath(ctxt), dataDirName)
 }
 
-func RepositoriesDirPath(ctxt context.Context) string {
-	return path.Join(DataDirPath(ctxt), repositoriesDirName)
+func GrapplicationsDirPath(ctxt context.Context) string {
+	return path.Join(DataDirPath(ctxt), grapplicationsDirName)
 
 }
-func RepositoryDgrzDirPath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName)
+func GrapplicationDgrzDirPath(ctxt context.Context, grappName string) string {
+	return path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName)
 }
 
-func RepositoryRefsDirPath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoryDgrzDirPath(ctxt, repoName), RefsDirName)
+func GrapplicationRefsDirPath(ctxt context.Context, grappName string) string {
+	return path.Join(GrapplicationDgrzDirPath(ctxt, grappName), RefsDirName)
 }
 
-func RepositoryRefsHeadsDirPath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoryRefsDirPath(ctxt, repoName), HeadsDirName)
+func GrapplicationRefsHeadsDirPath(ctxt context.Context, grappName string) string {
+	return path.Join(GrapplicationRefsDirPath(ctxt, grappName), HeadsDirName)
 }
 
-func RepositoryDatasetDirPath(ctxt context.Context, repoName string, datasetName string) string {
+func GrapplicationDatasetDirPath(ctxt context.Context, grappName string, datasetName string) string {
 
-	return path.Join(RepositoriesDirPath(ctxt), repoName, datasetName)
+	return path.Join(GrapplicationsDirPath(ctxt), grappName, datasetName)
 }
 
-func IndexFilePath(ctxt context.Context, repoName string) string {
-	return path.Join(RepositoriesDirPath(ctxt), repoName, IndexFileName)
+func IndexFilePath(ctxt context.Context, grappName string) string {
+	return path.Join(GrapplicationsDirPath(ctxt), grappName, IndexFileName)
 }
 
-// returns list of directory nams that are repository dirs
-func RepositoryDirList(ctxt context.Context) ([]string, error) {
-
-	//	baseRepoDir := RepositoryDirPath()
+// returns list of directory nams that are grapplication dirs
+func GrapplicationDirList(ctxt context.Context) ([]string, error) {
 
 	var dirListing []os.FileInfo
 	var err error
 
-	if dirListing, err = ioutil.ReadDir(RepositoriesDirPath(ctxt)); err != nil {
+	if dirListing, err = ioutil.ReadDir(GrapplicationsDirPath(ctxt)); err != nil {
 		return nil, err
 	}
 
-	repoDirList := make([]string, 0)
+	grappDirList := make([]string, 0)
 	for _, fileInfo := range dirListing {
 		// if directory entry is a directory and has a subdirectory entry itself named '.dgrz'
-		// then we can assume it's a repository dir
-		if fileInfo.IsDir() && DirExists(filepath.Join(RepositoriesDirPath(ctxt), DgrzDirName)) {
-			// IS A REPO DIR ADD IT
-			repoDirList = append(repoDirList, fileInfo.Name())
+		// then we can assume it's a grapplication dir
+		if fileInfo.IsDir() && DirExists(filepath.Join(GrapplicationsDirPath(ctxt), DgrzDirName)) {
+			// IS A GRAPP DIR ADD IT
+			grappDirList = append(grappDirList, fileInfo.Name())
 		}
 	}
 
-	return repoDirList, nil
+	return grappDirList, nil
 
 }
 func FileExists(path string) bool {
@@ -239,19 +237,19 @@ func DirExists(path string) bool {
 
 }
 
-func WriteHeadFile(ctxt context.Context, repoName string, branchName string) error {
+func WriteHeadFile(ctxt context.Context, grappName string, branchName string) error {
 
 	content := fmt.Sprintf("ref: %s\n", filepath.Join(RefsDirName, HeadsDirName, branchName))
 
 	_, err := WriteToFileAtomic(func() (io.Reader, error) { return strings.NewReader(content), nil },
-		path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName, HeadFileName))
+		path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName))
 
 	return err
 }
 
-func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, repoName string, commitHash string) error {
+func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, grappName string, commitHash string) error {
 
-	headFile := path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName, HeadFileName)
+	headFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName)
 
 	if f, err := os.Open(headFile); err != nil {
 		return err
@@ -268,7 +266,7 @@ func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, repoName strin
 			}
 		}
 
-		commitHashFile := path.Join(RepositoriesDirPath(ctxt), repoName, DgrzDirName, headFileSubPath)
+		commitHashFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, headFileSubPath)
 
 		myFunc := func() (io.Reader, error) {
 			return strings.NewReader(commitHash), nil
@@ -283,19 +281,19 @@ func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, repoName strin
 
 }
 
-func RepositoryExist(ctxt context.Context, repoName string) bool {
+func GrapplicationExist(ctxt context.Context, grappName string) bool {
 	// TODO: have this method return bool, error
-	repoPath := filepath.Join(RepositoriesDirPath(ctxt), repoName)
+	grappPath := filepath.Join(GrapplicationsDirPath(ctxt), grappName)
 
-	if info, err := os.Stat(repoPath); err != nil {
+	if info, err := os.Stat(grappPath); err != nil {
 		// PATH DOES NOT EXIST
 
 		return false
 
 	} else {
-		// REPO DOES EXIST. IS IT A DIR?
+		// GRAPP DOES EXIST. IS IT A DIR?
 		// COULD BE A FILE BUT THAT WOULD BE AN ERROR
-		// GIVEN THAT NO NON DIR OBJECTS SHOULD EXIST IN BASE REPO DIR
+		// GIVEN THAT NO NON DIR OBJECTS SHOULD EXIST IN BASE GRAPP DIR
 		return info.IsDir()
 	}
 

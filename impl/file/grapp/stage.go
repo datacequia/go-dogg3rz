@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"context"
@@ -32,17 +32,17 @@ type stagingResourceLocationFile struct {
 	fileDataset *fileDataset
 }
 
-type FileRepositoryResourceStager struct {
-	repoName string
+type FileGrapplicationResourceStager struct {
+	grappName string
 
-	index *fileRepositoryIndex
+	index *fileGrapplicationIndex
 
 	//stagedResources []rescom.StagingResource
 
 	//startList []stagingResourceLocationFile
 
-	// CONTAINS MAP OF ALL IN-MEMORY PARSED DATASETS FOR repoName
-	jsonLDParsedDocMap map[string]map[string]interface{} // key = REPO_NAME:DATASET_PATH
+	// CONTAINS MAP OF ALL IN-MEMORY PARSED DATASETS FOR grappName
+	jsonLDParsedDocMap map[string]map[string]interface{} // key = GRAPP_NAME:DATASET_PATH
 
 	// SPECIFIES CURRENT PARSED JSON-LD DOC BEING PROCESSED
 	currentJSONLDParsedDoc map[string]interface{}
@@ -58,22 +58,22 @@ type FileRepositoryResourceStager struct {
 }
 
 type stageCmdCollector struct {
-	stager *FileRepositoryResourceStager
+	stager *FileGrapplicationResourceStager
 }
 
 type removeCmdCollector struct {
-	stager *FileRepositoryResourceStager
+	stager *FileGrapplicationResourceStager
 }
 
-// Create new file repository stager instance
-func NewFileRepositoryResourceStager(ctxt context.Context, repoName string) (*FileRepositoryResourceStager, error) {
+// Create new file grapplication stager instance
+func NewFileGrapplicationResourceStager(ctxt context.Context, grappName string) (*FileGrapplicationResourceStager, error) {
 
 	var err error
-	stager := &FileRepositoryResourceStager{}
+	stager := &FileGrapplicationResourceStager{}
 
-	stager.repoName = repoName
+	stager.grappName = grappName
 
-	if stager.index, err = newFileRepositoryIndex(ctxt, repoName); err != nil {
+	if stager.index, err = newFileGrapplicationIndex(ctxt, grappName); err != nil {
 		return nil, err
 	}
 
@@ -84,7 +84,7 @@ func NewFileRepositoryResourceStager(ctxt context.Context, repoName string) (*Fi
 }
 
 // Add new resource (location) to staging index
-func (stager *FileRepositoryResourceStager) Add(ctxt context.Context, srl rescom.StagingResourceLocation) error {
+func (stager *FileGrapplicationResourceStager) Add(ctxt context.Context, srl rescom.StagingResourceLocation) error {
 
 	var err error
 
@@ -132,9 +132,9 @@ func (collector stageCmdCollector) CollectStart(ctxt context.Context, resource i
 	// GET MTIMES MAP FROM PARSED JSON-LD DOC
 	if i, ok = collector.stager.currentJSONLDParsedDoc[jsonld.MtimesEntryKeyName]; !ok {
 		return errors.NotFound.Newf("can't find parsed mtimes map within parsed "+
-			"JSON-LD document for dataset '%s', repository '%s'",
+			"JSON-LD document for dataset '%s', grapplication '%s'",
 			location.DatasetPath,
-			collector.stager.repoName)
+			collector.stager.grappName)
 	}
 
 	if mtimesMap, ok = i.(map[string]interface{}); !ok {
@@ -213,8 +213,8 @@ func (collector stageCmdCollector) CollectEnd(ctxt context.Context, resource int
 
 }
 
-// String renders FileRepositoryResource instance as a string
-func (stager *FileRepositoryResourceStager) String() string {
+// String renders FileGrapplicationResource instance as a string
+func (stager *FileGrapplicationResourceStager) String() string {
 
 	return fmt.Sprintf("fileStageResource = { } ")
 
@@ -225,13 +225,13 @@ func (stager *FileRepositoryResourceStager) String() string {
 /////////////////////////////////////
 
 // Removes a resource (and its children) from the staging index
-func (stager *FileRepositoryResourceStager) Remove(ctxt context.Context, sr rescom.StagingResourceLocation) error {
+func (stager *FileGrapplicationResourceStager) Remove(ctxt context.Context, sr rescom.StagingResourceLocation) error {
 
 	return nil
 }
 
 // Commits changes to the staging index
-func (stager *FileRepositoryResourceStager) Commit(ctxt context.Context) error {
+func (stager *FileGrapplicationResourceStager) Commit(ctxt context.Context) error {
 
 	err := stager.index.commit()
 	if err == nil {
@@ -242,7 +242,7 @@ func (stager *FileRepositoryResourceStager) Commit(ctxt context.Context) error {
 
 // Rollbacks discards any changes to the staging index since last call
 // to Commit
-func (stager *FileRepositoryResourceStager) Rollback(ctxt context.Context) error {
+func (stager *FileGrapplicationResourceStager) Rollback(ctxt context.Context) error {
 
 	err := stager.index.rollback()
 	if err == nil {
@@ -253,15 +253,15 @@ func (stager *FileRepositoryResourceStager) Rollback(ctxt context.Context) error
 
 // Close closes all resources associated with the staging index file
 // Note: this must be called after the object is not longer needed
-func (stager *FileRepositoryResourceStager) Close(ctxt context.Context) error {
+func (stager *FileGrapplicationResourceStager) Close(ctxt context.Context) error {
 	stager.index.close()
 	return nil
 }
 
-// Repository returns the repository name for this staging index
-func (stager *FileRepositoryResourceStager) Repository() string {
+// Grapplication returns the grapplication name for this staging index
+func (stager *FileGrapplicationResourceStager) Grapplication() string {
 
-	return stager.repoName
+	return stager.grappName
 
 }
 
@@ -272,20 +272,20 @@ func (stager *FileRepositoryResourceStager) Repository() string {
 // loadUnderlyingDatasetToCache loads dataset identified within srl
 // into memory and place into stager's map of cached datasets
 // Returns the dataset as a map if successful, otherwise returns an error
-func (stager *FileRepositoryResourceStager) loadUnderlyingDatasetToCache(ctxt context.Context, srl rescom.StagingResourceLocation) (map[string]interface{}, error) {
+func (stager *FileGrapplicationResourceStager) loadUnderlyingDatasetToCache(ctxt context.Context, srl rescom.StagingResourceLocation) (map[string]interface{}, error) {
 
 	var err error
 
 	var fds *fileDataset
 
 	// CREATE NEW (FILE) DATASET OBJECT AND ASSERT IT'S VALID (PATH ETC.)
-	if fds, err = newFileDataset(ctxt, stager.repoName, srl.DatasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, stager.grappName, srl.DatasetPath); err != nil {
 		return nil, err
 	}
 
 	var datasetExists bool
 
-	// ENSURE REPO /  DATASET JSON-LD DOCUMENT FILE EXIST
+	// ENSURE GRAPP /  DATASET JSON-LD DOCUMENT FILE EXIST
 	if datasetExists, err = fds.assertState(ctxt, true); !datasetExists {
 		return nil, err
 	}
@@ -303,10 +303,10 @@ func (stager *FileRepositoryResourceStager) loadUnderlyingDatasetToCache(ctxt co
 	}
 
 	// PARSE JSON-LD DATASET, IF NOT ALREADY NOT ALREADY PARSED
-	repoDatasetKey := makeJSONLDParsedDocMapKey(stager.repoName, srl.DatasetPath)
+	grappDatasetKey := makeJSONLDParsedDocMapKey(stager.grappName, srl.DatasetPath)
 
 	// POPULATE MAP OF PARSED JSON-LD DOCUMENTS IDENTIFIED BY KEY
-	//	if _, found := stager.jsonLDParsedDocMap[repoDatasetKey]; !found {
+	//	if _, found := stager.jsonLDParsedDocMap[grappDatasetKey]; !found {
 	var parsedJSONDoc map[string]interface{}
 
 	if parsedJSONDoc, err = parseJSONFile(fds.operatingSystemPath); err != nil {
@@ -314,9 +314,9 @@ func (stager *FileRepositoryResourceStager) loadUnderlyingDatasetToCache(ctxt co
 	}
 
 	//fmt.Println("parseJSONDoc", parsedJSONDoc, fds.operatingSystemPath)
-	//fmt.Println("repoDatasetKey", repoDatasetKey)
+	//fmt.Println("grappDatasetKey", grappDatasetKey)
 	// POPULATE PARSED JSON-LD DOC MAP
-	stager.jsonLDParsedDocMap[repoDatasetKey] = parsedJSONDoc
+	stager.jsonLDParsedDocMap[grappDatasetKey] = parsedJSONDoc
 
 	//	}
 
@@ -325,10 +325,10 @@ func (stager *FileRepositoryResourceStager) loadUnderlyingDatasetToCache(ctxt co
 }
 
 // makeJSONLDParsedDocMapKey produces a a unique key using
-// repoName and datasetName as input
-func makeJSONLDParsedDocMapKey(repoName string, datasetName string) string {
+// grappName and datasetName as input
+func makeJSONLDParsedDocMapKey(grappName string, datasetName string) string {
 
-	return fmt.Sprintf("%s:%s", repoName, datasetName)
+	return fmt.Sprintf("%s:%s", grappName, datasetName)
 }
 
 // parseJSONFile parses json-ld document specified by path.
@@ -357,7 +357,7 @@ func parseJSONFile(path string) (map[string]interface{}, error) {
 }
 
 // stageResource stages a resoource location into a file based index
-func (stager *FileRepositoryResourceStager) stageResource(ctxt context.Context, srl rescom.StagingResourceLocation) error {
+func (stager *FileGrapplicationResourceStager) stageResource(ctxt context.Context, srl rescom.StagingResourceLocation) error {
 
 	var jsonLDDoc map[string]interface{}
 	var ok bool
@@ -368,7 +368,7 @@ func (stager *FileRepositoryResourceStager) stageResource(ctxt context.Context, 
 		return err
 	}
 
-	mapKey := makeJSONLDParsedDocMapKey(stager.repoName, srl.DatasetPath)
+	mapKey := makeJSONLDParsedDocMapKey(stager.grappName, srl.DatasetPath)
 
 	// GET PARSED DATASET FROM MAP
 	if jsonLDDoc, ok = stager.jsonLDParsedDocMap[mapKey]; !ok {

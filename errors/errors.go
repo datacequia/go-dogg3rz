@@ -34,7 +34,7 @@ const (
 	InitNodeError
 	TryAgain
 	ConfigError
-	RepoError
+	GrappError
 	UnexpectedValue
 	AssertionError
 	UnhandledValue
@@ -85,8 +85,8 @@ func errorTypeToString(errType ErrorType) string {
 		return "TryAgain"
 	case ConfigError:
 		return "ConfigError"
-	case RepoError:
-		return "RepoError"
+	case GrappError:
+		return "GrappError"
 	case UnexpectedValue:
 		return "UnexpectedValue"
 	case AssertionError:

@@ -24,9 +24,9 @@ import (
 
 // STAGE  DEFAULT-GRAPH | GRAPH IRI | NODE IRI
 type dgrzStageCmd struct {
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
-	All     dgrzStageAllCmd     `command:"all" description:"stage all resources in a repository"`
+	All     dgrzStageAllCmd     `command:"all" description:"stage all resources in a grapplication"`
 	Dataset dgrzStageDatasetCmd `command:"dataset" alias:"ds" description:"stage objects in a dataset"`
 }
 
@@ -72,14 +72,14 @@ func init() {
 // EXECUTE ENTRYPOINTS
 /////////////////////////////////////
 
-// commaand entrypoint for staging either all 1) all datasets in a repository
+// commaand entrypoint for staging either all 1) all datasets in a grapplication
 // or 2) stage all resources in a dataset
 func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
 	ctxt, cancelFunc := context.WithCancel(getCmdContext())
 	defer cancelFunc()
 
-	stager, err := resource.GetRepositoryResourceStager(ctxt, stageCmd.Repository)
+	stager, err := resource.GetGrapplicationResourceStager(ctxt, stageCmd.Grapplication)
 	if err != nil {
 		return err
 	}
@@ -109,11 +109,11 @@ func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
 	switch cmd {
 	case &stageCmd.All:
-		// STAGE ALL DATASETS IN A REPOSITORY
+		// STAGE ALL DATASETS IN A GRAPPLICATION
 
-		repo := resource.GetRepositoryResource(ctxt)
+		grapp := resource.GetGrapplicationResource(ctxt)
 
-		datasets, err := repo.GetDataSets(ctxt, stageCmd.Repository)
+		datasets, err := grapp.GetDataSets(ctxt, stageCmd.Grapplication)
 		if err != nil {
 			return err
 		}
@@ -130,7 +130,7 @@ func (cmd *dgrzStageAllCmd) Execute(args []string) error {
 
 	case &stageCmd.Dataset.All:
 
-		// STAGE A SPECIFIC DATASET WITHIN A REPOSITORY
+		// STAGE A SPECIFIC DATASET WITHIN A GRAPPLICATION
 
 		if err := stageDataset(ctxt, stageCmd.Dataset.Positional.DatasetPath); err != nil {
 			return err
@@ -221,7 +221,7 @@ func (c *dgrzStageNode) Execute(args []string) error {
 
 func stageResourceLocation(ctxt context.Context, srl rescom.StagingResourceLocation) error {
 
-	stager, err := resource.GetRepositoryResourceStager(ctxt, stageCmd.Repository)
+	stager, err := resource.GetGrapplicationResourceStager(ctxt, stageCmd.Grapplication)
 	if err != nil {
 		return err
 	}
@@ -247,9 +247,9 @@ func (o *dgrzStageCmd) CommandName() string {
 }
 
 func (o *dgrzStageCmd) ShortDescription() string {
-	return "stage a repository resource"
+	return "stage a grapplication resource"
 }
 
 func (o *dgrzStageCmd) LongDescription() string {
-	return "stage a new JSON-LD repository resource from your workspace"
+	return "stage a new JSON-LD grapplication resource from your workspace"
 }

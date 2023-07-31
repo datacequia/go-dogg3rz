@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"bytes"
@@ -39,16 +39,16 @@ const (
 
 	channelWriteTimeoutSeconds = 5
 
-//	HeaderSignature    = [4]byte{'R', 'E', 'S', 'C'}
+// HeaderSignature    = [4]byte{'R', 'E', 'S', 'C'}
 )
 
-type fileRepositoryIndex struct {
+type fileGrapplicationIndex struct {
 
-	// O/S PATH TO BASE REPOSITORY
+	// O/S PATH TO BASE GRAPPLICATION
 	// DIRECTORY
-	repoDir string
-	// THE REPOSITORY NAME
-	repoName string
+	grappDir string
+	// THE GRAPPLICATION NAME
+	grappName string
 	// THE O/S PATH TO THE INDEX FILE
 	path string
 
@@ -70,8 +70,8 @@ type indexEntryInternal struct {
 	objectCID         []byte
 }
 
-type fileRepositoryIndexWorker struct {
-	index fileRepositoryIndex
+type fileGrapplicationIndexWorker struct {
+	index fileGrapplicationIndex
 
 	// CACHED ENTRIES
 	indexCache []common.StagingResource
@@ -155,19 +155,19 @@ CHECKSUM
                          CHECKSUM
 */
 
-func newFileRepositoryIndex(ctxt context.Context, repoName string) (*fileRepositoryIndex, error) {
+func newFileGrapplicationIndex(ctxt context.Context, grappName string) (*fileGrapplicationIndex, error) {
 
-	index := fileRepositoryIndex{}
+	index := fileGrapplicationIndex{}
 
-	index.repoName = repoName
+	index.grappName = grappName
 
-	index.repoDir = filepath.Join(file.RepositoriesDirPath(ctxt), repoName)
+	index.grappDir = filepath.Join(file.GrapplicationDirPath(ctxt), grappName)
 
-	index.path = file.IndexFilePath(ctxt, repoName)
+	index.path = file.IndexFilePath(ctxt, grappName)
 
-	if !file.DirExists(index.repoDir) {
-		return nil, errors.NotFound.Newf("repository directory at %s does not exist",
-			index.repoDir)
+	if !file.DirExists(index.grappDir) {
+		return nil, errors.NotFound.Newf("grapplication directory at %s does not exist",
+			index.grappDir)
 	}
 
 	// CREATE REQUEST CHANNEL
@@ -175,7 +175,7 @@ func newFileRepositoryIndex(ctxt context.Context, repoName string) (*fileReposit
 
 	//  CREATE INDEX WORKER AND SPAWN IT
 
-	worker, err := newFileRepositoryIndexWorker(index)
+	worker, err := newFileGrapplicationIndexWorker(index)
 	if err != nil {
 		return nil, err
 
@@ -188,11 +188,12 @@ func newFileRepositoryIndex(ctxt context.Context, repoName string) (*fileReposit
 }
 
 // close closes the request channel, which releases resources allocated
-// by fileRepositoryIndex
+// by fileGrapplicationIndex
 //
 // HINT: You probably want to call  defer <index object>close()
-//       after calling newFileRepositoryIndex()
-func (index *fileRepositoryIndex) close() {
+//
+//	after calling newFileGrapplicationIndex()
+func (index *fileGrapplicationIndex) close() {
 	// CLOSE THE REQUEST CHANNEL. THIS WILL RELEASE THE WORKER
 	close(index.requestChannel)
 	// RESET requestChannel to nil to indicate it's cloosed
@@ -206,7 +207,7 @@ func (index *fileRepositoryIndex) close() {
 // parameter to return true when invoked.
 // The msgIndexResponse channel will  return a single response upon read by the caller
 // which delivers the final outcome of this call.
-func (index *fileRepositoryIndex) scan(filterFunc func(common.StagingResource) bool) (*msgIndexResultSetRequest, error) {
+func (index *fileGrapplicationIndex) scan(filterFunc func(common.StagingResource) bool) (*msgIndexResultSetRequest, error) {
 
 	if index.requestChannel == nil {
 		return nil, errors.ChannelClosed.New("request channel closed")
@@ -236,7 +237,7 @@ func (index *fileRepositoryIndex) scan(filterFunc func(common.StagingResource) b
 // Note: A subsequent call to either commit or rollback must occur so that changes
 // will take effect or be undone. Failure to call either will result in
 // index file being locked indefinitely
-func (index *fileRepositoryIndex) stage(resource common.StagingResource) error {
+func (index *fileGrapplicationIndex) stage(resource common.StagingResource) error {
 
 	if index.requestChannel == nil {
 		return errors.ChannelClosed.New("request channel closed")
@@ -277,7 +278,7 @@ func (index *fileRepositoryIndex) stage(resource common.StagingResource) error {
 // Note: A subsequent call to either commit or rollback MUST occur so that changes
 // will take effect or be undone. Failure to call either will result in
 // unreleased resources.
-func (index *fileRepositoryIndex) remove(resource common.StagingResource) (*msgIndexResultSetRequest, error) {
+func (index *fileGrapplicationIndex) remove(resource common.StagingResource) (*msgIndexResultSetRequest, error) {
 
 	if index.requestChannel == nil {
 		return nil, errors.ChannelClosed.New("request channel closed")
@@ -305,7 +306,7 @@ func (index *fileRepositoryIndex) remove(resource common.StagingResource) (*msgI
 // read by caller to retrieve a single
 // value of type msgIndexResponse that provides the success or failure status of
 // this call.
-func (index *fileRepositoryIndex) commit() error {
+func (index *fileGrapplicationIndex) commit() error {
 
 	if index.requestChannel == nil {
 		return errors.ChannelClosed.New("request channel closed")
@@ -339,7 +340,7 @@ func (index *fileRepositoryIndex) commit() error {
 // Returns a channel that is subsequently read by caller to retrieve a single
 // value of type msgIndexResponse that determines the success or failure status of
 // this call.
-func (index *fileRepositoryIndex) rollback() error {
+func (index *fileGrapplicationIndex) rollback() error {
 
 	if index.requestChannel == nil {
 		return errors.ChannelClosed.New("request channel closed")
@@ -454,7 +455,7 @@ func writeIndexEntriesInternalToBuffer(buf *bytes.Buffer, indexEntries []indexEn
 
 }
 
-func (index *fileRepositoryIndex) readIndexFile() ([]common.StagingResource, os.FileInfo, error) {
+func (index *fileGrapplicationIndex) readIndexFile() ([]common.StagingResource, os.FileInfo, error) {
 
 	var indexEntriesInternal []indexEntryInternal = []indexEntryInternal{}
 	var indexEntries []common.StagingResource = []common.StagingResource{}
@@ -477,7 +478,7 @@ func (index *fileRepositoryIndex) readIndexFile() ([]common.StagingResource, os.
 
 }
 
-func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal, os.FileInfo, error) {
+func (index *fileGrapplicationIndex) readIndexFileInternal() ([]indexEntryInternal, os.FileInfo, error) {
 
 	indexEntries := []indexEntryInternal{}
 
@@ -666,9 +667,9 @@ func (index *fileRepositoryIndex) readIndexFileInternal() ([]indexEntryInternal,
 
 }
 
-func (index *fileRepositoryIndex) String() string {
-	return fmt.Sprintf("fileRepositoryIndex { path: %s, repoDir: %s, repoName: %s, requestChannel: %T at %v }",
-		index.path, index.repoDir, index.repoName, index.requestChannel, index.requestChannel)
+func (index *fileGrapplicationIndex) String() string {
+	return fmt.Sprintf("fileGrapplicationIndex { path: %s, grappDir: %s, grappName: %s, requestChannel: %T at %v }",
+		index.path, index.grappDir, index.grappName, index.requestChannel, index.requestChannel)
 }
 
 func ValidateIndexEntry(e common.StagingResource) (indexEntryInternal, error) {
@@ -676,14 +677,14 @@ func ValidateIndexEntry(e common.StagingResource) (indexEntryInternal, error) {
 	var internal indexEntryInternal
 
 	// VALIDATE DATASET PATH
-	var rp *common.RepositoryPath
+	var rp *common.GrapplicationPath
 	var err error
 
 	if err = e.AssertValid(); err != nil {
 		return internal, err
 	}
 
-	if rp, err = common.RepositoryPathNew(e.DatasetPath); err != nil {
+	if rp, err = common.GrapplicationPathNew(e.DatasetPath); err != nil {
 		return internal, err
 	}
 
@@ -793,13 +794,13 @@ func (i indexEntryInternal) String() string {
 }
 
 ///////////////////////////////////////////////
-// fileRepositoryIndexWorker functions
+// fileGrapplicationIndexWorker functions
 //////////////////////////////////////////////
 
-// newFileRepositoryIndexWorker creates a new instance
-func newFileRepositoryIndexWorker(index fileRepositoryIndex) (*fileRepositoryIndexWorker, error) {
+// newFileGrapplicationIndexWorker creates a new instance
+func newFileGrapplicationIndexWorker(index fileGrapplicationIndex) (*fileGrapplicationIndexWorker, error) {
 
-	worker := fileRepositoryIndexWorker{}
+	worker := fileGrapplicationIndexWorker{}
 
 	worker.index = index
 
@@ -810,7 +811,7 @@ func newFileRepositoryIndexWorker(index fileRepositoryIndex) (*fileRepositoryInd
 
 }
 
-func (worker *fileRepositoryIndexWorker) run(ctxt context.Context) {
+func (worker *fileGrapplicationIndexWorker) run(ctxt context.Context) {
 
 	for ok := worker.handleRequest(ctxt); ok; ok = worker.handleRequest(ctxt) {
 
@@ -820,7 +821,7 @@ func (worker *fileRepositoryIndexWorker) run(ctxt context.Context) {
 
 // run is the entry point for the worker. This should be invoke by go keyword
 // so that it's run in its own execution context
-func (worker *fileRepositoryIndexWorker) handleRequest(ctxt context.Context) bool {
+func (worker *fileGrapplicationIndexWorker) handleRequest(ctxt context.Context) bool {
 
 	//var ok bool
 
@@ -1020,10 +1021,10 @@ func (worker *fileRepositoryIndexWorker) handleRequest(ctxt context.Context) boo
 }
 
 // String implements the fmt.Stringer interface to represent
-// fileRepositoryIndexWorker  as a string
-func (worker *fileRepositoryIndexWorker) String() string {
+// fileGrapplicationIndexWorker  as a string
+func (worker *fileGrapplicationIndexWorker) String() string {
 	return fmt.Sprintf(
-		"fileRepositoryIndexWorker { index: %v, indexCacheLastUpdated: %s, "+
+		"fileGrapplicationIndexWorker { index: %v, indexCacheLastUpdated: %s, "+
 			"len(worker.indexCache): %d, modCount: %d }", worker.index,
 		worker.indexCacheLastUpdated,
 		len(worker.indexCache), worker.modCount)
@@ -1031,7 +1032,7 @@ func (worker *fileRepositoryIndexWorker) String() string {
 }
 
 // handleIndexScanRequest processes a msgIndexScanRequest message
-func (worker *fileRepositoryIndexWorker) handleIndexScanRequest(ctxt context.Context, request msgIndexScanRequest) {
+func (worker *fileGrapplicationIndexWorker) handleIndexScanRequest(ctxt context.Context, request msgIndexScanRequest) {
 
 	// ONLY UPDATE CACHE IF IT HAS NOT BEEN MODIFIED AND UNDERLYING INDEX FILE
 	// HAS CHANGED SINCE LAST CACHE REFRESH
@@ -1087,12 +1088,12 @@ func (worker *fileRepositoryIndexWorker) handleIndexScanRequest(ctxt context.Con
 
 }
 
-func (worker *fileRepositoryIndexWorker) hasDirtyCache() bool {
+func (worker *fileGrapplicationIndexWorker) hasDirtyCache() bool {
 	return worker.modCount > 0
 
 }
 
-func (worker *fileRepositoryIndexWorker) handleIndexStageRequest(ctxt context.Context, request msgIndexStageRequest) {
+func (worker *fileGrapplicationIndexWorker) handleIndexStageRequest(ctxt context.Context, request msgIndexStageRequest) {
 
 	// VALIDATE REQUEST VALUE
 	if _, err := ValidateIndexEntry(request.value); err != nil {
@@ -1153,7 +1154,7 @@ func (worker *fileRepositoryIndexWorker) handleIndexStageRequest(ctxt context.Co
 
 }
 
-func (worker *fileRepositoryIndexWorker) handleIndexRemoveRequest(ctxt context.Context, request msgIndexRemoveRequest) {
+func (worker *fileGrapplicationIndexWorker) handleIndexRemoveRequest(ctxt context.Context, request msgIndexRemoveRequest) {
 	// ONLY UPDATE CACHE IF IT HAS NOT BEEN MODIFIED AND UNDERLYING INDEX FILE
 	// HAS CHANGED SINCE LAST CACHE REFRESH
 	if !worker.hasDirtyCache() {
@@ -1234,7 +1235,7 @@ func (worker *fileRepositoryIndexWorker) handleIndexRemoveRequest(ctxt context.C
 
 // getChildContainers retrieves a list of child container resources of  sr
 // within the index (cache)
-func (worker *fileRepositoryIndexWorker) getChildrenContainers(sr common.StagingResource) []common.StagingResource {
+func (worker *fileGrapplicationIndexWorker) getChildrenContainers(sr common.StagingResource) []common.StagingResource {
 
 	childContainers := make([]common.StagingResource, 0)
 
@@ -1258,7 +1259,7 @@ func (worker *fileRepositoryIndexWorker) getChildrenContainers(sr common.Staging
 
 }
 
-func (worker *fileRepositoryIndexWorker) handleIndexRollbackRequest(ctxt context.Context, request msgIndexRollbackRequest) {
+func (worker *fileGrapplicationIndexWorker) handleIndexRollbackRequest(ctxt context.Context, request msgIndexRollbackRequest) {
 
 	response := msgIndexResponse{}
 	response.request = request
@@ -1280,7 +1281,7 @@ func (worker *fileRepositoryIndexWorker) handleIndexRollbackRequest(ctxt context
 
 // updateIndexCacheIfInvalidated updates the local memory index cache of the
 // receiver if the associated index file has changed since last cache refresh
-func (worker *fileRepositoryIndexWorker) updateIndexCacheIfInvalidated() error {
+func (worker *fileGrapplicationIndexWorker) updateIndexCacheIfInvalidated() error {
 
 	// CHECK IF INDEX FILE HAS BEEN UPDATED SINCE
 	// LAST TIME CACHE WAS LOADED

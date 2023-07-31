@@ -14,7 +14,7 @@
 package cmd
 
 type dgrzAlterCmd struct {
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Context dgrzAlterContext `command:"context" alias:"ctxt" description:"alter a JSON-LD object's context"`
 }

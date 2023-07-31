@@ -15,18 +15,14 @@ package cmd
 
 import (
 	"fmt"
-	//config "github.com/ipfs/go-ipfs-config"
-	//fsrepo "github.com/ipfs/go-ipfs/repo/fsrepo"
-	//	"os"
 
 	"github.com/datacequia/go-dogg3rz/resource"
 	"github.com/datacequia/go-dogg3rz/resource/config"
-	//"github.com/datacequia/go-dogg3rz/util"
 )
 
 type dgrzInitCmd struct {
-	Node dgrzInitNode `command:"node" description:"initialize this host as a dogg3rz node" `
-	Repo dgrzInitRepo `command:"repository" alias:"repo" description:"initialize a new repository" `
+	Node  dgrzInitNode  `command:"node" description:"initialize this host as a dogg3rz node" `
+	Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
 }
 
 type dgrzInitNode struct {
@@ -36,9 +32,9 @@ type dgrzInitNode struct {
 	IPFSApiEndpoint string `long:"ipfs-api-endpoint" description:"the http(s) url your IPFS node's api endpoint listener" default:"http://localhost:5001/"`
 }
 
-type dgrzInitRepo struct {
+type dgrzInitGrapp struct {
 	Positional struct {
-		RepoName string `positional-arg-name:"REPO_NAME" required:"yes" `
+		GrappName string `positional-arg-name:"GRAPP_NAME" required:"yes" `
 	} `positional-args:"yes"`
 }
 
@@ -62,18 +58,18 @@ func (x *dgrzInitNode) Execute(args []string) error {
 
 }
 
-func (x *dgrzInitRepo) Execute(args []string) error {
+func (x *dgrzInitGrapp) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 
-	return resource.GetRepositoryResource(ctxt).InitRepo(ctxt, x.Positional.RepoName)
+	return resource.GetGrapplicationResource(ctxt).InitGrapp(ctxt, x.Positional.GrappName)
 
 }
 
 // // IMPLEMENTS 'Commander' interface
 func (x *dgrzInitCmd) Execute(args []string) error {
 
-	fmt.Printf("Repo path is '%s'\n", "d")
+	fmt.Printf("Grapp path is '%s'\n", "d")
 
 	return nil
 }
@@ -83,9 +79,9 @@ func (o *dgrzInitCmd) CommandName() string {
 }
 
 func (o *dgrzInitCmd) ShortDescription() string {
-	return "initialize a new repository"
+	return "initialize a new grapplication"
 }
 
 func (o *dgrzInitCmd) LongDescription() string {
-	return "initialize a new repository"
+	return "initialize a new grapplication"
 }

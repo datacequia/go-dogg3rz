@@ -14,21 +14,20 @@
 package cmd
 
 import (
-
+	"fmt"
+	"io"
 	"strings"
-   "io"
-   "fmt"
 
 	"github.com/datacequia/go-dogg3rz/errors"
 )
 
-// PARSE REPO / SCHEMA PATH IN  REPO:SCHEMA_PATH FORMAT
-func parseRepoSchemaPath(repoSchemaPath string) (string, string, error) {
+// PARSE GRAPP / SCHEMA PATH IN  GRAPP:SCHEMA_PATH FORMAT
+func parseGrappSchemaPath(grappSchemaPath string) (string, string, error) {
 
-	elements := strings.SplitN(repoSchemaPath, ":", 2)
+	elements := strings.SplitN(grappSchemaPath, ":", 2)
 	if len(elements) != 2 {
-		return "", "", errors.UnexpectedValue.Newf("found '%s': want format REPO:SCHEMA_PATH",
-			repoSchemaPath)
+		return "", "", errors.UnexpectedValue.Newf("found '%s': want format GRAPP:SCHEMA_PATH",
+			grappSchemaPath)
 
 	}
 
@@ -36,9 +35,9 @@ func parseRepoSchemaPath(repoSchemaPath string) (string, string, error) {
 
 }
 
-func parseRepoAndPathMaybe(repoAndPath string) (string, string, error) {
+func parseGrappAndPathMaybe(grappAndPath string) (string, string, error) {
 
-	elements := strings.SplitN(repoAndPath, ":", 2)
+	elements := strings.SplitN(grappAndPath, ":", 2)
 	switch len(elements) {
 	case 1:
 		return elements[0], "", nil
@@ -46,17 +45,15 @@ func parseRepoAndPathMaybe(repoAndPath string) (string, string, error) {
 		return elements[0], elements[1], nil
 	}
 
-	return "", "", errors.UnexpectedValue.Newf("found '%s': want format REPO[:PATH]",
-		repoAndPath)
+	return "", "", errors.UnexpectedValue.Newf("found '%s': want format GRAPP[:PATH]",
+		grappAndPath)
 
 }
 
-
-func printValues(values []string, ignoreValue string , out io.Writer){
+func printValues(values []string, ignoreValue string, out io.Writer) {
 
 	for _, v := range values {
 		fmt.Fprintln(out, v)
 
 	}
 }
-

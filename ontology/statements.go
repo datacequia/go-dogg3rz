@@ -39,10 +39,18 @@ type RDFSClass struct {
 	SubClassOf *ResourceIdentifier `json:"rdfs:subClassOf,omitempty"`
 }
 
+type Head struct {
+	Latest ResourceIdentifier `json:"latest"`
+}
+
 type Snapshot struct {
+	Image     GrapplicationImage `json:"image"`
+	Signature string             `json:"signature"`
 }
 
 type GrapplicationImage struct {
+	Data     DataFile              `json:"data"`
+	Metadata GrapplicationMetadata `json:"metadata"`
 }
 
 type GrapplicationRuntimeImage struct {
@@ -71,7 +79,8 @@ var context = Object{
 }
 
 var graph = []any{
-
+	headClassDecl(),
+	latestPropertyDecl(),
 	snapshotClassDecl(),
 	imagePropertyDecl(),
 	signaturePropertyDecl(),
@@ -140,6 +149,55 @@ func applicationRuntimeFile() *RDFSClass {
 // ////////////////////////////////////////////////////////////////////////
 // RDFS Datatype Subclasses used by this ontology
 // ////////////////////////////////////////////////////////////////////////
+
+// ////////////////////////////////////////////////////////////////////////
+// Head Class Declaration and its Properties
+// ////////////////////////////////////////////////////////////////////////
+func headClassDecl() *RDFSClass {
+
+	c := RDFSClass{
+		RDFSResource: RDFSResource{
+			ResourceIdentifier: ResourceIdentifier{
+				Id: reflect.TypeOf(Head{}).Name(),
+			},
+			Type:        "rdfs:Class",
+			Comment:     "Points to the latest snapshot in a Grapplication branch",
+			IsDefinedBy: "",
+			Label:       "",
+			Member:      reflect.TypeOf(Head{}).Name(),
+			SeeAlso:     "",
+		},
+		//SubClassOf: &ResourceIdentifier{},
+	}
+	c.SubClassOf = resourceId("rdfs:Resource") // allow other properties with rdfs:Class domain to be assigned to this class
+
+	return &c
+
+}
+
+func latestPropertyDecl() *RDFProperty {
+
+	p := &RDFProperty{
+		RDFSResource: RDFSResource{
+			ResourceIdentifier: ResourceIdentifier{
+				Id: "latest",
+			},
+			Type:        "rdfs:Property",
+			Comment:     "Grapplication image object",
+			IsDefinedBy: "",
+			Label:       "latest",
+			Member:      "",
+			//SeeAlso:     "https://parquet.apache.org/",
+		},
+		//SubPropertyOf: resourceId(""),
+		Domain: reflect.TypeOf(Head{}).Name(),
+		Range:  reflect.TypeOf(Snapshot{}).Name(),
+	}
+
+	//p.SubPropertyOf = resourceId("rdfs:Property")
+
+	return p
+}
 
 // ////////////////////////////////////////////////////////////////////////
 // Snapshot Class Declaration and its Properties

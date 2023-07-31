@@ -11,34 +11,25 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
-/*
 import (
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
+	"context"
+	"fmt"
 )
 
-type fileRepositoryIndexCache struct {
-	repo    FileRepositoryIndex
-	entries []indexEntry
-}
-
-type indexEntry struct {
-	resourceId rescom.RepositoryResourceId
-}
-
-// CREATE NEW INSTANCE OF CACHE
-func newFileRepositoryIndexCache(repo FileRepositoryIndex) *fileRepositoryIndexCache {
-
-	return &fileRepositoryIndexCache{
-		repo:    repo,
-		entries: []indexEntry{},
+func (grapp *FileGrapplicationResource) CreateNamedGraph(ctxt context.Context, grappName string, datasetPath string, graphName string,
+	parentGraphName string) error {
+	var fds *fileDataset
+	var err error
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
+		return err
 	}
 
-}
+	if err = fds.createNamedGraph(ctxt, graphName, parentGraphName); err != nil {
+		fmt.Println(err)
+		return err
 
-func (cache *fileRepositoryIndexCache) Read(p []byte) (n int, err error) {
-
-	return 0, nil
+	}
+	return nil
 }
-*/

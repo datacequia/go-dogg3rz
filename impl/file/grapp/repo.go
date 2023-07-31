@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"context"
@@ -25,23 +25,23 @@ import (
 
 const indexFileName = "index"
 
-type FileRepositoryResource struct {
+type FileGrapplicationResource struct {
 }
 
-func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) error {
+func (grapp *FileGrapplicationResource) InitGrapp(ctxt context.Context, name string) error {
 
-	repoDir := path.Join(file.RepositoriesDirPath(ctxt), name)
+	grappDir := path.Join(file.GrapplicationsDirPath(ctxt), name)
 
 	// CREATE DEFAULT BRANCH DIR
-	mainBranchDir := path.Join(repoDir, file.MasterBranchName)
+	mainBranchDir := path.Join(grappDir, file.MasterBranchName)
 
 	// CREATE 'refs/heads' SUBDIR
-	// CREATE '.dgrz' DIR AS SUBDI OF BASE REPO DIR
-	dgrzDir := path.Join(repoDir, file.DgrzDirName)
+	// CREATE '.dgrz' DIR AS SUBDI OF BASE GRAPP DIR
+	dgrzDir := path.Join(grappDir, file.DgrzDirName)
 	refsDir := path.Join(dgrzDir, file.RefsDirName)
 	headsDir := path.Join(refsDir, file.HeadsDirName)
 
-	dirsList := []string{repoDir, mainBranchDir, dgrzDir, refsDir, headsDir}
+	dirsList := []string{grappDir, mainBranchDir, dgrzDir, refsDir, headsDir}
 
 	for _, d := range dirsList {
 
@@ -49,8 +49,8 @@ func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) 
 
 		if err != nil {
 			if os.IsNotExist(err) {
-				// BASE REPO DIR DOES NOT EXIST
-				return dgrzerr.NotFound.Wrapf(err, file.RepositoriesDirPath(ctxt))
+				// BASE GRAPP DIR DOES NOT EXIST
+				return dgrzerr.NotFound.Wrapf(err, file.GrapplicationsDirPath(ctxt))
 			}
 			if os.IsExist(err) {
 
@@ -72,20 +72,20 @@ func (repo *FileRepositoryResource) InitRepo(ctxt context.Context, name string) 
 
 }
 
-func (repo *FileRepositoryResource) CreateSnapshot(ctxt context.Context, repoName string) error {
+func (grapp *FileGrapplicationResource) CreateSnapshot(ctxt context.Context, grappName string) error {
 
 	ss := &fileCreateSnapshot{}
 
-	return ss.createSnapshot(ctxt, repoName)
+	return ss.createSnapshot(ctxt, grappName)
 
 }
 
-func (repo *FileRepositoryResource) CreateDataset(ctxt context.Context, repoName string, datasetPath string) error {
+func (grapp *FileGrapplicationResource) CreateDataset(ctxt context.Context, grappName string, datasetPath string) error {
 
 	var fds *fileDataset
 	var err error
 
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 
@@ -96,34 +96,34 @@ func (repo *FileRepositoryResource) CreateDataset(ctxt context.Context, repoName
 	return nil
 }
 
-func (repo *FileRepositoryResource) AddNamespaceDataset(ctxt context.Context, repoName string, datasetPath string, term string, iri string) error {
+func (grapp *FileGrapplicationResource) AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error {
 
-	if err := addNamespaceDataset(ctxt, repoName, datasetPath, term, iri); err != nil {
+	if err := addNamespaceDataset(ctxt, grappName, datasetPath, term, iri); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (repo *FileRepositoryResource) AddNamespaceNode(ctxt context.Context, repoName string, datasetPath string, nodeID string, term string, iri string) error {
+func (grapp *FileGrapplicationResource) AddNamespaceNode(ctxt context.Context, grappName string, datasetPath string, nodeID string, term string, iri string) error {
 
 	o := &addNamespaceNode{}
 
-	if err := o.execute(ctxt, repoName, datasetPath, nodeID, term, iri); err != nil {
+	if err := o.execute(ctxt, grappName, datasetPath, nodeID, term, iri); err != nil {
 		return err
 	}
 
 	return nil
 }
 
-func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName string) ([]string, error) {
+func (grapp *FileGrapplicationResource) GetDataSets(ctxt context.Context, grappName string) ([]string, error) {
 
-	repoDir := path.Join(file.RepositoriesDirPath(ctxt), repoName)
+	grappDir := path.Join(file.GrapplicationsDirPath(ctxt), grappName)
 	var files []string
 	var err error
 
-	if file.DirExists(repoDir) {
-		files, err = file.GetDirs(repoDir)
+	if file.DirExists(grappDir) {
+		files, err = file.GetDirs(grappDir)
 	}
 
 	// Ignore any dogg3rz internal dirs and files.
@@ -138,8 +138,8 @@ func (repo *FileRepositoryResource) GetDataSets(ctxt context.Context, repoName s
 	return files, err
 }
 
-func (repo *FileRepositoryResource) Add(ctxt context.Context, repoName string, path string) error {
+func (grapp *FileGrapplicationResource) Add(ctxt context.Context, grappName string, path string) error {
 
-	return add(ctxt, repoName, path)
+	return add(ctxt, grappName, path)
 
 }

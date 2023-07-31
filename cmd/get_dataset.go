@@ -15,17 +15,15 @@ package cmd
 
 import (
 	"github.com/datacequia/go-dogg3rz/impl/file"
-	//"github.com/datacequia/go-dogg3rz/impl/file/repo"
+
+	"os"
+
 	"github.com/datacequia/go-dogg3rz/resource"
-  "os"
 )
 
-// Command to get list of dataset in a repo
+// Command to get list of dataset in a grapp
 type dgrzGetDatasetCmd struct {
-
-	Repository string `long:"repo" short:"r"  env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
-
-
+	Grapplication string `long:"grapp" short:"r"  env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 }
 
 /*
@@ -35,33 +33,29 @@ func init() {
 }
 */
 
-
 func (x *dgrzGetDatasetCmd) Execute(args []string) error {
 
-
 	ctxt := getCmdContext()
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 	var files []string
 	var err error
-	files, err = repo.GetDataSets(ctxt, x.Repository)
+	files, err = grapp.GetDataSets(ctxt, x.Grapplication)
 	if err != nil {
-     return err
-    }
-    printValues(files, file.DgrzDirName, os.Stdout)
+		return err
+	}
+	printValues(files, file.DgrzDirName, os.Stdout)
 	return err
 
 }
-
-
 
 func (x *dgrzGetDatasetCmd) CommandName() string {
 	return "get dataset"
 }
 
 func (x *dgrzGetDatasetCmd) ShortDescription() string {
-	return "get listing of datasets in a repository"
+	return "get listing of datasets in a grapplication"
 }
 
 func (x *dgrzGetDatasetCmd) LongDescription() string {
-	return "get listing of datasets in a repository"
+	return "get listing of datasets in a grapplication"
 }

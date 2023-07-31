@@ -28,7 +28,7 @@ type resId struct {
 	subPath         string
 }
 
-func UnixStylePathToResourceId(path string) (rescom.RepositoryResourceId, error) {
+func UnixStylePathToResourceId(path string) (rescom.GrapplicationResourceId, error) {
 
 	pathElements := strings.SplitN(path, "/", 5)
 

@@ -14,18 +14,18 @@
 package cmd
 
 type dgrzInsertCmd struct {
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//	DirPath      string                 `long:"dirpath" description:"directory path" required:"true"`
 	/*
 		Dataset   dgrzCreateDataset   `command:"dataset" alias:"ds" description:"create a new dataset" `
-		Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a repository directory" `
+		Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a grapplication directory" `
 
-		Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the repository"`
+		Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the grapplication"`
 
 		Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
 	*/
-	Node dgrzInsertNode `command:"node" description:"insert a JSON-LD Node into a repository dataset graph"`
+	Node dgrzInsertNode `command:"node" description:"insert a JSON-LD Node into a grapplication dataset graph"`
 }
 
 ///////////////////////////////////////////////////////////
@@ -44,9 +44,9 @@ func (o *dgrzInsertCmd) CommandName() string {
 }
 
 func (o *dgrzInsertCmd) ShortDescription() string {
-	return "insert a new data resource into a repository"
+	return "insert a new data resource into a grapplication"
 }
 
 func (o *dgrzInsertCmd) LongDescription() string {
-	return "insert a new data resource into a repository"
+	return "insert a new data resource into a grapplication"
 }

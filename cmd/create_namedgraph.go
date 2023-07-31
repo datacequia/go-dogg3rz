@@ -11,9 +11,6 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-
-
-
 package cmd
 
 import (
@@ -22,18 +19,13 @@ import (
 )
 
 type dgrzCreateNamedGraph struct {
+	Positional struct {
+		GraphID string `positional-arg-name:"GRAPH_NAME" description:"the name/ID of the graph" required:"true"`
+	} `positional-args:"yes"`
 
-		Positional struct {
-			GraphID string `positional-arg-name:"GRAPH_NAME" description:"the name/ID of the graph" required:"true"`
-		} `positional-args:"yes"`
-
-		Dataset string `long:"dataset"   description:"Dataset path" required:"true" `
-		ParentGraphID string `long:"parent"  description:"Parent graph ID" required:"false" default:"default"`
-
-
-	}
-
-
+	Dataset       string `long:"dataset"   description:"Dataset path" required:"true" `
+	ParentGraphID string `long:"parent"  description:"Parent graph ID" required:"false" default:"default"`
+}
 
 ///////////////////////////////////////////////////////////
 // CREATE CLASS SUBCOMMAND FUNCTIONS
@@ -42,15 +34,14 @@ type dgrzCreateNamedGraph struct {
 func (x *dgrzCreateNamedGraph) Execute(args []string) error {
 
 	ctxt := getCmdContext()
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	err := repo.CreateNamedGraph(ctxt,
-		createCmd.Repository,
+	err := grapp.CreateNamedGraph(ctxt,
+		createCmd.Grapplication,
 		x.Dataset,
 		x.Positional.GraphID,
 		x.ParentGraphID,
 	)
-
 
 	return err
 }

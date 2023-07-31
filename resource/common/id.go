@@ -33,8 +33,9 @@ http format
 const RootPathElementName = "dgrz"
 
 // INTERFACE THAT IDENTIFIES A SPECIFIC
-//  USER CREATED REPOSITORY RESOURCE (PRIMITIVE)
-type RepositoryResourceId interface {
+//
+//	USER CREATED REPOSITORY RESOURCE (PRIMITIVE)
+type GrapplicationResourceId interface {
 	User() string            // THE USER CONTEXT. EMPTY STRIING IF NO USER CONTEXT
 	CommitMultiHash() string // THE COMMIT HASH FOR THE OBJECT. EMPTY STRING
 	// IF OBJECT NOT YET STAGED

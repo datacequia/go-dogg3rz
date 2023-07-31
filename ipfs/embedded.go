@@ -1,5 +1,7 @@
 //go:build ipfs_embed
+
 package ipfs
+
 // This source was copied from https://github.com/ipfs/kubo/blob/master/docs/examples/kubo-as-a-library/main.go
 
 import (
@@ -14,20 +16,20 @@ import (
 
 	config "github.com/ipfs/go-ipfs-config"
 	files "github.com/ipfs/go-ipfs-files"
-	libp2p "github.com/ipfs/kubo/core/node/libp2p"
 	icore "github.com/ipfs/interface-go-ipfs-core"
 	icorepath "github.com/ipfs/interface-go-ipfs-core/path"
+	libp2p "github.com/ipfs/kubo/core/node/libp2p"
 	peerstore "github.com/libp2p/go-libp2p/p2p/host/peerstore"
 	ma "github.com/multiformats/go-multiaddr"
 
 	"github.com/ipfs/kubo/core"
 	"github.com/ipfs/kubo/core/coreapi"
+	"github.com/ipfs/kubo/grapp/fsgrapp"
 	"github.com/ipfs/kubo/plugin/loader" // This package is needed so that all the preloaded plugins are loaded automatically
-	"github.com/ipfs/kubo/repo/fsrepo"
 	"github.com/libp2p/go-libp2p-core/peer"
 )
 
-/// ------ Setting up the IPFS Repo
+/// ------ Setting up the IPFS Grapp
 
 func setupPlugins(externalPluginsPath string) error {
 	// Load any external plugins if available on externalPluginsPath
@@ -48,8 +50,8 @@ func setupPlugins(externalPluginsPath string) error {
 	return nil
 }
 
-func createTempRepo(ctx context.Context) (string, error) {
-	repoPath, err := ioutil.TempDir("", "ipfs-shell")
+func createTempGrapp(ctx context.Context) (string, error) {
+	grappPath, err := ioutil.TempDir("", "ipfs-shell")
 	if err != nil {
 		return "", fmt.Errorf("failed to get temp dir: %s", err)
 	}
@@ -60,17 +62,17 @@ func createTempRepo(ctx context.Context) (string, error) {
 		return "", err
 	}
 
-	// Create the repo with the config
-	err = fsrepo.Init(repoPath, cfg)
+	// Create the grapp with the config
+	err = fsgrapp.Init(grappPath, cfg)
 	if err != nil {
 		return "", fmt.Errorf("failed to init ephemeral node: %s", err)
 	}
 
-	return repoPath, nil
+	return grappPath, nil
 }
 
-// Create ipfs repo at repoPath with default config options
-func CreateRepo(ctx context.Context,repoPath string) (string, error) {
+// Create ipfs grapp at grappPath with default config options
+func CreateGrapp(ctx context.Context, grappPath string) (string, error) {
 
 	// Create a config with default options and a 2048 bit key
 	cfg, err := config.Init(ioutil.Discard, 2048)
@@ -78,21 +80,21 @@ func CreateRepo(ctx context.Context,repoPath string) (string, error) {
 		return "", err
 	}
 
-	// Create the repo with the config
-	err = fsrepo.Init(repoPath, cfg)
+	// Create the grapp with the config
+	err = fsgrapp.Init(grappPath, cfg)
 	if err != nil {
 		return "", fmt.Errorf("failed to init ipfs node: %s", err)
 	}
 
-	return repoPath, nil
+	return grappPath, nil
 }
 
 /// ------ Spawning the node
 
 // Creates an IPFS node and returns its coreAPI
-func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
-	// Open the repo
-	repo, err := fsrepo.Open(repoPath)
+func createNode(ctx context.Context, grappPath string) (icore.CoreAPI, error) {
+	// Open the grapp
+	grapp, err := fsgrapp.Open(grappPath)
 	if err != nil {
 		return nil, err
 	}
@@ -103,7 +105,7 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 		Online:  true,
 		Routing: libp2p.DHTOption, // This option sets the node to be a full DHT node (both fetching and storing DHT Records)
 		// Routing: libp2p.DHTClientOption, // This option sets the node to be a client DHT node (only fetching records)
-		Repo: repo,
+		Grapp: grapp,
 	}
 
 	node, err := core.NewNode(ctx, nodeOptions)
@@ -115,7 +117,7 @@ func createNode(ctx context.Context, repoPath string) (icore.CoreAPI, error) {
 	return coreapi.NewCoreAPI(node)
 }
 
-// Spawns a node on the default repo location, if the repo exists
+// Spawns a node on the default grapp location, if the grapp exists
 func spawnDefault(ctx context.Context) (icore.CoreAPI, error) {
 	defaultPath, err := config.PathRoot()
 	if err != nil {
@@ -130,32 +132,33 @@ func spawnDefault(ctx context.Context) (icore.CoreAPI, error) {
 
 	return createNode(ctx, defaultPath)
 }
-// Spawns a node at repoPath. Assumes repoPath was initialized
-// previously with CreateRepo
-func Spawn(ctx context.Context, repoPath string)(icore.CoreAPI,error) {
 
-    if err := setupPlugins(repoPath);err != nil {
-        return nil, err
-    }    
+// Spawns a node at grappPath. Assumes grappPath was initialized
+// previously with CreateGrapp
+func Spawn(ctx context.Context, grappPath string) (icore.CoreAPI, error) {
 
-    return createNode(ctx,repoPath)
+	if err := setupPlugins(grappPath); err != nil {
+		return nil, err
+	}
+
+	return createNode(ctx, grappPath)
 
 }
 
-// Spawns a node to be used just for this run (i.e. creates a tmp repo)
+// Spawns a node to be used just for this run (i.e. creates a tmp grapp)
 func spawnEphemeral(ctx context.Context) (icore.CoreAPI, error) {
 	if err := setupPlugins(""); err != nil {
 		return nil, err
 	}
 
-	// Create a Temporary Repo
-	repoPath, err := createTempRepo(ctx)
+	// Create a Temporary Grapp
+	grappPath, err := createTempGrapp(ctx)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create temp repo: %s", err)
+		return nil, fmt.Errorf("failed to create temp grapp: %s", err)
 	}
 
 	// Spawning an ephemeral IPFS node
-	return createNode(ctx, repoPath)
+	return createNode(ctx, grappPath)
 }
 
 //
@@ -239,16 +242,16 @@ func main() {
 	defer cancel()
 
 	/*
-		// Spawn a node using the default path (~/.ipfs), assuming that a repo exists there already
-		fmt.Println("Spawning node on default repo")
+		// Spawn a node using the default path (~/.ipfs), assuming that a grapp exists there already
+		fmt.Println("Spawning node on default grapp")
 		ipfs, err := spawnDefault(ctx)
 		if err != nil {
-			fmt.Println("No IPFS repo available on the default path")
+			fmt.Println("No IPFS grapp available on the default path")
 		}
 	*/
 
-	// Spawn a node using a temporary path, creating a temporary repo for the run
-	fmt.Println("Spawning node on a temporary repo")
+	// Spawn a node using a temporary path, creating a temporary grapp for the run
+	fmt.Println("Spawning node on a temporary grapp")
 	ipfs, err := spawnEphemeral(ctx)
 	if err != nil {
 		panic(fmt.Errorf("failed to spawn ephemeral node: %s", err))

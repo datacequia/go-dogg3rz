@@ -1,4 +1,4 @@
-package repo
+package grapp
 
 import (
 	"context"
@@ -16,25 +16,25 @@ const (
 	insertNode1Name     = "node1"
 )
 
-func TestFileRepositoryResourceStager(t *testing.T) {
+func TestFileGrapplicationResourceStager(t *testing.T) {
 
 	//ctxt, _ := context.WithCancel(context.Background())
 
-	ctxt, cancelFunc, err := initTestNode("FileRepositoryResourceStager")
+	ctxt, cancelFunc, err := initTestNode("FileGrapplicationResourceStager")
 	if err != nil {
 		t.Error(err)
 		return
 	}
-    defer cancelFunc() 
+	defer cancelFunc()
 
 	//dogg3rzHome, _ := ctxt.Value(env.EnvDogg3rzHome).(string)
-	repoName, _ := ctxt.Value(env.EnvDogg3rzRepo).(string)
+	grappName, _ := ctxt.Value(env.EnvDogg3rzGrapp).(string)
 
 	//fmt.Println(dogg3rzHome)
 
 	//defer os.RemoveAll(dogg3rzHome)
 
-	stager, err := NewFileRepositoryResourceStager(ctxt, repoName)
+	stager, err := NewFileGrapplicationResourceStager(ctxt, grappName)
 	if err != nil {
 		t.Error(stager, err)
 		return
@@ -126,28 +126,28 @@ func TestFileRepositoryResourceStager(t *testing.T) {
 
 }
 
-////////////////////////////////
+// //////////////////////////////
 // test helper funcs
-///////////////////////////////
+// /////////////////////////////
 func addTestResourcesToJSONLDDoc(ctxt context.Context) error {
 
-	frr := &FileRepositoryResource{}
+	frr := &FileGrapplicationResource{}
 
-	repoName, _ := ctxt.Value(env.EnvDogg3rzRepo).(string)
+	grappName, _ := ctxt.Value(env.EnvDogg3rzGrapp).(string)
 
-	err := frr.CreateDataset(ctxt, repoName, testDatasetName)
+	err := frr.CreateDataset(ctxt, grappName, testDatasetName)
 	if err != nil {
 		return err
 	}
 
 	// create outermost context prefix
-	err = frr.AddNamespaceDataset(ctxt, repoName, testDatasetName, "rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
+	err = frr.AddNamespaceDataset(ctxt, grappName, testDatasetName, "rdf", "http://www.w3.org/1999/02/22-rdf-syntax-ns#")
 	if err != nil {
 		return err
 	}
 
 	// create new schema type
-	err = frr.CreateTypeClass(ctxt, repoName, testDatasetName, createTypeClassName, "", "my first class", "my first class")
+	err = frr.CreateTypeClass(ctxt, grappName, testDatasetName, createTypeClassName, "", "my first class", "my first class")
 	if err != nil {
 		return err
 	}
@@ -155,7 +155,7 @@ func addTestResourcesToJSONLDDoc(ctxt context.Context) error {
 	// create new node
 	nodeProps := []string{"a", "b", "c"}
 	nodeValues := []string{"1", "2", "3"}
-	err = frr.InsertNode(ctxt, repoName, testDatasetName, createTypeClassName, insertNode1Name, "", nodeProps, nodeValues)
+	err = frr.InsertNode(ctxt, grappName, testDatasetName, createTypeClassName, insertNode1Name, "", nodeProps, nodeValues)
 	if err != nil {
 		return err
 	}

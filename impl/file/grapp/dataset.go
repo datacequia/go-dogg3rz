@@ -11,12 +11,13 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"bytes"
 	"context"
 	"encoding/json"
+
 	//"encoding/json"
 	//	"fmt"
 
@@ -32,10 +33,10 @@ import (
 const defaultGraphID = "default"
 
 type fileDataset struct {
-	// NAME OF REPOSITORY
-	repoName string
+	// NAME OF GRAPPLICATION
+	grappName string
 	// THE RELATIVE & STANDARDIZED PATH TO THE DATASET RESOURCE IN DOGG3RZ FORM
-	datasetPath *common.RepositoryPath
+	datasetPath *common.GrapplicationPath
 
 	// CANONICAL PATH TO THE PARENT DIR OF THE JSON-LD DOC FILE
 	// THAT HOLDS THE DATASET
@@ -44,12 +45,12 @@ type fileDataset struct {
 	operatingSystemPath string
 }
 
-func newFileDataset(ctxt context.Context, repoName string, datasetPath string) (*fileDataset, error) {
+func newFileDataset(ctxt context.Context, grappName string, datasetPath string) (*fileDataset, error) {
 
 	var err error
 
-	if len(repoName) < 1 {
-		return nil, errors.InvalidValue.New("empty repoName")
+	if len(grappName) < 1 {
+		return nil, errors.InvalidValue.New("empty grappName")
 	}
 
 	if len(datasetPath) < 1 {
@@ -59,14 +60,14 @@ func newFileDataset(ctxt context.Context, repoName string, datasetPath string) (
 
 	fds := &fileDataset{}
 
-	fds.repoName = repoName
+	fds.grappName = grappName
 
-	if fds.datasetPath, err = common.RepositoryPathNew(datasetPath); err != nil {
+	if fds.datasetPath, err = common.GrapplicationPathNew(datasetPath); err != nil {
 		return nil, err
 	}
 
-	fds.parentDirPath = filepath.Join(file.RepositoriesDirPath(ctxt),
-		fds.repoName, fds.datasetPath.ToOperatingSystemPath())
+	fds.parentDirPath = filepath.Join(file.GrapplicationsDirPath(ctxt),
+		fds.grappName, fds.datasetPath.ToOperatingSystemPath())
 
 	fds.operatingSystemPath = filepath.Join(fds.parentDirPath, file.JSONLDDocumentName)
 
@@ -74,18 +75,20 @@ func newFileDataset(ctxt context.Context, repoName string, datasetPath string) (
 
 }
 
-/* assets whether a dataset exists (state=true) or does not exisst (state=false)
-   fileDataset members are initialized in standardized form
-   upon function return
+/*
+assets whether a dataset exists (state=true) or does not exisst (state=false)
+
+	fileDataset members are initialized in standardized form
+	upon function return
 */
 func (ds *fileDataset) assertState(ctxt context.Context, state bool) (bool, error) {
 
 	if state {
 		// WANT ASSERT DATASET DOES EXIST
 
-		if !file.RepositoryExist(ctxt, ds.repoName) {
-			return false, errors.NotFound.Newf("repository '%s' does not exist",
-				ds.repoName)
+		if !file.GrapplicationExist(ctxt, ds.grappName) {
+			return false, errors.NotFound.Newf("grapplication '%s' does not exist",
+				ds.grappName)
 		}
 
 		if !file.FileExists(ds.operatingSystemPath) {

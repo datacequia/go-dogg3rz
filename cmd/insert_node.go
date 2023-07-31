@@ -45,7 +45,7 @@ type dgrzSubCmdInto struct {
 
 type dgrzSubCmdDataset struct {
 	Positional struct {
-		Path string `positional-arg-name:"DATASET_PATH" description:"the repository path to the dataset" required:"true"`
+		Path string `positional-arg-name:"DATASET_PATH" description:"the grapplication path to the dataset" required:"true"`
 	} `positional-args:"yes"`
 	PropertyValues dgrzSubCmdNodePropertyValues `command:"property-values" alias:"pv" description:"describes the property names/values"`
 }
@@ -63,13 +63,13 @@ func (cmd *dgrzSubCmdNodePropertyValues) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
 	switch cmd {
 	case insertDefaultGraph:
 		//fmt.Printf("insert default graph")
-		err = repo.InsertNode(ctxt,
-			insertCmd.Repository,
+		err = grapp.InsertNode(ctxt,
+			insertCmd.Grapplication,
 			insertCmd.Node.Into.DefaultGraph.Dataset.Positional.Path,
 			insertCmd.Node.Options.Type,
 			insertCmd.Node.Options.ID,
@@ -78,8 +78,8 @@ func (cmd *dgrzSubCmdNodePropertyValues) Execute(args []string) error {
 			insertDefaultGraph.Values)
 
 	case insertNamedGraph:
-		err = repo.InsertNode(ctxt,
-			insertCmd.Repository,
+		err = grapp.InsertNode(ctxt,
+			insertCmd.Grapplication,
 			insertCmd.Node.Into.NamedGraph.Dataset.Positional.Path, //.DefaultGraph.Dataset.Positional.Path,
 			insertCmd.Node.Options.Type,
 			insertCmd.Node.Options.ID,

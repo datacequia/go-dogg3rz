@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 //	"os"
 
@@ -39,16 +39,16 @@ import (
 )
 
 type fileCreateSchema struct {
-	repoName       string
-	schemaSubpath  common.RepositoryPath
+	grappName      string
+	schemaSubpath  common.GrapplicationPath
 	fileSystemPath string
 }
 
 //
 
-func (cs *fileCreateSchema) createSchema(ctxt context.Context, repoName string, schemaSubpath string, schemaReader io.Reader) error {
+func (cs *fileCreateSchema) createSchema(ctxt context.Context, grappName string, schemaSubpath string, schemaReader io.Reader) error {
 
-	rp, err := common.RepositoryPathNew(schemaSubpath)
+	rp, err := common.GrapplicationPathNew(schemaSubpath)
 	if err != nil {
 		return err
 	}
@@ -59,8 +59,8 @@ func (cs *fileCreateSchema) createSchema(ctxt context.Context, repoName string, 
 			schemaSubpath)
 	}
 
-	if schemaPath, err := cs.createRepositoryResourcePath(
-		ctxt, rp, repoName, primitives.TYPE_DOGG3RZ_SCHEMA,
+	if schemaPath, err := cs.createGrapplicationResourcePath(
+		ctxt, rp, grappName, primitives.TYPE_DOGG3RZ_SCHEMA,
 		schemaReader); err != nil {
 		return err
 	} else {
@@ -69,27 +69,27 @@ func (cs *fileCreateSchema) createSchema(ctxt context.Context, repoName string, 
 
 	}
 
-	cs.repoName = repoName
+	cs.grappName = grappName
 	cs.schemaSubpath = *rp
 
 	return nil
 
 }
 
-// CREATES THE RESOURCE PATH IN THE DESIGNATED REPOSITORY OF A SPECIFIC
+// CREATES THE RESOURCE PATH IN THE DESIGNATED Grapplication OF A SPECIFIC
 // RESOURCE TYPE
-func (cs *fileCreateSchema) createRepositoryResourcePath(
+func (cs *fileCreateSchema) createGrapplicationResourcePath(
 	ctxt context.Context,
-	resPath *rescom.RepositoryPath,
-	repoName string,
+	resPath *rescom.GrapplicationPath,
+	grappName string,
 	resType primitives.Dogg3rzObjectType,
 	bodyReader io.Reader) (string, error) {
 
-	if !file.RepositoryExist(ctxt, repoName) {
-		return "", errors.NotFound.Newf("repository '%s' does not exist. please create it first", repoName)
+	if !file.GrapplicationExist(ctxt, grappName) {
+		return "", errors.NotFound.Newf("Grapplication '%s' does not exist. please create it first", grappName)
 	}
-	// REPO DOES EXIST. CREATE EACH PATH ELEMENT IF NECESSARY
-	curPath := filepath.Join(file.RepositoriesDirPath(ctxt), repoName)
+	// GRAPP DOES EXIST. CREATE EACH PATH ELEMENT IF NECESSARY
+	curPath := filepath.Join(file.GrapplicationsDirPath(ctxt), grappName)
 	curResType := primitives.TYPE_DOGG3RZ_TREE
 	mkDirCount := 0
 	success := false
@@ -113,7 +113,7 @@ func (cs *fileCreateSchema) createRepositoryResourcePath(
 
 		}
 
-		// EVAL CURRENT REPO PATH TO ENSURE IT'S A DIRECTORY AND
+		// EVAL CURRENT GRAPP PATH TO ENSURE IT'S A DIRECTORY AND
 		// A DOGG3RZ TREE OBJECT
 		if _, err := os.Stat(curPath); err != nil {
 
@@ -223,7 +223,7 @@ func (cs *fileCreateSchema) createRepositoryResourcePath(
 
 					return "", errors.InvalidPathElement.Newf(
 						"encountered invalid base path '%s' during creation of "+
-							"repository resource '%s': want %s '%s', found %s '%s'",
+							"grapplication resource '%s': want %s '%s', found %s '%s'",
 						curPath,
 						resPath.ToString(),
 						primitives.DOGG3RZ_OBJECT_ATTR_TYPE,

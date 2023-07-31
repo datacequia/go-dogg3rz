@@ -11,19 +11,19 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"context" //"github.com/datacequia/go-dogg3rz/util"
 )
 
-func (repo *FileRepositoryResource) CreateTypeClass(ctxt context.Context, repoName string, datasetPath string,
+func (grapp *FileGrapplicationResource) CreateTypeClass(ctxt context.Context, grappName string, datasetPath string,
 	typeID string, subclassOf string,
 	label string, comment string) error {
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 
@@ -49,14 +49,14 @@ func (repo *FileRepositoryResource) CreateTypeClass(ctxt context.Context, repoNa
 
 }
 
-func (repo *FileRepositoryResource) CreateTypeDatatype(ctxt context.Context,
-	repoName string, datasetPath string,
+func (grapp *FileGrapplicationResource) CreateTypeDatatype(ctxt context.Context,
+	grappName string, datasetPath string,
 	typeID string, subclassOf string,
 	label string, comment string) error {
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 
@@ -81,14 +81,14 @@ func (repo *FileRepositoryResource) CreateTypeDatatype(ctxt context.Context,
 	return nil
 }
 
-func (repo *FileRepositoryResource) CreateTypeProperty(ctxt context.Context,
-	repoName string, datasetPath string,
+func (grapp *FileGrapplicationResource) CreateTypeProperty(ctxt context.Context,
+	grappName string, datasetPath string,
 	typeID string, subPropertyOf string,
 	domain string, _range string, label string, comment string) error {
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 

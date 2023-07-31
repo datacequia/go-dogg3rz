@@ -14,13 +14,13 @@
 package cmd
 
 type dgrzCreateCmd struct {
-	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//	DirPath      string                 `long:"dirpath" description:"directory path" required:"true"`
 	Dataset dgrzCreateDataset `command:"dataset" alias:"ds" description:"create a new dataset" `
-	//	Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a repository directory" `
+	//	Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a grapplication directory" `
 
-	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the repository"`
+	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the grapplication"`
 
 	Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
 
@@ -43,9 +43,9 @@ func (o *dgrzCreateCmd) CommandName() string {
 }
 
 func (o *dgrzCreateCmd) ShortDescription() string {
-	return "create a new schema/non-data repository resource"
+	return "create a new schema/non-data grapplication resource"
 }
 
 func (o *dgrzCreateCmd) LongDescription() string {
-	return "create a new schema/non-data repository resource"
+	return "create a new schema/non-data grapplication resource"
 }

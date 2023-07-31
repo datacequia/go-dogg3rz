@@ -22,7 +22,7 @@ import (
 	"github.com/datacequia/go-dogg3rz/errors"
 )
 
-type RepositoryPath struct {
+type GrapplicationPath struct {
 	pathElements        []string
 	lastCharPathElement bool
 }
@@ -31,13 +31,13 @@ var REPO_PATH_SEPARATOR = '/'
 
 var VALID_PATH_ELEMENT_SPECIAL_CHARS = []rune{'.', '_', '-'}
 
-func RepositoryPathNew(path string) (*RepositoryPath, error) {
+func GrapplicationPathNew(path string) (*GrapplicationPath, error) {
 
 	if len(path) < 1 {
-		return nil, errors.InvalidValue.New("repository path is zero length (empty) string")
+		return nil, errors.InvalidValue.New("grapplication path is zero length (empty) string")
 	}
 
-	rp := &RepositoryPath{}
+	rp := &GrapplicationPath{}
 
 	if rune(path[len(path)-1]) == REPO_PATH_SEPARATOR {
 		// PATH LAST CHARACTER ENDS WITH PATH SEP. MUST BE REFERRING TO DIR
@@ -87,7 +87,7 @@ func RepositoryPathNew(path string) (*RepositoryPath, error) {
 	}
 
 	if len(standardizedPathElements) < 1 {
-		return nil, errors.InvalidValue.New("repository path has zero path elements")
+		return nil, errors.InvalidValue.New("grapplication path has zero path elements")
 
 	}
 
@@ -97,7 +97,7 @@ func RepositoryPathNew(path string) (*RepositoryPath, error) {
 
 }
 
-func (rp *RepositoryPath) ToString() string {
+func (rp *GrapplicationPath) ToString() string {
 
 	pj := strings.Join(rp.pathElements, string(REPO_PATH_SEPARATOR))
 
@@ -114,7 +114,7 @@ func (rp *RepositoryPath) ToString() string {
 
 }
 
-func (rp *RepositoryPath) ToOperatingSystemPath() string {
+func (rp *GrapplicationPath) ToOperatingSystemPath() string {
 	pj := strings.Join(rp.pathElements, string(os.PathSeparator))
 
 	if rp.lastCharPathElement {
@@ -130,16 +130,16 @@ func (rp *RepositoryPath) ToOperatingSystemPath() string {
 
 }
 
-func (rp *RepositoryPath) Size() int {
+func (rp *GrapplicationPath) Size() int {
 	return len(rp.pathElements)
 }
 
-func (rp *RepositoryPath) EndsWithPathSeparator() bool {
+func (rp *GrapplicationPath) EndsWithPathSeparator() bool {
 	return rp.lastCharPathElement
 
 }
 
-func (rp *RepositoryPath) PathElements() []string {
+func (rp *GrapplicationPath) PathElements() []string {
 	return rp.pathElements
 
 }

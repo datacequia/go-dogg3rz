@@ -23,12 +23,12 @@ func TestInitContextFromEnv(t *testing.T) {
 
 	const (
 		dgrzHomeValue       = "/home/test"
-		dgrzRepoValue       = "myrepo"
+		dgrzGrappValue      = "myrepo"
 		dgrzStateStoreValue = "file"
 	)
 
 	os.Setenv(EnvDogg3rzHome, dgrzHomeValue)
-	os.Setenv(EnvDogg3rzRepo, dgrzRepoValue)
+	os.Setenv(EnvDogg3rzGrapp, dgrzGrappValue)
 	os.Setenv(EnvDogg3rzStateStore, dgrzStateStoreValue)
 
 	ctxt := InitContextFromEnv(context.Background())
@@ -40,10 +40,10 @@ func TestInitContextFromEnv(t *testing.T) {
 			dgrzHomeValue, EnvDogg3rzHome, i, i)
 	}
 
-	i = ctxt.Value(EnvDogg3rzRepo)
-	if value, ok := i.(string); !(ok && value == dgrzRepoValue) {
+	i = ctxt.Value(EnvDogg3rzGrapp)
+	if value, ok := i.(string); !(ok && value == dgrzGrappValue) {
 		t.Errorf("expected ctxt.Value() to return '%s' value for key '%s', found '%v' of type %T",
-			dgrzRepoValue, EnvDogg3rzRepo, i, i)
+			dgrzGrappValue, EnvDogg3rzGrapp, i, i)
 	}
 
 	i = ctxt.Value(EnvDogg3rzStateStore)

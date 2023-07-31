@@ -45,10 +45,10 @@ import (
 )
 
 type dgrzCreateDataset struct {
-	//	Repository string `long:"repo" short:"r" env:"DOGG3RZ_REPO" description:"repository name" required:"true"`
+	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Positional struct {
-		DatasetPath string `positional-arg-name:"DATASET_PATH" description:"repository path to dataset" required:"yes" `
+		DatasetPath string `positional-arg-name:"DATASET_PATH" description:"grapplication path to dataset" required:"yes" `
 	} `positional-args:"yes"`
 	//	SubclassOf string `long:"subclass-of" description:"RDF subclass" required:"false"`
 
@@ -63,12 +63,12 @@ type dgrzCreateDataset struct {
 func (x *dgrzCreateDataset) Execute(args []string) error {
 
 	ctxt := getCmdContext()
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	//fmt.Println("create dataset", createCmd.Repository, x.Positional.DatasetPath)
+	//fmt.Println("create dataset", createCmd.Grapplication, x.Positional.DatasetPath)
 
-	if err := repo.CreateDataset(ctxt,
-		createCmd.Repository,
+	if err := grapp.CreateDataset(ctxt,
+		createCmd.Grapplication,
 		x.Positional.DatasetPath); err != nil {
 		return err
 	}

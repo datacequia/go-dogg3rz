@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"context"
@@ -20,14 +20,14 @@ import (
 	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
-func (repo *FileRepositoryResource) InsertNode(ctxt context.Context,
-	repoName string, datasetPath string,
+func (grapp *FileGrapplicationResource) InsertNode(ctxt context.Context,
+	grappName string, datasetPath string,
 	nodeType string, nodeID string, graphName string,
 	nodeProperties []string, nodeValues []string) error {
 
 	var fds *fileDataset
 	var err error
-	if fds, err = newFileDataset(ctxt, repoName, datasetPath); err != nil {
+	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
 		return err
 	}
 

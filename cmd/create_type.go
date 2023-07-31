@@ -30,7 +30,7 @@ type dgrzTypeOptions struct {
 }
 
 type dgrzTypeContext struct {
-	DatasetPath string `positional-arg-name:"DATASET_PATH" description:"repository path to dataset" required:"yes"`
+	DatasetPath string `positional-arg-name:"DATASET_PATH" description:"grapplication path to dataset" required:"yes"`
 	ID          string `positional-arg-name:"ID" description:"[relative] IRI or term" required:"yes" `
 }
 
@@ -65,17 +65,17 @@ type dgrzCreateTypeProperty struct {
 // CREATE TYPE  FUNCTIONS
 ///////////////////////////////////////////////////////////
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 // CREATE TYPE CLASS SUBCOMMAND FUNCTIONS
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeClass) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	if err := repo.CreateTypeClass(ctxt,
-		createCmd.Repository,
+	if err := grapp.CreateTypeClass(ctxt,
+		createCmd.Grapplication,
 		o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubclassOf,
 		o.Options.Label, o.Options.Comment); err != nil {
@@ -85,17 +85,17 @@ func (o *dgrzCreateTypeClass) Execute(args []string) error {
 	return nil
 }
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 // CREATE TYPE DATATYPE SUBCOMMAND FUNCTIONS
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	if err := repo.CreateTypeDatatype(ctxt,
-		createCmd.Repository, o.Positional.DatasetPath,
+	if err := grapp.CreateTypeDatatype(ctxt,
+		createCmd.Grapplication, o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubclassOf,
 		o.Options.Label, o.Options.Comment); err != nil {
 		return err
@@ -104,17 +104,17 @@ func (o *dgrzCreateTypeDatatype) Execute(args []string) error {
 	return nil
 }
 
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 // CREATE TYPE PROPERTY SUBCOMMAND FUNCTIONS
-///////////////////////////////////////////////////////////
+// /////////////////////////////////////////////////////////
 func (o *dgrzCreateTypeProperty) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 	// TODO: ALLOW FOR MULTIPLE RANGES (AND DOMAINS) DURING CREATION
-	repo := resource.GetRepositoryResource(ctxt)
+	grapp := resource.GetGrapplicationResource(ctxt)
 
-	if err := repo.CreateTypeProperty(ctxt,
-		createCmd.Repository, o.Positional.DatasetPath,
+	if err := grapp.CreateTypeProperty(ctxt,
+		createCmd.Grapplication, o.Positional.DatasetPath,
 		o.Positional.ID, o.Options.SubpropertyOf,
 		o.Options.Domain, o.Options.Range,
 		o.Options.Label, o.Options.Comment); err != nil {

@@ -37,8 +37,6 @@ func (o *dgrzOntologyCmd) LongDescription() string {
 
 func (x *dgrzOntologyCmd) Execute(args []string) error {
 
-	//	fmt.Printf("hello snapshot: { repo = %s }\n", x.Positional.Repository)
-
 	//ctxt := getCmdContext()
 
 	fmt.Println("got ontology?")

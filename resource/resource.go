@@ -18,13 +18,13 @@ import (
 	"fmt"
 
 	resourceconfig "github.com/datacequia/go-dogg3rz/resource/config"
+	resourcegrapp "github.com/datacequia/go-dogg3rz/resource/grapp"
 	resourcenode "github.com/datacequia/go-dogg3rz/resource/node"
-	resourcerepo "github.com/datacequia/go-dogg3rz/resource/repo"
 
 	//fileconfig "github.com/datacequia/go-dogg3rz/impl/file/config"
 	fileconfig "github.com/datacequia/go-dogg3rz/impl/file/config"
+	filegrapp "github.com/datacequia/go-dogg3rz/impl/file/grapp"
 	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
-	filerepo "github.com/datacequia/go-dogg3rz/impl/file/repo"
 
 	"github.com/datacequia/go-dogg3rz/env"
 	"github.com/datacequia/go-dogg3rz/util"
@@ -33,7 +33,7 @@ import (
 /*
 var configResource resourceconfig.ConfigResource
 var nodeResource resourcenode.NodeResource
-var repoResource resourcerepo.RepositoryResource
+var grappResource resourcegrapp.GrapplicationResource
 */
 
 // INITIALIZES THE DESIRED
@@ -42,10 +42,10 @@ var repoResource resourcerepo.RepositoryResource
 // AND ASSIGNS IT TO IT'S CORRESPONDING RESOURCE TYPE INTERFACE
 // FOR USE IN REST OF THE CODE WHEN INTERACTING WITH THESE RESOURCE TYPES
 
-//const EnvDogg3rzStateStore = "DOGG3RZ_STATE_STORE"
+// const EnvDogg3rzStateStore = "DOGG3RZ_STATE_STORE"
 const StateStoreTypeFile = "file"
 
-/// GetConfigResource returns a ConfigResource which allows the caller
+// / GetConfigResource returns a ConfigResource which allows the caller
 // to interact with the node configuration at runtime for all supported
 // configuration type operations
 func GetConfigResource(ctxt context.Context) resourceconfig.ConfigResource {
@@ -85,15 +85,15 @@ func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
 	}
 }
 
-// GetRepositoryResource returns a RepositoryResource which allows the caller
-// to interact with the configured repository type at runtime for most
-// repository operations
-func GetRepositoryResource(ctxt context.Context) resourcerepo.RepositoryResource {
+// GetGrapplicationResource returns a GrapplicationResource which allows the caller
+// to interact with the configured grapplication type at runtime for most
+// grapplication operations
+func GetGrapplicationResource(ctxt context.Context) resourcegrapp.GrapplicationResource {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
 	switch storeType {
 	case StateStoreTypeFile:
-		return &filerepo.FileRepositoryResource{}
+		return &filegrapp.FileGrapplicationResource{}
 
 	default:
 		panic(fmt.Sprintf(
@@ -104,16 +104,16 @@ func GetRepositoryResource(ctxt context.Context) resourcerepo.RepositoryResource
 	}
 }
 
-// GetRepositoryResourceStager returns a RepositoryResourceStager which allows the caller
-// to interact with the configured repository type at runtime for staging type
-// repository operations
-func GetRepositoryResourceStager(ctxt context.Context, repoName string) (resourcerepo.RepositoryResourceStager, error) {
+// GetGrapplicationResourceStager returns a GrapplicationResourceStager which allows the caller
+// to interact with the configured grapplication type at runtime for staging type
+// grapplication operations
+func GetGrapplicationResourceStager(ctxt context.Context, grappName string) (resourcegrapp.GrapplicationResourceStager, error) {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
 	switch storeType {
 	case StateStoreTypeFile:
 
-		return filerepo.NewFileRepositoryResourceStager(ctxt, repoName)
+		return filegrapp.NewFileGrapplicationResourceStager(ctxt, grappName)
 
 	default:
 		panic(fmt.Sprintf(

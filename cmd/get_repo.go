@@ -15,48 +15,46 @@ package cmd
 
 import (
 	"github.com/datacequia/go-dogg3rz/impl/file"
-	//"github.com/datacequia/go-dogg3rz/impl/file/repo"
-	"github.com/datacequia/go-dogg3rz/resource"
+
 	"os"
+
+	"github.com/datacequia/go-dogg3rz/resource"
 )
 
-// Command to get list of repos
-type dgrzGetRepoCmd struct {
-
+// Command to get list of grapplications
+type dgrzGetGrappCmd struct {
 }
+
 /*
 func init() {
-	// REGISTER THE 'get repo ' COMMAND
-	register(&dgrzGetRepoCmd{})
+	// REGISTER THE 'get grapp ' COMMAND
+	register(&dgrzGetGrappCmd{})
 }
 */
 
-func (o *dgrzGetRepoCmd) Execute(args []string) error {
-
+func (o *dgrzGetGrappCmd) Execute(args []string) error {
 
 	ctxt := getCmdContext()
 	node := resource.GetNodeResource(ctxt)
 	var files []string
 	var err error
-	files, err = node.GetRepos(ctxt)
+	files, err = node.GetGrapps(ctxt)
 	if err != nil {
-      return err
-    }
-    printValues(files, file.DgrzDirName, os.Stdout)
+		return err
+	}
+	printValues(files, file.DgrzDirName, os.Stdout)
 	return err
 
 }
 
-
-
-func (o *dgrzGetRepoCmd) CommandName() string {
-	return "get repository"
+func (o *dgrzGetGrappCmd) CommandName() string {
+	return "get grapplication"
 }
 
-func (o *dgrzGetRepoCmd) ShortDescription() string {
-	return "get listing of repositories"
+func (o *dgrzGetGrappCmd) ShortDescription() string {
+	return "get listing of grapplications"
 }
 
-func (o *dgrzGetRepoCmd) LongDescription() string {
-	return "get listing of repositories"
+func (o *dgrzGetGrappCmd) LongDescription() string {
+	return "get listing of grapplications"
 }

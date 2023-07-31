@@ -21,5 +21,5 @@ import (
 
 type NodeResource interface {
 	InitNode(ctx context.Context, config config.Dogg3rzConfig) error
-	GetRepos(ctxt context.Context ) ([]string, error)
+	GetGrapps(ctxt context.Context) ([]string, error)
 }

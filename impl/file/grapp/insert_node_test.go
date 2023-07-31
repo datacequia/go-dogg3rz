@@ -11,11 +11,12 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
-	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 	"testing"
+
+	"github.com/datacequia/go-dogg3rz/resource/jsonld"
 )
 
 func TestInsertNodeIntoGraph(t *testing.T) {
@@ -34,13 +35,13 @@ func TestInsertNodeIntoGraph(t *testing.T) {
 // Add new named graph to default graph
 func testInsertNodeIntoDefaultGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test1")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test1")
 	fileDataset.create(ctxt)
 
 	keys := []string{"key1"}
 	values := []string{"value1"}
-	var fileRe FileRepositoryResource
-	err := fileRe.InsertNode(ctxt, testRepoName, "test1", "", "", "", keys, values)
+	var fileRe FileGrapplicationResource
+	err := fileRe.InsertNode(ctxt, testGrappName, "test1", "", "", "", keys, values)
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -64,7 +65,7 @@ func testInsertNodeIntoDefaultGraph(t *testing.T) {
 		t.FailNow()
 	}
 
-	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface {})
+	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface{})
 	if mtime == nil {
 		t.Errorf("Newly created graph Mtime not updated expected size of MTime to be 3 but was  : %v", mtime)
 		t.FailNow()
@@ -79,7 +80,7 @@ func testInsertNodeIntoDefaultGraph(t *testing.T) {
 // Add new named graph to Named graph
 func testInsertNodeIntoNamedGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test2")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test2")
 	fileDataset.create(ctxt)
 	var namedGraphName = "namedGraph1"
 	err1 := fileDataset.createNamedGraph(ctxt, namedGraphName, "default")
@@ -89,8 +90,8 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 	}
 	keys := []string{"key2"}
 	values := []string{"value2"}
-	var fileRe FileRepositoryResource
-	err := fileRe.InsertNode(ctxt, testRepoName, "test2", "", "", namedGraphName, keys, values)
+	var fileRe FileGrapplicationResource
+	err := fileRe.InsertNode(ctxt, testGrappName, "test2", "", "", namedGraphName, keys, values)
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -117,7 +118,7 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 		t.FailNow()
 	}
 
-	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface {})
+	mtime := m[jsonld.MtimesEntryKeyName].(map[string]interface{})
 	if mtime == nil {
 		t.Errorf("Newly created graph Mtime not updated expected size of MTime to be 3 but was  : %v", mtime)
 		t.FailNow()
@@ -131,7 +132,7 @@ func testInsertNodeIntoNamedGraph(t *testing.T) {
 // Add new named graph to default graph
 func testInsertNodeIntoNGAfterDefaultGraph(t *testing.T) {
 	ctxt := getContext()
-	fileDataset, _ := newFileDataset(ctxt, testRepoName, "test3")
+	fileDataset, _ := newFileDataset(ctxt, testGrappName, "test3")
 	fileDataset.create(ctxt)
 
 	var namedGraphName = "namedGraph2"
@@ -142,8 +143,8 @@ func testInsertNodeIntoNGAfterDefaultGraph(t *testing.T) {
 	}
 	keys := []string{"key4"}
 	values := []string{"value4"}
-	var fileRe FileRepositoryResource
-	err := fileRe.InsertNode(ctxt, testRepoName, "test3", "", "", "", keys, values)
+	var fileRe FileGrapplicationResource
+	err := fileRe.InsertNode(ctxt, testGrappName, "test3", "", "", "", keys, values)
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)
@@ -176,7 +177,7 @@ func testInsertNodeIntoNGAfterDefaultGraph(t *testing.T) {
 	keys = []string{"key3"}
 	values = []string{"value3"}
 
-	err = fileRe.InsertNode(ctxt, testRepoName, "test3", "", "", namedGraphName, keys, values)
+	err = fileRe.InsertNode(ctxt, testGrappName, "test3", "", "", namedGraphName, keys, values)
 
 	if err != nil {
 		t.Errorf("unexpected error: %v", err)

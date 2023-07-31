@@ -22,8 +22,8 @@ import (
 const (
 	// PREFIX FOR ALL DOGG3RZ O/S ENVIRONMENT VARIABLES
 	EnvDogg3rzPrefix = "DOGG3RZ_"
-	// SPECIFIES PATH TO ROOT DOGG3RZ REPOSITORY DIRECTORY  (OPTIONAL)
-	EnvDogg3rzRepo = EnvDogg3rzPrefix + "REPO"
+	// SPECIFIES PATH TO CURRENT DOGG3RZ GRAPPLICATION DIRECTORY CONTEXT  (OPTIONAL)
+	EnvDogg3rzGrapp = EnvDogg3rzPrefix + "GRAPP"
 	// SPECIFIES PATH TO BASE/HOME DIECTORY FOR DOGG3RZ FILES (OPTIONAL)
 	EnvDogg3rzHome = EnvDogg3rzPrefix + "HOME"
 	// SPECIFIES THE PERSISTENCE TYPE FOR PERSISTING STATE IN DOGG3RZ
@@ -41,7 +41,7 @@ func init() {
 }
 
 var envNames = []string{
-	EnvDogg3rzRepo,
+	EnvDogg3rzGrapp,
 	EnvDogg3rzHome,
 	EnvDogg3rzStateStore,
 }

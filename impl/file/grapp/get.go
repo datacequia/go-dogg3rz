@@ -11,15 +11,15 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 /*
 type fileGetResourcesContext struct {
-	repoName     string
+	grappName     string
 	resourcePath string
-	//schemaSubpath  common.RepositoryPath
+	//schemaSubpath  common.GrapplicationPath
 	//fileSystemPath string
-	resourceList []repo.GetResourceItem
+	resourceList []grapp.GetResourceItem
 }
 
 type fileGetResourceItem struct {
@@ -27,7 +27,7 @@ type fileGetResourceItem struct {
 	status string
 }
 
-func (ctxt *fileGetResourcesContext) getResources(repoName string, resourcePath string) ([]repo.GetResourceItem, error) {
+func (ctxt *fileGetResourcesContext) getResources(grappName string, resourcePath string) ([]grapp.GetResourceItem, error) {
 
 	return ctxt.resourceList, nil
 }

@@ -28,26 +28,23 @@ import (
 	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
-func nodeRepoSetup(t *testing.T, prefix string) string {
+func nodeGrappSetup(t *testing.T, prefix string) string {
 
 	dogg3rzHome := filepath.Join(os.TempDir(),
 		fmt.Sprintf("%s_%d", prefix, time.Now().UnixNano()))
 
-    var dgrzConf config.Dogg3rzConfig
+	var dgrzConf config.Dogg3rzConfig
 
 	// REQUIRED CONF
 	dgrzConf.User.Email = "test@dogg3rz.com"
 
 	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
-
 	return dogg3rzHome
 
 }
 
-
-
-func nodeRepoTeardown(t *testing.T, dogg3rzHome string) {
+func nodeGrappTeardown(t *testing.T, dogg3rzHome string) {
 
 	os.RemoveAll(dogg3rzHome)
 
@@ -109,10 +106,10 @@ func TestWriteToFileAtomic(t *testing.T) {
 
 }
 
-func TestRepositoryDirList(t *testing.T) {
+func TestGrappDirList(t *testing.T) {
 
-	// CREATE A NEW NODE/REPO SANDBOX FOR TESTING
-	dogg3rzHome := nodeRepoSetup(t, "file_test")
-	defer nodeRepoTeardown(t, dogg3rzHome)
+	// CREATE A NEW NODE/GRAPP SANDBOX FOR TESTING
+	dogg3rzHome := nodeGrappSetup(t, "file_test")
+	defer nodeGrappTeardown(t, dogg3rzHome)
 
 }

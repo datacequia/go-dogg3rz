@@ -22,11 +22,9 @@ package cmd
 //	"github.com/xeipuuv/gojsonschema"
 
 type dgrzGetCmd struct {
+	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a grapp" `
 
-	Dataset dgrzGetDatasetCmd `command:"dataset" alias:"ds" description:"get datasets in a repo" `
-
-	Repos dgrzGetRepoCmd `command:"repository" alias:"repo" description:"get list of repos" `
-
+	Grapps dgrzGetGrappCmd `command:"grapplication" alias:"grapp" description:"get list of grapps" `
 }
 
 func init() {
@@ -34,16 +32,14 @@ func init() {
 	register(&dgrzGetCmd{})
 }
 
-
-
 func (o *dgrzGetCmd) CommandName() string {
 	return "get"
 }
 
 func (o *dgrzGetCmd) ShortDescription() string {
-	return "get listing of repository resources"
+	return "get listing of grapplication resources"
 }
 
 func (o *dgrzGetCmd) LongDescription() string {
-	return "get listing of repository resources"
+	return "get listing of grapplication resources"
 }

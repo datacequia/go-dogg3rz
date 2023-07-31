@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	//	"fmt"
@@ -31,7 +31,7 @@ import (
 )
 
 var dogg3rzHome string
-var fileRepoIdx *fileRepositoryIndex
+var fileGrappIdx *fileGrappsitoryIndex
 
 // returns a cancellable cnotext that inits DOGG3RZ_HOME
 // to package var dogg3rzHome
@@ -67,11 +67,11 @@ func indexSetup(t *testing.T) {
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		t.Error(err)
 	}
-//	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
+	//	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 
-	fileRepositoryResource := FileRepositoryResource{}
+	fileGrapplicationResource := FileGrapplicationResource{}
 
-	if err := fileRepositoryResource.InitRepo(ctxt, testRepoName); err != nil {
+	if err := fileGrapplicationResource.InitGrapp(ctxt, testGrappName); err != nil {
 		t.Error(err)
 	}
 
@@ -93,23 +93,23 @@ func TestIndex(t *testing.T) {
 
 	//fileNodeResource = FileNo
 
-	testNewFileRepoIndexWithNonExistentRepo(t)
+	testNewFileGrappIndexWithNonExistentGrapp(t)
 
-	//testNewFileRepoIndexThenCancel(t)
+	//testNewFileGrappIndexThenCancel(t)
 
-	testNewFileRepoIndexThenScanWithNoIndexFile(t)
+	testNewFileGrappIndexThenScanWithNoIndexFile(t)
 
-	testNewFileRepoIndexThenEmptyCommit(t)
+	testNewFileGrappIndexThenEmptyCommit(t)
 
-	testNewFileRepoIndexThenEmptyRollback(t)
+	testNewFileGrappIndexThenEmptyRollback(t)
 
-	testFileRepoIndexUpdateAndReadBackInTx(t)
+	testFileGrappIndexUpdateAndReadBackInTx(t)
 
-	testFileRepoIndexUpdateCommitAndReadBack(t)
+	testFileGrappIndexUpdateCommitAndReadBack(t)
 
-	testFileRepoIndexUpdateCommitAndScanForOne(t)
+	testFileGrappIndexUpdateCommitAndScanForOne(t)
 
-	testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack(t)
+	testFileGrappIndexStageThreeCommitAndStageUpdateOneReadBack(t)
 
 	testRemoveSingleNodeResourceFromIndex(t)
 
@@ -117,7 +117,7 @@ func TestIndex(t *testing.T) {
 
 	testInvalidIndexEntryValidate(t)
 
-	testNewFileRepoIndexOnNonExistentRepo(t)
+	testNewFileGrappIndexOnNonExistentGrapp(t)
 
 	testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t)
 	indexTeardown(t)
@@ -125,19 +125,19 @@ func TestIndex(t *testing.T) {
 }
 
 // returns a new index object with a context supplied cancel callback
-func newFileRepoIdxWithCancelFunc(t *testing.T) (*fileRepositoryIndex, context.Context, context.CancelFunc) {
-	// TEST NEW REPO INDEX WITH BAD REPO NAME
+func newFileGrappIdxWithCancelFunc(t *testing.T) (*fileGrapplicationIndex, context.Context, context.CancelFunc) {
+	// TEST NEW GRAPP INDEX WITH BAD GRAPP NAME
 	ctxt := getContext()
 
 	var cancelFunc context.CancelFunc
 
 	ctxt, cancelFunc = context.WithCancel(ctxt)
 
-	var f *fileRepositoryIndex
+	var f *fileGrapplicationIndex
 	var err error
 
-	if f, err = newFileRepositoryIndex(ctxt, testRepoName); err != nil {
-		t.Errorf("newFileRepoIdxWithCancelFunc(): %s", err)
+	if f, err = newFileGrapplicationIndex(ctxt, testGrappName); err != nil {
+		t.Errorf("newFileGrappIdxWithCancelFunc(): %s", err)
 	}
 
 	// make sure index lock file not there before returning
@@ -158,22 +158,22 @@ func newFileRepoIdxWithCancelFunc(t *testing.T) (*fileRepositoryIndex, context.C
 }
 
 // test that failure occurs when attempt to instantiate index object from
-// non-existent repo
-func testNewFileRepoIndexWithNonExistentRepo(t *testing.T) {
+// non-existent grapp
+func testNewFileGrappIndexWithNonExistentGrapp(t *testing.T) {
 
-	if _, err := newFileRepositoryIndex(getContext(), testRepoName+"-noExist"); err == nil {
-		t.Errorf("newFileRepositoryIndex(): succeeded with non-existent repo (name)")
+	if _, err := newFileGrapplicationIndex(getContext(), testGrappName+"-noExist"); err == nil {
+		t.Errorf("newFileGrapplicationIndex(): succeeded with non-existent grapp (name)")
 	}
 
 }
 
 // tests to make sure that
 // scan() will respond with success even thoough a
-// new repository will not yet have an index file
+// new grapplication will not yet have an index file
 // created because no commits have been issued yet on the index
-func testNewFileRepoIndexThenScanWithNoIndexFile(t *testing.T) {
+func testNewFileGrappIndexThenScanWithNoIndexFile(t *testing.T) {
 
-	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+	f, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer f.close()
 
 	var req *msgIndexResultSetRequest
@@ -203,8 +203,8 @@ func testNewFileRepoIndexThenScanWithNoIndexFile(t *testing.T) {
 }
 
 // tests a new instance followed by a commit with no prior pending changes
-func testNewFileRepoIndexThenEmptyCommit(t *testing.T) {
-	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+func testNewFileGrappIndexThenEmptyCommit(t *testing.T) {
+	f, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer f.close()
 
 	if _, err := os.Stat(f.path); err == nil {
@@ -231,9 +231,9 @@ func testNewFileRepoIndexThenEmptyCommit(t *testing.T) {
 
 // tests that rollback operation is a no-op on non-existent index and
 // does not throw an error
-func testNewFileRepoIndexThenEmptyRollback(t *testing.T) {
+func testNewFileGrappIndexThenEmptyRollback(t *testing.T) {
 
-	f, _, _ := newFileRepoIdxWithCancelFunc(t)
+	f, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer f.close()
 
 	if _, err := os.Stat(f.path); err == nil {
@@ -254,13 +254,13 @@ func testNewFileRepoIndexThenEmptyRollback(t *testing.T) {
 
 // tests that index stage on empty index followed by rollback and rescan
 // results in zero entries in the index
-func testFileRepoIndexUpdateAndReadBackInTx(t *testing.T) {
+func testFileGrappIndexUpdateAndReadBackInTx(t *testing.T) {
 
 	var requests [3]common.StagingResource
 
 	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -340,18 +340,18 @@ func testFileRepoIndexUpdateAndReadBackInTx(t *testing.T) {
 }
 
 // tests that staged and commmitted changes to index can be scanned back
-func testFileRepoIndexUpdateCommitAndReadBack(t *testing.T) {
+func testFileGrappIndexUpdateCommitAndReadBack(t *testing.T) {
 
 	var requests [3]common.StagingResource
 
 	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
-	//t.Logf("testFileRepoIndexUpdateAndReadBack() ...")
-	//defer t.Logf("testFileRepoIndexUpdateAndReadBack() !")
+	//t.Logf("testFileGrappIndexUpdateAndReadBack() ...")
+	//defer t.Logf("testFileGrappIndexUpdateAndReadBack() !")
 	for _, r := range requests {
 
 		if err := index.stage(r); err != nil {
@@ -443,18 +443,18 @@ func testFileRepoIndexUpdateCommitAndReadBack(t *testing.T) {
 
 // tests that issuing a filtered  scan for one committed resource of multiple can be scanned
 // back after committing said resources
-func testFileRepoIndexUpdateCommitAndScanForOne(t *testing.T) {
+func testFileGrappIndexUpdateCommitAndScanForOne(t *testing.T) {
 
 	var requests [3]common.StagingResource
 
 	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
-	//t.Logf("testFileRepoIndexUpdateAndReadBack() ...")
-	//defer t.Logf("testFileRepoIndexUpdateAndReadBack() !")
+	//t.Logf("testFileGrappIndexUpdateAndReadBack() ...")
+	//defer t.Logf("testFileGrappIndexUpdateAndReadBack() !")
 	for _, r := range requests {
 
 		if err := index.stage(r); err != nil {
@@ -553,13 +553,13 @@ func testFileRepoIndexUpdateCommitAndScanForOne(t *testing.T) {
 
 }
 
-func testFileRepoIndexStageThreeCommitAndStageUpdateOneReadBack(t *testing.T) {
+func testFileGrappIndexStageThreeCommitAndStageUpdateOneReadBack(t *testing.T) {
 
 	var requests [3]common.StagingResource
 
 	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -687,7 +687,7 @@ func testRemoveSingleNodeResourceFromIndex(t *testing.T) {
 
 	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -829,7 +829,7 @@ func testRemoveSingleNamedGraphResourceWithChildrenFromIndex(t *testing.T) {
 
 	//	requests[0], requests[1], requests[2] = getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -932,7 +932,7 @@ func testLockIndexOnModify(t *testing.T) {
 	entry.LastModifiedNs = 1600103677854799000
 	entry.ObjectCID = "bafyreigcm277jvvdmenqkudvan3mn7icvzdj2a3eygtgilkf2mypcrkgvi"
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -946,7 +946,7 @@ func testLockIndexOnModify(t *testing.T) {
 
 	// 	if here lock file is in place
 
-	index2, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index2, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index2.close()
 
 	// NOW THAT LOCK FILE EXISTS. TRY TO STAGE SOOMETHING in SECND OBJECT
@@ -1015,7 +1015,7 @@ func testInvalidIndexEntryValidate(t *testing.T) {
 
 	entry, _, _ := getThreeEntries()
 
-	index, _, _ := newFileRepoIdxWithCancelFunc(t)
+	index, _, _ := newFileGrappIdxWithCancelFunc(t)
 	defer index.close()
 	defer os.Remove(index.path)
 
@@ -1050,20 +1050,20 @@ func testInvalidIndexEntryValidate(t *testing.T) {
 
 }
 
-// tests that creating a new index object on a non existent repo fails
-func testNewFileRepoIndexOnNonExistentRepo(t *testing.T) {
+// tests that creating a new index object on a non existent grapp fails
+func testNewFileGrappIndexOnNonExistentGrapp(t *testing.T) {
 
-	var nonExistRepo = "not." + testRepoName
+	var nonExistGrapp = "not." + testGrappName
 
 	ctxt := getContext()
 
-	if index, err := newFileRepositoryIndex(ctxt, nonExistRepo); err == nil {
+	if index, err := newFileGrapplicationIndex(ctxt, nonExistGrapp); err == nil {
 		index.close()
-		t.Errorf("testNewFileRepoIndexOnNonExistentRepo(): did not fail "+
-			"on non-existent repository: %s", nonExistRepo)
+		t.Errorf("testNewFileGrappIndexOnNonExistentGrapp(): did not fail "+
+			"on non-existent grapplication: %s", nonExistGrapp)
 	} else {
 
-		t.Logf("testNewFileRepoIndexOnNonExistentRepo: %s", err)
+		t.Logf("testNewFileGrappIndexOnNonExistentGrapp: %s", err)
 	}
 
 }
