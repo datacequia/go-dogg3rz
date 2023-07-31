@@ -24,7 +24,7 @@ import (
 )
 
 type dgrzAlterContext struct {
-	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	//	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//subcommands-optional:"true"
 	Dataset dgrzAlterContextDataset `command:"dataset" alias:"ds" description:"the dataset object in which to alter the context"`

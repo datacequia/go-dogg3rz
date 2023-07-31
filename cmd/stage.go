@@ -24,7 +24,7 @@ import (
 
 // STAGE  DEFAULT-GRAPH | GRAPH IRI | NODE IRI
 type dgrzStageCmd struct {
-	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	All     dgrzStageAllCmd     `command:"all" description:"stage all resources in a grapplication"`
 	Dataset dgrzStageDatasetCmd `command:"dataset" alias:"ds" description:"stage objects in a dataset"`

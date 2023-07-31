@@ -23,7 +23,7 @@ import (
 
 // Command to get list of dataset in a grapp
 type dgrzGetDatasetCmd struct {
-	Grapplication string `long:"grapp" short:"r"  env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	Grapplication string `long:"grapplication" short:"g"  env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 }
 
 /*

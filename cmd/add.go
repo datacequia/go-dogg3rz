@@ -5,7 +5,7 @@ import (
 )
 
 type dgrzAddCmd struct {
-	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Positional struct {
 		Path string `positional-arg-name:"FILE" description:"path to resource file (.jsonld)" required:"yes" `

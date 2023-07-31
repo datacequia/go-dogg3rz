@@ -45,7 +45,7 @@ import (
 )
 
 type dgrzCreateDataset struct {
-	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	//	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Positional struct {
 		DatasetPath string `positional-arg-name:"DATASET_PATH" description:"grapplication path to dataset" required:"yes" `

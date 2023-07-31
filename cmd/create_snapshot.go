@@ -19,7 +19,7 @@ import (
 )
 
 type dgrzCreateSnapshot struct {
-	//	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	//	Grapplication string `long:"grapp" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 }
 
 ///////////////////////////////////////////////////////////

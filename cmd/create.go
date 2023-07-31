@@ -14,7 +14,7 @@
 package cmd
 
 type dgrzCreateCmd struct {
-	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//	DirPath      string                 `long:"dirpath" description:"directory path" required:"true"`
 	Dataset dgrzCreateDataset `command:"dataset" alias:"ds" description:"create a new dataset" `

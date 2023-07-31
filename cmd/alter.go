@@ -14,7 +14,7 @@
 package cmd
 
 type dgrzAlterCmd struct {
-	Grapplication string `long:"grapp" short:"r" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	Context dgrzAlterContext `command:"context" alias:"ctxt" description:"alter a JSON-LD object's context"`
 }
