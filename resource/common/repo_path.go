@@ -27,7 +27,7 @@ type GrapplicationPath struct {
 	lastCharPathElement bool
 }
 
-var REPO_PATH_SEPARATOR = '/'
+var GRAPP_PATH_SEPARATOR = '/'
 
 var VALID_PATH_ELEMENT_SPECIAL_CHARS = []rune{'.', '_', '-'}
 
@@ -39,7 +39,7 @@ func GrapplicationPathNew(path string) (*GrapplicationPath, error) {
 
 	rp := &GrapplicationPath{}
 
-	if rune(path[len(path)-1]) == REPO_PATH_SEPARATOR {
+	if rune(path[len(path)-1]) == GRAPP_PATH_SEPARATOR {
 		// PATH LAST CHARACTER ENDS WITH PATH SEP. MUST BE REFERRING TO DIR
 		rp.lastCharPathElement = true
 
@@ -47,7 +47,7 @@ func GrapplicationPathNew(path string) (*GrapplicationPath, error) {
 
 	var standardizedPathElements []string
 
-	paths := strings.Split(path, string(REPO_PATH_SEPARATOR))
+	paths := strings.Split(path, string(GRAPP_PATH_SEPARATOR))
 
 	for _, path := range paths {
 
@@ -99,7 +99,7 @@ func GrapplicationPathNew(path string) (*GrapplicationPath, error) {
 
 func (rp *GrapplicationPath) ToString() string {
 
-	pj := strings.Join(rp.pathElements, string(REPO_PATH_SEPARATOR))
+	pj := strings.Join(rp.pathElements, string(GRAPP_PATH_SEPARATOR))
 
 	if rp.lastCharPathElement {
 		// TACK ON A TRAILING PATH SEPARATOR
@@ -107,7 +107,7 @@ func (rp *GrapplicationPath) ToString() string {
 		// CONSTRUCTED
 
 		// I.E. INTENDED TO BE A DIR
-		return pj + string(REPO_PATH_SEPARATOR)
+		return pj + string(GRAPP_PATH_SEPARATOR)
 	}
 
 	return pj

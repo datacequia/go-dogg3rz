@@ -44,7 +44,7 @@ type JSONLDDocumentLocation struct {
 
 type StagingResourceLocation struct {
 	JSONLDDocumentLocation
-	DatasetPath string // REPOSITORY PATH TO DATASET
+	DatasetPath string // GRAPPLICATION PATH TO DATASET
 }
 
 // StagingResource is a struct whose members describe the location within
@@ -262,7 +262,8 @@ func (sr StagingResourceLocation) CanStage() bool {
 // be staged to IPFS with an IPLD object that represents it's contents
 // and resulting CID value be assigned
 // to attribute value StagingResource.ObjectCID based on the state attribute values
-//  StagingResource.ObjectType and StagingResource.ContainerType
+//
+//	StagingResource.ObjectType and StagingResource.ContainerType
 func (sr StagingResourceLocation) WantsCID() bool {
 
 	var answer bool

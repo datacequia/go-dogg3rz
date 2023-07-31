@@ -13,23 +13,13 @@
 
 package primitives
 
-//const D_ATTR_NAME = "objectHeads"
+// const D_ATTR_NAME = "objectHeads"
 const TYPE_DOGG3RZ_SNAPSHOT = "dogg3rz.snapshot"
 
-//const MD_ATTR_NAME = "name"
-//const MD_ATTR_IPFS_PEER_ID = "ipfsPeerId"
+// const MD_ATTR_NAME = "name"
+// const MD_ATTR_IPFS_PEER_ID = "ipfsPeerId"
 const META_ATTR_EMAIL_ADDR = "_email.address"
-const META_ATTR_REPO_NAME = "_repository.name"
-const META_ATTR_REPO_ID = "_repository.id"
+const META_ATTR_GRAPP_NAME = "_grapplication.name"
+const META_ATTR_GRAPP_ID = "_grapplication.id"
 
 const BODY_ATTR_ROOT_TREE = "rootTree"
-
-//const D_ATTR_ROOT_TREE = "rootTree"
-//const D_ATTR_TRIPLES = "triples"
-//const D_ATTR_IMPORTS = "imports"
-
-/*
-var reservedMDAttrCommit = [...]string{MD_ATTR_REPO_NAME, MD_ATTR_EMAIL_ADDR}
-
-var reservedDAttrCommit = [...]string{D_ATTR_TRIPLES, D_ATTR_IMPORTS}
-*/

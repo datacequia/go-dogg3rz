@@ -1,4 +1,4 @@
-/*
+G/*
  * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
  * This program is licensed to you under the Apache License Version 2.0,
@@ -11,7 +11,7 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package repo
+package grapp
 
 import (
 	"context"
@@ -42,7 +42,7 @@ type GrapplicationResource interface {
 		domain string, _range string, label string, comment string) error
 
 	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
-	// FOR DATASET datasetPath REPO grappName
+	// FOR DATASET datasetPath GRAPP grappName
 	InsertNode(ctxt context.Context, grappName string, datasetPath string,
 		nodeType string, nodeID string, graphName string,
 		nodeProperties []string, nodeValues []string) error
@@ -50,16 +50,16 @@ type GrapplicationResource interface {
 	GetDataSets(ctxt context.Context, grappName string) ([]string, error)
 
 	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
-	// FOR DATASET datasetPath REPO grappName
+	// FOR DATASET datasetPath GRAPP grappName
 	CreateNamedGraph(ctxt context.Context, grappName string, datasetPath string, graphName string,
 		parentGraphName string) error
 
-	// ADD DATASET TO REPOSITORY
+	// ADD DATASET TO GRAPPLICATION
 	Add(ctxt context.Context, grappName string, path string) error
 }
 
 // ALLOWS USER TO STAGE/UNSTAGE (i.e. .Add(), Remove() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY
-// TO REPOSITORY IDENTIFIED BY VALUE RETURNED FROM  .Grapplication()
+// TO GRAPPLICATION IDENTIFIED BY VALUE RETURNED FROM  .Grapplication()
 // BEFORE FLUSHING STAGED RESOURCES USING .Commit()
 //
 // NOTE: CALLER SHOULD PASS THE SAME CANCELLABLE (context.Context.WithCancel()) CONTEXT OBJECT INSTANCE
