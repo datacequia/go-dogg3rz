@@ -14,50 +14,59 @@
 package cmd
 
 import (
-	"fmt"
-
+	"github.com/datacequia/go-dogg3rz/ipfs"
 	"github.com/datacequia/go-dogg3rz/resource"
 	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
+/*
 type dgrzInitCmd struct {
 	Node  dgrzInitNode  `command:"node" description:"initialize this host as a dogg3rz node" `
-	Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
+	//Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
+}
+*/
+
+type dgrzInitCmd struct {
+	ActivityPubUserHandle string `long:"activitypub-handle" description:"user's ActivityPub handle (i.e. @<user>@<host>)" required:"true"`
+	IPFSApiEndpoint       string `long:"ipfs-api-endpoint" description:"the http(s) url your IPFS node's api endpoint listener" default:"http://localhost:5001/"`
 }
 
-type dgrzInitNode struct {
-	UserEmail       string `long:"user-email" description:"user's email address" required:"true"`
-	UserFirstName   string `long:"user-firstname" description:"user's first name"`
-	UserLastName    string `long:"user-lastname" description:"user's last name"`
-	IPFSApiEndpoint string `long:"ipfs-api-endpoint" description:"the http(s) url your IPFS node's api endpoint listener" default:"http://localhost:5001/"`
-}
-
+/*
 type dgrzInitGrapp struct {
 	Positional struct {
 		GrappName string `positional-arg-name:"GRAPP_NAME" required:"yes" `
 	} `positional-args:"yes"`
 }
+*/
 
 func init() {
 	// REGISTER THE 'init' COMMAND
 	register(&dgrzInitCmd{})
 }
 
-func (x *dgrzInitNode) Execute(args []string) error {
+func (x *dgrzInitCmd) Execute(args []string) error {
 
 	var c config.Dogg3rzConfig
 
 	// ASSIGN REQUIIRED USER EMAIL
-	c.User.Email = x.UserEmail
-	c.User.FirstName = x.UserFirstName
-	c.User.LastName = x.UserLastName
+	c.User.ActivityPubUserHandle = x.ActivityPubUserHandle
 
 	ctxt := getCmdContext()
 
-	return resource.GetNodeResource(ctxt).InitNode(ctxt, c)
+	// INITIALIZE USER ENVIRONMENT
+	if err := resource.GetNodeResource(ctxt).InitNode(ctxt, c); err != nil {
+		return err
+	}
 
+	// PULL IPFS IMAGE
+	if err := ipfs.PullDefault(); err != nil {
+		return err
+	}
+
+	return nil
 }
 
+/*
 func (x *dgrzInitGrapp) Execute(args []string) error {
 
 	ctxt := getCmdContext()
@@ -65,23 +74,26 @@ func (x *dgrzInitGrapp) Execute(args []string) error {
 	return resource.GetGrapplicationResource(ctxt).InitGrapp(ctxt, x.Positional.GrappName)
 
 }
+*/
 
 // // IMPLEMENTS 'Commander' interface
+/*
 func (x *dgrzInitCmd) Execute(args []string) error {
 
 	fmt.Printf("Grapp path is '%s'\n", "d")
 
 	return nil
 }
+*/
 
 func (o *dgrzInitCmd) CommandName() string {
 	return "init"
 }
 
 func (o *dgrzInitCmd) ShortDescription() string {
-	return "initialize a new grapplication"
+	return "initialize the user environment"
 }
 
 func (o *dgrzInitCmd) LongDescription() string {
-	return "initialize a new grapplication"
+	return "initialize the user environment for use by this application"
 }

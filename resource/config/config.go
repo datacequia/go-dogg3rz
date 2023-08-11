@@ -73,20 +73,12 @@ const CONFIG_JSON_SCHEMA = `
 			"description":"User Information Section",
 			"type": "object",
 			"properties": {
-				"email": {
-					"description":"User's email address",
+				"activityPubUserHandle": {
+					"description":"User's ActivityPub handle",
 					"type":"string"
-				},
-				"firstName": {
-					"description":"User's first name",
-					"type": "string"
-				},
-				"lastName": {
-					"description":"User's last name",
-					"description":"string"
 				}
 			},
-			"required":["email"]
+			"required":["activityPubUserHandle"]
 		}
   },
   "required": [ "ipfs","user" ]
@@ -101,16 +93,15 @@ const CONFIG_JSON_DEFAULT_TEMPLATE = `
       "apiEndpoint":"{{ .IPFS.ApiEndpoint }}"
     },
 		"user": {
-			"email":"{{ .User.Email }}",
-			"firstName":"{{ .User.FirstName }}",
-			"lastName":"{{ .User.LastName  }}"
+			"activityPubUserHandle":"{{ .User.ActivityPubUserHandle }}"
+
 		}
 
 }
 `
 const (
-    IPFSDeploymentStandalone = "standalone"
-    IPFSDeploymentEmbedded = "embedded"
+	IPFSDeploymentStandalone = "standalone"
+	IPFSDeploymentEmbedded   = "embedded"
 )
 
 type Dogg3rzConfig struct {
@@ -119,17 +110,15 @@ type Dogg3rzConfig struct {
 }
 
 type IPFSConfig struct {
-    Deployment string `json:"deployment"`
-    // standalone deployment properties
+	Deployment string `json:"deployment"`
+	// standalone deployment properties
 	ApiEndpoint string `json:"apiEndpoint"`
-    // embedded deployment properties
+	// embedded deployment properties
 
 }
 
 type UserConfig struct {
-	Email     string `json:"email"`
-	FirstName string `json:"firstName"`
-	LastName  string `json:"lastName"`
+	ActivityPubUserHandle string `json:"activityPubUserHandle"`
 }
 
 type ConfigResource interface {
@@ -143,16 +132,16 @@ func GenerateDefault(config Dogg3rzConfig) (string, error) {
 	var tmpl *template.Template
 	var err error
 
-    // IF IPFS DEPLOYMENT TYPE NOT SPECIFIED
-    // DEFAULT TO STANDALONE 
-    if len(config.IPFS.Deployment) == 0 {
-        config.IPFS.Deployment = IPFSDeploymentStandalone
-    }	
+	// IF IPFS DEPLOYMENT TYPE NOT SPECIFIED
+	// DEFAULT TO STANDALONE
+	if len(config.IPFS.Deployment) == 0 {
+		config.IPFS.Deployment = IPFSDeploymentStandalone
+	}
 
-    // DEFAULT TO localhost:5001 if not provided
-    // AND DEPLOYMENT TYPE IS STANDALONE
-	if config.IPFS.Deployment == IPFSDeploymentStandalone && 
-       len(config.IPFS.ApiEndpoint) == 0 {
+	// DEFAULT TO localhost:5001 if not provided
+	// AND DEPLOYMENT TYPE IS STANDALONE
+	if config.IPFS.Deployment == IPFSDeploymentStandalone &&
+		len(config.IPFS.ApiEndpoint) == 0 {
 		config.IPFS.ApiEndpoint = "http://localhost:5001/"
 	}
 
@@ -162,8 +151,7 @@ func GenerateDefault(config Dogg3rzConfig) (string, error) {
 		return "", err
 	}
 
-    // TODO: MAKE SURE DEFAULT CONFORMS TO JSON SCHEMA
-    
+	// TODO: MAKE SURE DEFAULT CONFORMS TO JSON SCHEMA
 
 	err = tmpl.Execute(&buf, config)
 	if err != nil {

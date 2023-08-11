@@ -269,7 +269,7 @@ func createSnapshotObject(ctxt context.Context, grappName string, rootTree *map[
 
 	meta[primitives.META_ATTR_GRAPP_NAME] = grappName
 
-	meta[primitives.META_ATTR_EMAIL_ADDR] = c.User.Email
+	meta[primitives.META_ATTR_EMAIL_ADDR] = c.User.ActivityPubUserHandle
 
 	body := make(map[string]interface{})
 

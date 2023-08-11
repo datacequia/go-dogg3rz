@@ -15,7 +15,7 @@ import (
 )
 
 const (
-	imageName      = "ipfs/kubo:v0.15.0"
+	imageName      = "ipfs/kubo:v0.22.0"
 	defaultTimeout = time.Second * 5
 	cmdPull        = "pull"
 	cmdRun         = "run"
