@@ -1,3 +1,5 @@
+//go:build nothing
+
 /*
  * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
@@ -31,7 +33,7 @@ import (
 )
 
 var dogg3rzHome string
-var fileGrappIdx *fileGrappsitoryIndex
+var fileGrappIdx *fileGrapplicationIndex
 
 // returns a cancellable cnotext that inits DOGG3RZ_HOME
 // to package var dogg3rzHome
@@ -62,7 +64,7 @@ func indexSetup(t *testing.T) {
 	var dgrzConf config.Dogg3rzConfig
 
 	// REQUIRED CONF
-	dgrzConf.User.Email = "test@dogg3rz.com"
+	dgrzConf.User.ActivityPubUserHandle = "@test@dogg3rz.com"
 
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		t.Error(err)

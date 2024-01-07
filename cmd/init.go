@@ -87,7 +87,7 @@ func (x *dgrzInitCmd) Execute(args []string) error {
 */
 
 func (o *dgrzInitCmd) CommandName() string {
-	return "init"
+	return "init-env"
 }
 
 func (o *dgrzInitCmd) ShortDescription() string {

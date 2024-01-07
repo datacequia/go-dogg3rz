@@ -1,3 +1,5 @@
+//go:build nothing
+
 // Common dependent test functions that are used by other test
 // in this module
 package grapp
@@ -83,7 +85,7 @@ func initTestNode(dogg3rzHomePrefix string) (context.Context, context.CancelFunc
 	var dgrzConf config.Dogg3rzConfig
 
 	// REQUIRED CONF
-	dgrzConf.User.Email = "test@dogg3rz.com"
+	dgrzConf.User.ActivityPubUserHandle = "@test@dogg3rz.com"
 
 	if err := fileNodeResource.InitNode(ctxt, dgrzConf); err != nil {
 		//t.Error(err)

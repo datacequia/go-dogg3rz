@@ -1,3 +1,5 @@
+//go:build nothing
+
 /*
  * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *

@@ -17,6 +17,8 @@ import (
 	"context"
 	"errors"
 	"log"
+	"os"
+
 	//	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/env"
 	"github.com/jessevdk/go-flags"
@@ -76,5 +78,7 @@ func Run() {
 	_, err := parser.Parse()
 	if err != nil {
 		//log.Fatalf("failed to parse command line arguments: %s", err)
+
+		os.Exit(1)
 	}
 }

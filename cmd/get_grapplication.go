@@ -13,14 +13,6 @@
 
 package cmd
 
-import (
-	"github.com/datacequia/go-dogg3rz/impl/file"
-
-	"os"
-
-	"github.com/datacequia/go-dogg3rz/resource"
-)
-
 // Command to get list of dataset in a grapp
 type dgrzGetDatasetCmd struct {
 	Grapplication string `long:"grapplication" short:"g"  env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
@@ -34,17 +26,21 @@ func init() {
 */
 
 func (x *dgrzGetDatasetCmd) Execute(args []string) error {
+	/*
+		ctxt := getCmdContext()
+		grapp := resource.GetGrapplicationResource(ctxt)
+		var files []string
+		var err error
 
-	ctxt := getCmdContext()
-	grapp := resource.GetGrapplicationResource(ctxt)
-	var files []string
-	var err error
-	files, err = grapp.GetDataSets(ctxt, x.Grapplication)
-	if err != nil {
+			files, err = grapp.GetDataSets(ctxt, x.Grapplication)
+			if err != nil {
+				return err
+			}
+
+		printValues(files, file.DgrzDirName, os.Stdout)
 		return err
-	}
-	printValues(files, file.DgrzDirName, os.Stdout)
-	return err
+	*/
+	return nil
 
 }
 

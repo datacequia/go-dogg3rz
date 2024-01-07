@@ -18,7 +18,9 @@ import (
 	"os"
 
 	//"github.com/datacequia/go-dogg3rz/impl/file"
+	"github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
+
 	//	"github.com/datacequia/go-dogg3rz/impl/file/config"
 	"github.com/datacequia/go-dogg3rz/impl/file/config"
 	conf "github.com/datacequia/go-dogg3rz/resource/config"
@@ -31,7 +33,7 @@ func (node *FileNodeResource) InitNode(ctxt context.Context, c conf.Dogg3rzConfi
 
 	file.DotDirPath(ctxt)
 
-	createDirList := []string{file.DotDirPath(ctxt), file.DataDirPath(ctxt), file.GrapplicationsDirPath(ctxt)}
+	createDirList := []string{file.DotDirPath(ctxt), file.DataDirPath(ctxt) /*, file.GrapplicationsDirPath(ctxt)*/}
 
 	for _, d := range createDirList {
 		// CREATE DIR SO THAT ONLY USER CAN R/W
@@ -52,14 +54,16 @@ func (node *FileNodeResource) InitNode(ctxt context.Context, c conf.Dogg3rzConfi
 }
 
 func (node *FileNodeResource) GetGrapps(ctxt context.Context) ([]string, error) {
-	root := file.GrapplicationsDirPath(ctxt)
+	/*
+		root := file.GrapplicationsDirPath(ctxt)
 
-	var files []string
-	var err error
+		var files []string
+		var err error
 
-	if file.DirExists(root) {
-		files, err = file.GetDirs(root)
-	}
+		if file.DirExists(root) {
+			files, err = file.GetDirs(root)
+		}
+	*/
 
-	return files, err
+	return nil, errors.GrappError.New("not implemented")
 }

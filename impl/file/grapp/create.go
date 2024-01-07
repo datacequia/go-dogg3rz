@@ -24,18 +24,7 @@ package grapp
 //	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 //	"github.com/datacequia/go-dogg3rz/util"
 import (
-	"context"
-	"io"
-	"os"
-	"path/filepath"
-
-	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/resource/common"
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
-	"github.com/google/uuid"
-
-	"github.com/datacequia/go-dogg3rz/primitives"
 )
 
 type fileCreateSchema struct {
@@ -46,6 +35,7 @@ type fileCreateSchema struct {
 
 //
 
+/*
 func (cs *fileCreateSchema) createSchema(ctxt context.Context, grappName string, schemaSubpath string, schemaReader io.Reader) error {
 
 	rp, err := common.GrapplicationPathNew(schemaSubpath)
@@ -75,9 +65,11 @@ func (cs *fileCreateSchema) createSchema(ctxt context.Context, grappName string,
 	return nil
 
 }
+*/
 
 // CREATES THE RESOURCE PATH IN THE DESIGNATED Grapplication OF A SPECIFIC
 // RESOURCE TYPE
+/*
 func (cs *fileCreateSchema) createGrapplicationResourcePath(
 	ctxt context.Context,
 	resPath *rescom.GrapplicationPath,
@@ -252,3 +244,4 @@ func (cs *fileCreateSchema) createGrapplicationResourcePath(
 	return curPath, nil
 
 }
+*/

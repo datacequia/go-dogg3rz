@@ -1,3 +1,5 @@
+//go:build nothing
+
 /*
  * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
@@ -75,72 +77,74 @@ func init() {
 // commaand entrypoint for staging either all 1) all datasets in a grapplication
 // or 2) stage all resources in a dataset
 func (cmd *dgrzStageAllCmd) Execute(args []string) error {
+	/*
+		ctxt, cancelFunc := context.WithCancel(getCmdContext())
+		defer cancelFunc()
 
-	ctxt, cancelFunc := context.WithCancel(getCmdContext())
-	defer cancelFunc()
-
-	stager, err := resource.GetGrapplicationResourceStager(ctxt, stageCmd.Grapplication)
-	if err != nil {
-		return err
-	}
-	defer stager.Close(ctxt)
-
-	stageDataset := func(ctxt context.Context, datasetName string) error {
-
-		srl := rescom.StagingResourceLocation{}
-		srl.ContainerType = jsonld.DatasetResource
-		srl.ContainerIRI = "" // n/a  for type
-		srl.ObjectType = jsonld.DatasetResource
-		srl.ObjectIRI = "" // n/a for type
-		srl.DatasetPath = datasetName
-
-		// STAGE DATASET
-		if err := stager.Add(ctxt, srl); err != nil {
-			if err2 := stager.Rollback(ctxt); err2 != nil {
-				return errors.Wrap(err, err2.Error())
-			}
-			return err
-
-		}
-
-		return nil
-
-	}
-
-	switch cmd {
-	case &stageCmd.All:
-		// STAGE ALL DATASETS IN A GRAPPLICATION
-
-		grapp := resource.GetGrapplicationResource(ctxt)
-
-		datasets, err := grapp.GetDataSets(ctxt, stageCmd.Grapplication)
+		stager, err := resource.GetGrapplicationResourceStager(ctxt, stageCmd.Grapplication)
 		if err != nil {
 			return err
 		}
+		defer stager.Close(ctxt)
 
-		if len(datasets) < 1 {
-			return errors.NotFound.New("no datasets to stage")
+		stageDataset := func(ctxt context.Context, datasetName string) error {
+
+			srl := rescom.StagingResourceLocation{}
+			srl.ContainerType = jsonld.DatasetResource
+			srl.ContainerIRI = "" // n/a  for type
+			srl.ObjectType = jsonld.DatasetResource
+			srl.ObjectIRI = "" // n/a for type
+			srl.DatasetPath = datasetName
+
+			// STAGE DATASET
+			if err := stager.Add(ctxt, srl); err != nil {
+				if err2 := stager.Rollback(ctxt); err2 != nil {
+					return errors.Wrap(err, err2.Error())
+				}
+				return err
+
+			}
+
+			return nil
+
 		}
 
-		for _, ds := range datasets {
-			if err := stageDataset(ctxt, ds); err != nil {
+		switch cmd {
+		case &stageCmd.All:
+			// STAGE ALL DATASETS IN A GRAPPLICATION
+
+			grapp := resource.GetGrapplicationResource(ctxt)
+
+			datasets, err := grapp.GetDataSets(ctxt, stageCmd.Grapplication)
+			if err != nil {
 				return err
 			}
+
+			if len(datasets) < 1 {
+				return errors.NotFound.New("no datasets to stage")
+			}
+
+			for _, ds := range datasets {
+				if err := stageDataset(ctxt, ds); err != nil {
+					return err
+				}
+			}
+
+		case &stageCmd.Dataset.All:
+
+			// STAGE A SPECIFIC DATASET WITHIN A GRAPPLICATION
+
+			if err := stageDataset(ctxt, stageCmd.Dataset.Positional.DatasetPath); err != nil {
+				return err
+			}
+
+		default:
+			panic("unhandled 'stage all' command context")
 		}
 
-	case &stageCmd.Dataset.All:
-
-		// STAGE A SPECIFIC DATASET WITHIN A GRAPPLICATION
-
-		if err := stageDataset(ctxt, stageCmd.Dataset.Positional.DatasetPath); err != nil {
-			return err
-		}
-
-	default:
-		panic("unhandled 'stage all' command context")
-	}
-
-	return stager.Commit(ctxt)
+		return stager.Commit(ctxt)
+	*/
+	return nil
 }
 
 // command entrypoint for staging outermost context in a json-ld dataset

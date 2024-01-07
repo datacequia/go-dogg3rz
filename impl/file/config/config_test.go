@@ -53,8 +53,8 @@ func TestValidateConfig(t *testing.T) {
 	var dgrzConf config.Dogg3rzConfig
 	var defaultConfS string
 
-	dgrzConf.User.Email = "test@datacequia.com"
-	dgrzConf.User.FirstName = "Dogg3rz"
+	dgrzConf.User.ActivityPubUserHandle = "@test@datacequia.com"
+	
 	defaultConfS, err = config.GenerateDefault(dgrzConf)
 	if err != nil {
 		t.FailNow()

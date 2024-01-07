@@ -25,7 +25,7 @@ type dgrzInsertCmd struct {
 
 		Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
 	*/
-	Node dgrzInsertNode `command:"node" description:"insert a JSON-LD Node into a grapplication dataset graph"`
+	//Node dgrzInsertNode `command:"node" description:"insert a JSON-LD Node into a grapplication dataset graph"`
 }
 
 ///////////////////////////////////////////////////////////

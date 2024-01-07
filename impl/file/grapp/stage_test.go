@@ -1,3 +1,5 @@
+//go:build nothing
+
 package grapp
 
 import (

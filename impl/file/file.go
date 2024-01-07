@@ -17,7 +17,6 @@ import (
 	"context"
 	"fmt"
 	"io"
-	"io/ioutil"
 	"log"
 	"os"
 	"path"
@@ -49,6 +48,7 @@ const IndexFormatVersion = uint32(1)
 const HeadFileName = "HEAD"
 const GrapplicationIdFileName = "ID"
 const JSONLDDocumentName = ".document.jsonld"
+const IPFSAPIPortCounterFileName = ".ipfs-api-port-counter"
 
 var validPathElementRegex = regexp.MustCompilePOSIX("^[a-z][-a-z0-9]*$")
 
@@ -163,38 +163,81 @@ func DataDirPath(ctxt context.Context) string {
 	return path.Join(DotDirPath(ctxt), dataDirName)
 }
 
-func GrapplicationsDirPath(ctxt context.Context) string {
-	return path.Join(DataDirPath(ctxt), grapplicationsDirName)
+func GrapplicationDirPath(ctxt context.Context) (string, error) {
 
-}
-func GrapplicationDgrzDirPath(ctxt context.Context, grappName string) string {
-	return path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName)
-}
+	var pwd string
+	var err error
 
-func GrapplicationRefsDirPath(ctxt context.Context, grappName string) string {
-	return path.Join(GrapplicationDgrzDirPath(ctxt, grappName), RefsDirName)
-}
+	for pwd, err = os.Getwd(); err == nil && !DirExists(path.Join(pwd, DgrzDirName)); pwd = filepath.Dir(pwd) {
+		if pwd == "." || pwd == string(os.PathListSeparator) {
+			return "", dgrzerr.NotFound.New("not a grapplication project")
+		}
 
-func GrapplicationRefsHeadsDirPath(ctxt context.Context, grappName string) string {
-	return path.Join(GrapplicationRefsDirPath(ctxt, grappName), HeadsDirName)
-}
+	}
 
-func GrapplicationDatasetDirPath(ctxt context.Context, grappName string, datasetName string) string {
-
-	return path.Join(GrapplicationsDirPath(ctxt), grappName, datasetName)
+	return pwd, err
 }
 
-func IndexFilePath(ctxt context.Context, grappName string) string {
-	return path.Join(GrapplicationsDirPath(ctxt), grappName, IndexFileName)
+func GrapplicationDgrzDirPath(ctxt context.Context) (string, error) {
+	gdp, err := GrapplicationDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+	return path.Join(gdp, DgrzDirName), nil
 }
 
-// returns list of directory nams that are grapplication dirs
+func GrapplicationRefsDirPath(ctxt context.Context) (string, error) {
+	gdp, err := GrapplicationDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+	return path.Join(gdp, RefsDirName), nil
+}
+
+func GrapplicationRefsHeadsDirPath(ctxt context.Context) (string, error) {
+	//	return path.Join(GrapplicationRefsDirPath(ctxt, grappName), HeadsDirName)
+	gdp, err := GrapplicationDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+	return path.Join(gdp, HeadsDirName), nil
+}
+
+func GrapplicationDatasetDirPath(ctxt context.Context, datasetName string) (string, error) {
+
+	//return path.Join(GrapplicationsDirPath(ctxt), grappName, datasetName)
+	gdp, err := GrapplicationDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+
+	return path.Join(gdp, RefsDirName, datasetName), nil
+
+}
+
+func IndexFilePath(ctxt context.Context) (string, error) {
+	//return path.Join(GrapplicationsDirPath(ctxt), IndexFileName),nil
+	gdp, err := GrapplicationDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+
+	return path.Join(gdp, IndexFileName), nil
+}
+
+// returns list of directory names that are grapplication dirs
+/*
 func GrapplicationDirList(ctxt context.Context) ([]string, error) {
 
 	var dirListing []os.FileInfo
 	var err error
+	var grappDirPath string
 
-	if dirListing, err = ioutil.ReadDir(GrapplicationsDirPath(ctxt)); err != nil {
+	if grappDirPath, err = GrapplicationDirPath(ctxt);err != nil {
+		return nil, err
+	}
+
+	if dirListing, err = os.ReadDir(grappDirPath); err != nil {
 		return nil, err
 	}
 
@@ -211,6 +254,8 @@ func GrapplicationDirList(ctxt context.Context) ([]string, error) {
 	return grappDirList, nil
 
 }
+*/
+
 func FileExists(path string) bool {
 	info, err := os.Stat(path)
 	if err != nil {
@@ -237,19 +282,20 @@ func DirExists(path string) bool {
 
 }
 
-func WriteHeadFile(ctxt context.Context, grappName string, branchName string) error {
+func WriteHeadFile(ctxt context.Context, grappDirPath string, branchName string) error {
 
 	content := fmt.Sprintf("ref: %s\n", filepath.Join(RefsDirName, HeadsDirName, branchName))
 
 	_, err := WriteToFileAtomic(func() (io.Reader, error) { return strings.NewReader(content), nil },
-		path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName))
-
+		//path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName))
+		path.Join(grappDirPath, DgrzDirName, HeadFileName))
 	return err
 }
 
-func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, grappName string, commitHash string) error {
+func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, grappDirPath string, commitHash string) error {
 
-	headFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName)
+	//headFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, HeadFileName)
+	headFile := path.Join(grappDirPath, DgrzDirName, HeadFileName)
 
 	if f, err := os.Open(headFile); err != nil {
 		return err
@@ -266,7 +312,8 @@ func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, grappName stri
 			}
 		}
 
-		commitHashFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, headFileSubPath)
+		//commitHashFile := path.Join(GrapplicationsDirPath(ctxt), grappName, DgrzDirName, headFileSubPath)
+		commitHashFile := path.Join(grappDirPath, DgrzDirName, headFileSubPath)
 
 		myFunc := func() (io.Reader, error) {
 			return strings.NewReader(commitHash), nil
@@ -281,11 +328,12 @@ func WriteCommitHashToCurrentBranchHeadFile(ctxt context.Context, grappName stri
 
 }
 
-func GrapplicationExist(ctxt context.Context, grappName string) bool {
+func GrapplicationExist(ctxt context.Context, grappDirPath string) bool {
 	// TODO: have this method return bool, error
-	grappPath := filepath.Join(GrapplicationsDirPath(ctxt), grappName)
+	//grappPath := filepath.Join(GrapplicationsDirPath(ctxt), grappName)
+	dgrzDirPath := filepath.Join(grappDirPath, DgrzDirName)
 
-	if info, err := os.Stat(grappPath); err != nil {
+	if info, err := os.Stat(dgrzDirPath); err != nil {
 		// PATH DOES NOT EXIST
 
 		return false
@@ -299,6 +347,7 @@ func GrapplicationExist(ctxt context.Context, grappName string) bool {
 
 }
 
+/*
 func GetResourceAttributeCB(resPath string, attrName string, cb func(io.Reader,
 	os.FileInfo) error) error {
 
@@ -370,17 +419,20 @@ func PutResourceAttributeS(resPath string, attrName string,
 	return PutResourceAttribute(resPath, attrName, attrValueAsReader)
 
 }
+*/
 
 func GetDirs(root string) ([]string, error) {
 	var files []string
 
-	fileInfo, err := ioutil.ReadDir(root)
+	fileInfo, err := os.ReadDir(root)
 	if err != nil {
 		return files, err
 	}
 
 	for _, file := range fileInfo {
-		files = append(files, file.Name())
+		if file.IsDir() {
+			files = append(files, file.Name())
+		}
 	}
 	return files, nil
 }

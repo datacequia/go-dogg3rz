@@ -36,7 +36,7 @@ func nodeGrappSetup(t *testing.T, prefix string) string {
 	var dgrzConf config.Dogg3rzConfig
 
 	// REQUIRED CONF
-	dgrzConf.User.Email = "test@dogg3rz.com"
+	dgrzConf.User.ActivityPubUserHandle = "@test@dogg3rz.com"
 
 	t.Logf("created DOGG3RZ_HOME at %s", dogg3rzHome)
 

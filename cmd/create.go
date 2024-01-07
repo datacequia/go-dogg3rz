@@ -13,18 +13,28 @@
 
 package cmd
 
+import (
+	"fmt"
+	"os"
+
+	"github.com/datacequia/go-dogg3rz/resource"
+)
+
 type dgrzCreateCmd struct {
-	Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
+	//Grapplication string `long:"grapplication" short:"g" env:"DOGG3RZ_GRAPP" description:"grapplication name" required:"true"`
 
 	//	DirPath      string                 `long:"dirpath" description:"directory path" required:"true"`
-	Dataset dgrzCreateDataset `command:"dataset" alias:"ds" description:"create a new dataset" `
+	//Dataset dgrzCreateDataset `command:"dataset" alias:"ds" description:"create a new dataset" `
 	//	Namespace dgrzCreateNamespace `command:"namespace" alias:"ns" description:"create a new namespace (IRI) in a grapplication directory" `
 
-	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the grapplication"`
+	//	Snapshot dgrzCreateSnapshot `command:"snapshot" alias:"ss" description:"create a snapshot of the grapplication"`
 
-	Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
+	//	Type dgrzCreateType `command:"type" description:"create an instance of an RDF [Schema] type"`
+	Positional struct {
+		GrapplicationDirectory string `positional-arg-name:"DIRECTORY" description:"grapplication project directory path" required:"no" `
+	} `positional-args:"yes"`
 
-	NamedGraph dgrzCreateNamedGraph `command:"namedgraph" alias:"ng" description:"create a new named graph in the dataset"`
+	// NamedGraph dgrzCreateNamedGraph `command:"namedgraph" alias:"ng" description:"create a new named graph in the dataset"`
 }
 
 ///////////////////////////////////////////////////////////
@@ -39,13 +49,34 @@ func init() {
 }
 
 func (o *dgrzCreateCmd) CommandName() string {
-	return "create"
+	return "init"
 }
 
 func (o *dgrzCreateCmd) ShortDescription() string {
-	return "create a new schema/non-data grapplication resource"
+	return "initialize directory as grapplication project"
 }
 
 func (o *dgrzCreateCmd) LongDescription() string {
-	return "create a new schema/non-data grapplication resource"
+	return "initialize directory as grapplication project"
+}
+
+func (x *dgrzCreateCmd) Execute(args []string) error {
+
+	ctxt := getCmdContext()
+
+	grapp := resource.GetGrapplicationResource(ctxt)
+
+	// DIRECTORY PATH POSITIONAL ARGUMENT NOT SUPPLIED
+	//
+	if len(x.Positional.GrapplicationDirectory) < 1 {
+		if d, err := os.Getwd(); err != nil {
+			return err
+		} else {
+			x.Positional.GrapplicationDirectory = d
+		}
+	}
+	fmt.Printf("INIT: { grapplication dir = %s }\n", x.Positional.GrapplicationDirectory)
+
+	return grapp.Create(ctxt, x.Positional.GrapplicationDirectory) //grapp.Add(ctxt, x.Grapplication, x.Positional.Path)
+
 }

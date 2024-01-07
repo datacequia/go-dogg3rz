@@ -15,9 +15,13 @@ package grapp
 
 import (
 	"context"
+	"io"
 	"os"
-	"path"
+	"strconv"
 	"strings"
+
+	"math"
+	"path"
 
 	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/impl/file"
@@ -28,9 +32,18 @@ const indexFileName = "index"
 type FileGrapplicationResource struct {
 }
 
-func (grapp *FileGrapplicationResource) InitGrapp(ctxt context.Context, name string) error {
+func (grapp *FileGrapplicationResource) Create(ctxt context.Context, grappDir string) error {
 
-	grappDir := path.Join(file.GrapplicationsDirPath(ctxt), name)
+	// check to see if grapp dir exists. if not try to create it
+	if !file.DirExists(grappDir) {
+		if err := os.MkdirAll(grappDir, 0750); err != nil {
+			return err
+		}
+
+	}
+
+	//grappDir := path.Join(file.GrapplicationsDirPath(ctxt), path)
+	//grappDir := path
 
 	// CREATE DEFAULT BRANCH DIR
 	mainBranchDir := path.Join(grappDir, file.MasterBranchName)
@@ -41,7 +54,8 @@ func (grapp *FileGrapplicationResource) InitGrapp(ctxt context.Context, name str
 	refsDir := path.Join(dgrzDir, file.RefsDirName)
 	headsDir := path.Join(refsDir, file.HeadsDirName)
 
-	dirsList := []string{grappDir, mainBranchDir, dgrzDir, refsDir, headsDir}
+	// CREATE GRAPP DIRS IN THE FOLLOWING ORDER
+	dirsList := []string{mainBranchDir, dgrzDir, refsDir, headsDir}
 
 	for _, d := range dirsList {
 
@@ -50,11 +64,11 @@ func (grapp *FileGrapplicationResource) InitGrapp(ctxt context.Context, name str
 		if err != nil {
 			if os.IsNotExist(err) {
 				// BASE GRAPP DIR DOES NOT EXIST
-				return dgrzerr.NotFound.Wrapf(err, file.GrapplicationsDirPath(ctxt))
+				return dgrzerr.NotFound.Wrapf(err, grappDir)
 			}
 			if os.IsExist(err) {
 
-				return dgrzerr.AlreadyExists.Wrapf(err, name)
+				return dgrzerr.AlreadyExists.Wrapf(err, grappDir)
 			}
 
 			return err
@@ -63,83 +77,92 @@ func (grapp *FileGrapplicationResource) InitGrapp(ctxt context.Context, name str
 
 	}
 	// WRITE THE HEAD FILE WITH A POINTER TO DEFAULT MASTER BRANCH
-	err := file.WriteHeadFile(ctxt, name, file.MasterBranchName)
+	err := file.WriteHeadFile(ctxt, grappDir, file.MasterBranchName)
 	if err != nil {
 		return err
 	}
 
-	return nil
+	// CREATE IPFS CONTAINER FOR THIS GRAPPLICATION
+	_, err = allocateIPFSAPIPort(ctxt, grappDir)
 
-}
+	return err
 
-func (grapp *FileGrapplicationResource) CreateSnapshot(ctxt context.Context, grappName string) error {
-
-	ss := &fileCreateSnapshot{}
-
-	return ss.createSnapshot(ctxt, grappName)
-
-}
-
-func (grapp *FileGrapplicationResource) CreateDataset(ctxt context.Context, grappName string, datasetPath string) error {
-
-	var fds *fileDataset
-	var err error
-
-	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
-		return err
-	}
-
-	if err := fds.create(ctxt); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (grapp *FileGrapplicationResource) AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error {
-
-	if err := addNamespaceDataset(ctxt, grappName, datasetPath, term, iri); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (grapp *FileGrapplicationResource) AddNamespaceNode(ctxt context.Context, grappName string, datasetPath string, nodeID string, term string, iri string) error {
-
-	o := &addNamespaceNode{}
-
-	if err := o.execute(ctxt, grappName, datasetPath, nodeID, term, iri); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-func (grapp *FileGrapplicationResource) GetDataSets(ctxt context.Context, grappName string) ([]string, error) {
-
-	grappDir := path.Join(file.GrapplicationsDirPath(ctxt), grappName)
-	var files []string
-	var err error
-
-	if file.DirExists(grappDir) {
-		files, err = file.GetDirs(grappDir)
-	}
-
-	// Ignore any dogg3rz internal dirs and files.
-	for i, v := range files {
-
-		if strings.HasPrefix(v, ".") {
-
-			files = append(files[:i], files[i+1:]...)
-		}
-	}
-
-	return files, err
 }
 
 func (grapp *FileGrapplicationResource) Add(ctxt context.Context, grappName string, path string) error {
 
-	return add(ctxt, grappName, path)
+	return dgrzerr.GrappError.New("not implemented") //add(ctxt, grappName, path)
+
+}
+
+func allocateIPFSAPIPort(ctxt context.Context, dirPath string) (int, error) {
+
+	return nextIPFSAPIPort(ctxt, 50001, dirPath)
+}
+
+// Allocate next available IPFS API Listen Port based on counter file
+// in dirPath
+func nextIPFSAPIPort(ctxt context.Context, basePortNum int, dirPath string) (int, error) {
+
+	if !file.DirExists(dirPath) {
+		return -1, dgrzerr.InvalidValue.Newf("%s is not a directory or does not exist", dirPath)
+	}
+
+	baseGrappDirPath := file.DataDirPath(ctxt) //file.GrapplicationsDirPath(ctxt)
+	//grappDirPath := path.Join(file.GrapplicationsDirPath(ctxt), grappDirName)
+	counterFilePath := path.Join(baseGrappDirPath, file.IPFSAPIPortCounterFileName)
+
+	var nextPort int = -1
+
+	const minTCPPort = 1025
+	const maxTCPPort = int(math.MaxUint16) // TCP PORTS ARE unsigned 16 bit integers
+
+	if basePortNum > maxTCPPort || basePortNum < minTCPPort {
+		// supplied base port is outside of user tcp port range
+		return -1, dgrzerr.OutOfRange.Newf("supplied base port number '%d' is outside of allowable tcp port range %d->%d",
+			basePortNum, minTCPPort, maxTCPPort)
+
+	}
+
+	counterFunc := func() (io.Reader, error) {
+		// READ NEXT PORT VALUE FROM PORT COUNTER FILE
+
+		nextPort = basePortNum
+
+		if file.FileExists(counterFilePath) {
+			// COUNTER FILE EXISTS. READ CURRENT VALUE
+
+			nextPortAsBytes, err := os.ReadFile(counterFilePath)
+
+			if err != nil {
+				return nil, err
+			}
+
+			if nextPort, err = strconv.Atoi(string(nextPortAsBytes)); err != nil {
+				return nil, err
+			}
+			nextPort++ // INCREMENT FROM EXISTING VALUE
+		}
+
+		// INCREMENT PORT COUNTER AND WRITE TO COUNTER FILE
+		return strings.NewReader(strconv.Itoa(nextPort)), nil
+
+	}
+
+	if _, err := file.WriteToFileAtomic(counterFunc, counterFilePath); err != nil {
+		return -1, err
+	}
+
+	if nextPort < minTCPPort {
+		// never initialized. programmer error
+		panic("nextPort never assigned or assigned out of range min value")
+	}
+
+	if nextPort > maxTCPPort {
+		return -1, dgrzerr.OutOfRange.Newf("exhausted port range %d-%d looking for unused IPFS API port",
+			basePortNum, maxTCPPort)
+	}
+
+	return nextPort, nil
 
 }

@@ -22,37 +22,38 @@ import (
 // GrapplicationResource is an interface the provides all the non-iterative interactions
 // a user can perform against a grapplication
 type GrapplicationResource interface {
-	InitGrapp(ctxt context.Context, grappName string) error
+	// CREATE A NEW GRAPPLICATION
+	Create(ctxt context.Context, grappName string) error
 
-	CreateDataset(ctxt context.Context, grappName string, datasetPath string) error
+	//CreateDataset(ctxt context.Context, grappName string, datasetPath string) error
 
-	AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error
+	//AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error
 
-	AddNamespaceNode(ctxt context.Context, grappName string, datasetPath string, nodeID string, term string, iri string) error
+	//AddNamespaceNode(ctxt context.Context, grappName string, datasetPath string, nodeID string, term string, iri string) error
 
-	CreateSnapshot(ctxt context.Context, grappName string) error
+	//CreateSnapshot(ctxt context.Context, grappName string) error
 
-	CreateTypeClass(ctxt context.Context, grappName string, datasetPath string, typeID string, subclassOf string,
-		label string, comment string) error
+	//CreateTypeClass(ctxt context.Context, grappName string, datasetPath string, typeID string, subclassOf string,
+	//	label string, comment string) error
 
-	CreateTypeDatatype(ctxt context.Context, grappName string, datasetPath string, typeID string, subclassOf string,
-		label string, comment string) error
+	//CreateTypeDatatype(ctxt context.Context, grappName string, datasetPath string, typeID string, subclassOf string,
+	//	label string, comment string) error
 
-	CreateTypeProperty(ctxt context.Context, grappName string, datasetPath string, typeID string, subPropertyOf string,
-		domain string, _range string, label string, comment string) error
+	//CreateTypeProperty(ctxt context.Context, grappName string, datasetPath string, typeID string, subPropertyOf string,
+	//	domain string, _range string, label string, comment string) error
 
 	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
 	// FOR DATASET datasetPath GRAPP grappName
-	InsertNode(ctxt context.Context, grappName string, datasetPath string,
-		nodeType string, nodeID string, graphName string,
-		nodeProperties []string, nodeValues []string) error
+	//InsertNode(ctxt context.Context, grappName string, datasetPath string,
+	//	nodeType string, nodeID string, graphName string,
+	//	nodeProperties []string, nodeValues []string) error
 	// Returns list of data sets in the grapp
-	GetDataSets(ctxt context.Context, grappName string) ([]string, error)
+	//GetDataSets(ctxt context.Context, grappName string) ([]string, error)
 
 	// INSERT NEW NODE INTO DEFAULT-GRAPH (graphName="") or NAMED-GRAPH (graphName!="")
 	// FOR DATASET datasetPath GRAPP grappName
-	CreateNamedGraph(ctxt context.Context, grappName string, datasetPath string, graphName string,
-		parentGraphName string) error
+	//CreateNamedGraph(ctxt context.Context, grappName string, datasetPath string, graphName string,
+	//	parentGraphName string) error
 
 	// ADD DATASET TO GRAPPLICATION
 	Add(ctxt context.Context, grappName string, path string) error

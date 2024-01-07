@@ -107,6 +107,7 @@ func GetGrapplicationResource(ctxt context.Context) resourcegrapp.GrapplicationR
 // GetGrapplicationResourceStager returns a GrapplicationResourceStager which allows the caller
 // to interact with the configured grapplication type at runtime for staging type
 // grapplication operations
+/*
 func GetGrapplicationResourceStager(ctxt context.Context, grappName string) (resourcegrapp.GrapplicationResourceStager, error) {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) //appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
@@ -123,3 +124,4 @@ func GetGrapplicationResourceStager(ctxt context.Context, grappName string) (res
 
 	}
 }
+*/
