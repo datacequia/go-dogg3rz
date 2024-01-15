@@ -14,12 +14,17 @@
 package cmd
 
 import (
+	"io"
+	"os"
+
+	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/resource"
 )
 
 type dgrzValidateCmd struct {
 	//Init dgrzConfigInitCmd `command:"init" description:"initialize the user environment configuration" `
 	//Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
+	Verbose []bool `short:"v" long:"verbose" description:"Show verbose validate information"`
 }
 
 func init() {
@@ -32,7 +37,20 @@ func (x *dgrzValidateCmd) Execute(args []string) error {
 	// INITIALIZE USER ENVIRONMENT
 	ctxt := getCmdContext()
 
-	if err := resource.GetGrapplicationResource(ctxt).Validate(ctxt); err != nil {
+	//fmt.Println("file vaalidate ", grappDir)
+	grappDir, err := file.GrapplicationDirPath(ctxt)
+	if err != nil {
+		return err
+	}
+	var verboseWriter io.Writer
+
+	if len(x.Verbose) > 0 && x.Verbose[0] {
+		verboseWriter = os.Stdout
+		//fmt.Println("chose verbose option", len(x.Verbose), x.Verbose[0])
+
+	}
+
+	if err := resource.GetGrapplicationResource(ctxt).Validate(ctxt, grappDir, verboseWriter); err != nil {
 		return err
 	}
 

@@ -1,15 +1,28 @@
 package grapp
 
+/*
+ * Copyright (c) 2019-2024 Datacequia LLC. All rights reserved.
+ *
+ * This program is licensed to you under the Apache License Version 2.0,
+ * and you may not use this file except in compliance with the Apache License Version 2.0.
+ * You may obtain a copy of the Apache License Version 2.0 at http://www.apache.org/licenses/LICENSE-2.0.
+ *
+ * Unless required by applicable law or agreed to in writing,
+ * software distributed under the Apache License Version 2.0 is distributed on an
+ * "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
+ */
+
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"io"
 	"os"
 	"path/filepath"
 	"strings"
 
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/piprate/json-gold/ld"
 )
 
@@ -26,20 +39,22 @@ type triple struct {
 	object_type interface{} // IRI for XSD TYPE OR "@"
 }
 
-func (grapp *FileGrapplicationResource) Validate(ctxt context.Context) error {
+func (grapp *FileGrapplicationResource) Validate(ctxt context.Context, grappDir string, vw io.Writer) error {
 
-	//fmt.Println("file vaalidate ", grappDir)
-	grappDir, err := file.GrapplicationDirPath(ctxt)
+	err := validateGrappProjectFiles(ctxt, grappDir, vw)
 	if err != nil {
-		return err
+		verbose(vw, "Validation completed with errors: ", err)
+	} else {
+		verbose(vw, "Validation completed successfully!")
 	}
+	return err
 
-	return validate(ctxt, grappDir)
 }
 
-func validate(ctxt context.Context, grappDir string) error {
+func validateGrappProjectFiles(ctxt context.Context, grappDir string, vw io.Writer) error {
 
-	projectFiles, err := listJsonLdFiles(grappDir)
+	verbose(vw, "Listing .jsonld files in project directory at %s...", grappDir)
+	projectFiles, err := listJsonLdFiles(grappDir, vw)
 	if err != nil {
 		return err
 	}
@@ -54,11 +69,14 @@ func validate(ctxt context.Context, grappDir string) error {
 		var err error
 		var parsedJson map[string]interface{}
 
+		verbose(vw, "Applying JSON parser to %s...", jsonLdFile)
 		if parsedJson, err = parseJSON(jsonLdFile); err != nil {
 			return err
 		}
-		var expandedJsonLd interface{}
+		//var expandedJsonLd interface{}
+		var p []interface{} // list of flattened json-ld objects
 
+		verbose(vw, "Applying JSON-LD processor to parsed JSON from %s...", jsonLdFile)
 		if p, err = process(parsedJson); err != nil {
 
 			return err
@@ -71,7 +89,7 @@ func validate(ctxt context.Context, grappDir string) error {
 		}
 
 		//fmt.Println("after process")
-		ld.PrintDocument(jsonLdFile, expandedJsonLd)
+		//ld.PrintDocument(jsonLdFile, expandedJsonLd)
 
 		/*
 			termNsMap := make(map[string]string)
@@ -178,7 +196,7 @@ func process(jsonMap map[string]interface{}) ([]interface{}, error) {
 
 }
 
-func listJsonLdFiles(grappDir string) ([]string, error) {
+func listJsonLdFiles(grappDir string, vw io.Writer) ([]string, error) {
 
 	// LIST ALL JSONLD FILES
 	files, err := os.ReadDir(grappDir)
@@ -191,7 +209,10 @@ func listJsonLdFiles(grappDir string) ([]string, error) {
 
 	for _, file := range files {
 		if file.Type().IsRegular() && strings.HasSuffix(strings.ToLower(file.Name()), ".jsonld") {
-			jsonLDFiles = append(jsonLDFiles, filepath.Join(grappDir, file.Name()))
+			newFile := filepath.Join(grappDir, file.Name())
+			jsonLDFiles = append(jsonLDFiles, newFile)
+
+			verbose(vw, newFile)
 		}
 	}
 
@@ -214,5 +235,14 @@ func (s *jsonParseStats) Read(p []byte) (int, error) {
 	}
 
 	return bytesRead, err
+
+}
+
+func verbose(w io.Writer, msg string, args ...interface{}) (int, error) {
+	if w == nil {
+		return 0, nil
+	}
+
+	return fmt.Fprintf(w, msg+"\n", args...)
 
 }

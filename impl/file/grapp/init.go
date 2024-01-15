@@ -34,6 +34,12 @@ type FileGrapplicationResource struct {
 
 func (grapp *FileGrapplicationResource) Init(ctxt context.Context, grappDir string) error {
 
+	return initGrappDir(ctxt, grappDir)
+
+}
+
+func initGrappDir(ctxt context.Context, grappDir string) error {
+
 	// check to see if grapp dir exists. if not try to create it
 	if !file.DirExists(grappDir) {
 		if err := os.MkdirAll(grappDir, 0750); err != nil {
@@ -41,9 +47,6 @@ func (grapp *FileGrapplicationResource) Init(ctxt context.Context, grappDir stri
 		}
 
 	}
-
-	//grappDir := path.Join(file.GrapplicationsDirPath(ctxt), path)
-	//grappDir := path
 
 	// CREATE DEFAULT BRANCH DIR
 	mainBranchDir := path.Join(grappDir, file.MasterBranchName)
@@ -88,14 +91,6 @@ func (grapp *FileGrapplicationResource) Init(ctxt context.Context, grappDir stri
 	return err
 
 }
-
-/*
-func (grapp *FileGrapplicationResource) Add(ctxt context.Context, grappName string, path string) error {
-
-	return dgrzerr.NotImplemented.New("add") //add(ctxt, grappName, path)
-
-}
-*/
 
 func allocateIPFSAPIPort(ctxt context.Context, dirPath string) (int, error) {
 

@@ -15,6 +15,7 @@ package grapp
 
 import (
 	"context"
+	"io"
 )
 
 // GrapplicationResource is an interface the provides all the non-iterative interactions
@@ -22,7 +23,7 @@ import (
 type GrapplicationResource interface {
 	// CREATE A NEW GRAPPLICATION
 	Init(ctxt context.Context, grappDirPath string) error
-	Validate(ctxt context.Context) error
+	Validate(ctxt context.Context, grappDirPath string, verbose io.Writer) error
 	//CreateDataset(ctxt context.Context, grappName string, datasetPath string) error
 
 	//AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error
