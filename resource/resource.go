@@ -17,14 +17,12 @@ import (
 	"context"
 	"fmt"
 
+	filegrapp "github.com/datacequia/go-dogg3rz/impl/file/grapp"
 	resourceconfig "github.com/datacequia/go-dogg3rz/resource/config"
 	resourcegrapp "github.com/datacequia/go-dogg3rz/resource/grapp"
-	resourcenode "github.com/datacequia/go-dogg3rz/resource/node"
 
 	//fileconfig "github.com/datacequia/go-dogg3rz/impl/file/config"
 	fileconfig "github.com/datacequia/go-dogg3rz/impl/file/config"
-	filegrapp "github.com/datacequia/go-dogg3rz/impl/file/grapp"
-	filenode "github.com/datacequia/go-dogg3rz/impl/file/node"
 
 	"github.com/datacequia/go-dogg3rz/env"
 	"github.com/datacequia/go-dogg3rz/util"
@@ -69,6 +67,7 @@ func GetConfigResource(ctxt context.Context) resourceconfig.ConfigResource {
 // GetNodeResource returns a NodeResource which allows the caller
 // to interact with the node at runtime for all supported
 // node type operations
+/*
 func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
 
 	storeType := util.ContextValueAsStringOrDefault(ctxt, env.EnvDogg3rzStateStore, StateStoreTypeFile) // appCtxt.GetOrDefault("DOGG3RZ_STATE_STORE", StateStoreTypeFile)
@@ -84,6 +83,7 @@ func GetNodeResource(ctxt context.Context) resourcenode.NodeResource {
 
 	}
 }
+*/
 
 // GetGrapplicationResource returns a GrapplicationResource which allows the caller
 // to interact with the configured grapplication type at runtime for most

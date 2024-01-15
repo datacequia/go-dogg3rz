@@ -46,6 +46,7 @@ const (
 	EmptyCommit        // AN ATTEMPT TO COMMIT A RESOURCE BUT NOTHING TO COMMIT
 	ExternalError      // EXTERNAL RESOURCE FAILED
 	UnexpectedBehavior // ENCOUNTERED UNEXPECTED BEHAVIOR WHEN INTERACTING WITH A RESOURCE
+	NotImplemented     // BEHAVIOR NOT IMPLEMENTED
 )
 
 type badDogg3rz struct {
@@ -109,6 +110,8 @@ func errorTypeToString(errType ErrorType) string {
 		return "ExternalError"
 	case UnexpectedBehavior:
 		return "UnexpectedBehavior"
+	case NotImplemented:
+		return "NotImplemented"
 	default:
 		panic("unknown error")
 	}

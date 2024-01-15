@@ -13,9 +13,7 @@
 
 package util
 
-import (
-	"context"
-)
+import "context"
 
 func ContextValueAsString(ctxt context.Context, key interface{}) (string, bool) {
 

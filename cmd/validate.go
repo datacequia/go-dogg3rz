@@ -14,47 +14,39 @@
 package cmd
 
 import (
-	"github.com/datacequia/go-dogg3rz/impl/file"
-
-	"os"
-
 	"github.com/datacequia/go-dogg3rz/resource"
 )
 
-// Command to get list of grapplications
-type dgrzGetGrappCmd struct {
+type dgrzValidateCmd struct {
+	//Init dgrzConfigInitCmd `command:"init" description:"initialize the user environment configuration" `
+	//Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
 }
 
-/*
 func init() {
-	// REGISTER THE 'get grapp ' COMMAND
-	register(&dgrzGetGrappCmd{})
+	// REGISTER THE 'init' COMMAND
+	register(&dgrzValidateCmd{})
 }
-*/
 
-func (o *dgrzGetGrappCmd) Execute(args []string) error {
+func (x *dgrzValidateCmd) Execute(args []string) error {
 
+	// INITIALIZE USER ENVIRONMENT
 	ctxt := getCmdContext()
-	node := resource.GetNodeResource(ctxt)
-	var files []string
-	var err error
-	files, err = node.GetGrapps(ctxt)
-	if err != nil {
+
+	if err := resource.GetGrapplicationResource(ctxt).Validate(ctxt); err != nil {
 		return err
 	}
-	printValues(files, file.DgrzDirName, os.Stdout)
-	return err
 
+	return nil
 }
 
-func (o *dgrzGetGrappCmd) CommandName() string {
-	return "get grapplication"
+func (o *dgrzValidateCmd) CommandName() string {
+	return "validate"
 }
 
-func (o *dgrzGetGrappCmd) ShortDescription() string {
-	return "get listing of grapplications"
+func (o *dgrzValidateCmd) ShortDescription() string {
+	return "validate grapplication project files"
 }
 
-func (o *dgrzGetGrappCmd) LongDescription() string {
-	return "get listing of grapplications"
+func (o *dgrzValidateCmd) LongDescription() string {
+	return "validate grapplication project files"
 }

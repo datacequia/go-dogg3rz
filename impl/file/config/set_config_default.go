@@ -15,7 +15,6 @@ package config
 
 import (
 	"context"
-	"io/ioutil"
 	"os"
 
 	"github.com/datacequia/go-dogg3rz/resource/config"
@@ -30,7 +29,7 @@ func SetConfigDefault(ctxt context.Context, c config.Dogg3rzConfig) error {
 		return err
 	}
 
-	err = ioutil.WriteFile(configPath(ctxt), []byte(dgrzConfS), os.FileMode(0660))
+	err = os.WriteFile(configPath(ctxt), []byte(dgrzConfS), os.FileMode(0660))
 
 	return err
 

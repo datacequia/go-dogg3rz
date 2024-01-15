@@ -15,16 +15,14 @@ package grapp
 
 import (
 	"context"
-
-	rescom "github.com/datacequia/go-dogg3rz/resource/common"
 )
 
 // GrapplicationResource is an interface the provides all the non-iterative interactions
 // a user can perform against a grapplication
 type GrapplicationResource interface {
 	// CREATE A NEW GRAPPLICATION
-	Create(ctxt context.Context, grappName string) error
-
+	Init(ctxt context.Context, grappDirPath string) error
+	Validate(ctxt context.Context) error
 	//CreateDataset(ctxt context.Context, grappName string, datasetPath string) error
 
 	//AddNamespaceDataset(ctxt context.Context, grappName string, datasetPath string, term string, iri string) error
@@ -56,7 +54,7 @@ type GrapplicationResource interface {
 	//	parentGraphName string) error
 
 	// ADD DATASET TO GRAPPLICATION
-	Add(ctxt context.Context, grappName string, path string) error
+	//Add(ctxt context.Context, grappName string, path string) error
 }
 
 // ALLOWS USER TO STAGE/UNSTAGE (i.e. .Add(), Remove() )  EXISTING (JSON-LD) WORKSPACE RESOURCES ITERATIVELY
@@ -67,6 +65,7 @@ type GrapplicationResource interface {
 // TO ResourceStager METHODS WHICH REQUIRE A CONTEXT AND CALL THE CANCEL FUNCTION WHEN DONE TO ENSURE
 // ANY ALLOCATED GO-ROUTINES ALLOCATED DURING THE INTERACTION WITH THIS INTERFACE ARE DEALLOCATED
 
+/*
 type GrapplicationResourceStager interface {
 	Add(ctxt context.Context, sr rescom.StagingResourceLocation) error    // stage an new/existing resource (from workspace)
 	Remove(ctxt context.Context, sr rescom.StagingResourceLocation) error // remove resource from staging
@@ -75,3 +74,4 @@ type GrapplicationResourceStager interface {
 	Close(ctxt context.Context) error                                     // release all resources
 	Grapplication() string                                                // return grapplication context for staging operations
 }
+*/

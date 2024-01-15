@@ -169,7 +169,7 @@ func GrapplicationDirPath(ctxt context.Context) (string, error) {
 	var err error
 
 	for pwd, err = os.Getwd(); err == nil && !DirExists(path.Join(pwd, DgrzDirName)); pwd = filepath.Dir(pwd) {
-		if pwd == "." || pwd == string(os.PathListSeparator) {
+		if pwd == "." || pwd == string(os.PathSeparator) {
 			return "", dgrzerr.NotFound.New("not a grapplication project")
 		}
 

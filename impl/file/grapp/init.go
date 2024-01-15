@@ -32,7 +32,7 @@ const indexFileName = "index"
 type FileGrapplicationResource struct {
 }
 
-func (grapp *FileGrapplicationResource) Create(ctxt context.Context, grappDir string) error {
+func (grapp *FileGrapplicationResource) Init(ctxt context.Context, grappDir string) error {
 
 	// check to see if grapp dir exists. if not try to create it
 	if !file.DirExists(grappDir) {
@@ -89,11 +89,13 @@ func (grapp *FileGrapplicationResource) Create(ctxt context.Context, grappDir st
 
 }
 
+/*
 func (grapp *FileGrapplicationResource) Add(ctxt context.Context, grappName string, path string) error {
 
-	return dgrzerr.GrappError.New("not implemented") //add(ctxt, grappName, path)
+	return dgrzerr.NotImplemented.New("add") //add(ctxt, grappName, path)
 
 }
+*/
 
 func allocateIPFSAPIPort(ctxt context.Context, dirPath string) (int, error) {
 

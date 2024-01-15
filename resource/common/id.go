@@ -35,6 +35,8 @@ const RootPathElementName = "dgrz"
 // INTERFACE THAT IDENTIFIES A SPECIFIC
 //
 //	USER CREATED GRAPPLICATION RESOURCE (PRIMITIVE)
+
+/*
 type GrapplicationResourceId interface {
 	User() string            // THE USER CONTEXT. EMPTY STRIING IF NO USER CONTEXT
 	CommitMultiHash() string // THE COMMIT HASH FOR THE OBJECT. EMPTY STRING
@@ -47,3 +49,4 @@ type GrapplicationResourceId interface {
 	// UNIQUENESS
 
 }
+*/

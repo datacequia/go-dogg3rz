@@ -14,86 +14,57 @@
 package cmd
 
 import (
-	"github.com/datacequia/go-dogg3rz/ipfs"
+	"os"
+
 	"github.com/datacequia/go-dogg3rz/resource"
-	"github.com/datacequia/go-dogg3rz/resource/config"
 )
 
-/*
 type dgrzInitCmd struct {
-	Node  dgrzInitNode  `command:"node" description:"initialize this host as a dogg3rz node" `
-	//Grapp dgrzInitGrapp `command:"grapplication" alias:"grapp" description:"initialize a new grapplication" `
-}
-*/
-
-type dgrzInitCmd struct {
-	ActivityPubUserHandle string `long:"activitypub-handle" description:"user's ActivityPub handle (i.e. @<user>@<host>)" required:"true"`
-	IPFSApiEndpoint       string `long:"ipfs-api-endpoint" description:"the http(s) url your IPFS node's api endpoint listener" default:"http://localhost:5001/"`
-}
-
-/*
-type dgrzInitGrapp struct {
 	Positional struct {
-		GrappName string `positional-arg-name:"GRAPP_NAME" required:"yes" `
+		GrapplicationDirectory string `positional-arg-name:"DIRECTORY" description:"grapplication project directory path"  `
 	} `positional-args:"yes"`
 }
-*/
+
+///////////////////////////////////////////////////////////
+// CREATE COMMAND FUNCTIONS
+///////////////////////////////////////////////////////////
+
+var initCmd = dgrzInitCmd{}
 
 func init() {
 	// REGISTER THE 'init' COMMAND
-	register(&dgrzInitCmd{})
+	register(&initCmd)
 }
-
-func (x *dgrzInitCmd) Execute(args []string) error {
-
-	var c config.Dogg3rzConfig
-
-	// ASSIGN REQUIIRED USER EMAIL
-	c.User.ActivityPubUserHandle = x.ActivityPubUserHandle
-
-	ctxt := getCmdContext()
-
-	// INITIALIZE USER ENVIRONMENT
-	if err := resource.GetNodeResource(ctxt).InitNode(ctxt, c); err != nil {
-		return err
-	}
-
-	// PULL IPFS IMAGE
-	if err := ipfs.PullDefault(); err != nil {
-		return err
-	}
-
-	return nil
-}
-
-/*
-func (x *dgrzInitGrapp) Execute(args []string) error {
-
-	ctxt := getCmdContext()
-
-	return resource.GetGrapplicationResource(ctxt).InitGrapp(ctxt, x.Positional.GrappName)
-
-}
-*/
-
-// // IMPLEMENTS 'Commander' interface
-/*
-func (x *dgrzInitCmd) Execute(args []string) error {
-
-	fmt.Printf("Grapp path is '%s'\n", "d")
-
-	return nil
-}
-*/
 
 func (o *dgrzInitCmd) CommandName() string {
-	return "init-env"
+	return "init"
 }
 
 func (o *dgrzInitCmd) ShortDescription() string {
-	return "initialize the user environment"
+	return "initialize directory as grapplication project"
 }
 
 func (o *dgrzInitCmd) LongDescription() string {
-	return "initialize the user environment for use by this application"
+	return "initialize directory as grapplication project"
+}
+
+func (x *dgrzInitCmd) Execute(args []string) error {
+
+	ctxt := getCmdContext()
+
+	grapp := resource.GetGrapplicationResource(ctxt)
+
+	// DIRECTORY PATH POSITIONAL ARGUMENT NOT SUPPLIED
+	//
+	if len(x.Positional.GrapplicationDirectory) < 1 {
+		if d, err := os.Getwd(); err != nil {
+			return err
+		} else {
+			x.Positional.GrapplicationDirectory = d
+		}
+	}
+	//	fmt.Printf("INIT: { grapplication dir = %s }\n", x.Positional.GrapplicationDirectory)
+
+	return grapp.Init(ctxt, x.Positional.GrapplicationDirectory) //grapp.Add(ctxt, x.Grapplication, x.Positional.Path)
+
 }

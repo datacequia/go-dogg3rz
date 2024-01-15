@@ -123,6 +123,7 @@ type UserConfig struct {
 
 type ConfigResource interface {
 	GetConfig(ctxt context.Context) (*Dogg3rzConfig, error)
+	InitConfig(ctxt context.Context, config Dogg3rzConfig) error
 }
 
 func GenerateDefault(config Dogg3rzConfig) (string, error) {

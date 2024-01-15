@@ -16,8 +16,8 @@ package config
 import (
 	"context"
 	"encoding/json"
-	"io/ioutil"
 	"log"
+	"os"
 	"path"
 	"path/filepath"
 	"strings"
@@ -43,7 +43,7 @@ func (configResource *FileConfigResource) GetConfig(ctxt context.Context) (*reso
 
 	dgrzCfg := &resourceconfig.Dogg3rzConfig{}
 
-	byteValue, err := ioutil.ReadFile(configPath(ctxt))
+	byteValue, err := os.ReadFile(configPath(ctxt))
 	if err != nil {
 		return nil, err
 	}
@@ -54,6 +54,30 @@ func (configResource *FileConfigResource) GetConfig(ctxt context.Context) (*reso
 	}
 
 	return dgrzCfg, nil
+
+}
+
+func (configResource *FileConfigResource) InitConfig(ctxt context.Context, c resourceconfig.Dogg3rzConfig) error {
+
+	file.DotDirPath(ctxt)
+
+	createDirList := []string{file.DotDirPath(ctxt), file.DataDirPath(ctxt) /*, file.GrapplicationsDirPath(ctxt)*/}
+
+	for _, d := range createDirList {
+		// CREATE DIR SO THAT ONLY USER CAN R/W
+		err := os.Mkdir(d, os.FileMode(0700))
+
+		if err != nil {
+			return err
+		}
+	}
+
+	err := SetConfigDefault(ctxt, c)
+	if err != nil {
+		return err
+	}
+
+	return nil
 
 }
 

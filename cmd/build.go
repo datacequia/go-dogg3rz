@@ -1,5 +1,3 @@
-//go:build nothing
-
 /*
  * Copyright (c) 2019-2020 Datacequia LLC. All rights reserved.
  *
@@ -13,25 +11,4 @@
  * See the Apache License Version 2.0 for the specific language governing permissions and limitations there under.
  */
 
-package grapp
-
-import (
-	"context"
-	"fmt"
-)
-
-func (grapp *FileGrapplicationResource) CreateNamedGraph(ctxt context.Context, grappName string, datasetPath string, graphName string,
-	parentGraphName string) error {
-	var fds *fileDataset
-	var err error
-	if fds, err = newFileDataset(ctxt, grappName, datasetPath); err != nil {
-		return err
-	}
-
-	if err = fds.createNamedGraph(ctxt, graphName, parentGraphName); err != nil {
-		fmt.Println(err)
-		return err
-
-	}
-	return nil
-}
+package cmd

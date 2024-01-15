@@ -65,5 +65,5 @@ func (node *FileNodeResource) GetGrapps(ctxt context.Context) ([]string, error) 
 		}
 	*/
 
-	return nil, errors.GrappError.New("not implemented")
+	return nil, errors.NotImplemented.New("get grapplications")
 }
