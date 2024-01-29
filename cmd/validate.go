@@ -17,7 +17,6 @@ import (
 	"io"
 	"os"
 
-	"github.com/datacequia/go-dogg3rz/impl/file"
 	"github.com/datacequia/go-dogg3rz/resource"
 )
 
@@ -37,11 +36,6 @@ func (x *dgrzValidateCmd) Execute(args []string) error {
 	// INITIALIZE USER ENVIRONMENT
 	ctxt := getCmdContext()
 
-	//fmt.Println("file vaalidate ", grappDir)
-	grappDir, err := file.GrapplicationDirPath(ctxt)
-	if err != nil {
-		return err
-	}
 	var verboseWriter io.Writer
 
 	if len(x.Verbose) > 0 && x.Verbose[0] {
@@ -50,7 +44,7 @@ func (x *dgrzValidateCmd) Execute(args []string) error {
 
 	}
 
-	if err := resource.GetGrapplicationResource(ctxt).Validate(ctxt, grappDir, verboseWriter); err != nil {
+	if err := resource.GetGrapplicationResource(ctxt).Validate(ctxt, verboseWriter); err != nil {
 		return err
 	}
 

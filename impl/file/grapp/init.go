@@ -49,16 +49,17 @@ func initGrappDir(ctxt context.Context, grappDir string) error {
 	}
 
 	// CREATE DEFAULT BRANCH DIR
-	mainBranchDir := path.Join(grappDir, file.MasterBranchName)
+	//mainBranchDir := path.Join(grappDir, file.MasterBranchName)
 
 	// CREATE 'refs/heads' SUBDIR
 	// CREATE '.dgrz' DIR AS SUBDI OF BASE GRAPP DIR
 	dgrzDir := path.Join(grappDir, file.DgrzDirName)
 	refsDir := path.Join(dgrzDir, file.RefsDirName)
-	headsDir := path.Join(refsDir, file.HeadsDirName)
+	objectsDir := path.Join(dgrzDir, file.ObjectsDirName)
+	headsDir := path.Join(refsDir, file.HeadsDirName) // branch (name) head files go under here
 
 	// CREATE GRAPP DIRS IN THE FOLLOWING ORDER
-	dirsList := []string{mainBranchDir, dgrzDir, refsDir, headsDir}
+	dirsList := []string{dgrzDir, refsDir, objectsDir, headsDir}
 
 	for _, d := range dirsList {
 

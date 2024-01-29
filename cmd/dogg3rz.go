@@ -19,7 +19,6 @@ import (
 	"log"
 	"os"
 
-	//	dgrzerr "github.com/datacequia/go-dogg3rz/errors"
 	"github.com/datacequia/go-dogg3rz/env"
 	"github.com/jessevdk/go-flags"
 )

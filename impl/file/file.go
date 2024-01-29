@@ -39,6 +39,7 @@ const grapplicationsDirName = "grapplications"
 // BASE GRAP DIR FOR ALL STATE FILES
 const DgrzDirName = ".dgrz"
 const RefsDirName = "refs"
+const ObjectsDirName = "objects" // where file objects are cached
 const HeadsDirName = "heads"
 const MasterBranchName = "main"
 const IndexFileName = ".index"
@@ -168,7 +169,18 @@ func GrapplicationDirPath(ctxt context.Context) (string, error) {
 	var pwd string
 	var err error
 
-	for pwd, err = os.Getwd(); err == nil && !DirExists(path.Join(pwd, DgrzDirName)); pwd = filepath.Dir(pwd) {
+	getPWD := func() (string, error) {
+
+		if val, ok := ctxt.Value(env.EnvDogg3rzGrapp).(string); ok {
+			return val, nil
+		}
+
+		return os.Getwd()
+
+	}
+
+	for pwd, err = getPWD(); err == nil && !DirExists(path.Join(pwd, DgrzDirName)); pwd = filepath.Dir(pwd) {
+		//fmt.Println("pwd", pwd, DirExists(path.Join(pwd, DgrzDirName)))
 		if pwd == "." || pwd == string(os.PathSeparator) {
 			return "", dgrzerr.NotFound.New("not a grapplication project")
 		}
@@ -192,6 +204,14 @@ func GrapplicationRefsDirPath(ctxt context.Context) (string, error) {
 		return "", err
 	}
 	return path.Join(gdp, RefsDirName), nil
+}
+
+func GrapplicationObjectsDirPath(ctxt context.Context) (string, error) {
+	gdp, err := GrapplicationDgrzDirPath(ctxt)
+	if err != nil {
+		return "", err
+	}
+	return path.Join(gdp, ObjectsDirName), nil
 }
 
 func GrapplicationRefsHeadsDirPath(ctxt context.Context) (string, error) {

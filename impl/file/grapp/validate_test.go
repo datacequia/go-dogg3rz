@@ -20,6 +20,9 @@ import (
 	"os"
 	"path/filepath"
 	"testing"
+
+	"github.com/datacequia/go-dogg3rz/env"
+	"github.com/datacequia/go-dogg3rz/impl/file"
 )
 
 func TestValidate(t *testing.T) {
@@ -31,21 +34,31 @@ func TestValidate(t *testing.T) {
 	} else {
 		grappDir = tmpDir
 	}
-	defer os.RemoveAll(grappDir)
+	//defer os.RemoveAll(grappDir)
 
+	// SET NEW TMP DIR AS GRAPP DIR VIA CONTEXT VAR OVERRIDE (FROM PWD)
 	ctxt := context.Background()
+	ctxt = context.WithValue(ctxt, env.EnvDogg3rzGrapp, grappDir)
 
 	// INIT TMPDIR AS GRAPP DIR FIRST
 	if err := initGrappDir(ctxt, grappDir); err != nil {
 		t.Fatal(err)
 	}
 
+	// get object dir
+	var od string
+	var err error
+	od, err = file.GrapplicationObjectsDirPath(ctxt)
+	if err != nil {
+		t.Fatal("file.GrapplicationObjectsDirPath", err)
+	}
+
 	// stage good json
 	if jsonLdFilePath, err := stageFile("good.jsonld", grappDir); err != nil {
 		t.Fatal(err)
 	} else {
-
-		if err := validateGrappProjectFiles(ctxt, grappDir); err != nil {
+		if err := validateGrappProjectFiles(ctxt, grappDir, od, os.Stdout); err != nil {
+			//fmt.Println("failed here 111")
 			t.Fatal(err)
 
 		}
@@ -54,11 +67,12 @@ func TestValidate(t *testing.T) {
 	}
 
 	// stage malformed json file
+
 	if jsonLdFilePath, err := stageFile("malformed-unclosed-quote.jsonld", grappDir); err != nil {
 		t.Fatal(err)
 	} else {
 
-		if err := validateGrappProjectFiles(ctxt, grappDir); err == nil {
+		if err := validateGrappProjectFiles(ctxt, grappDir, od, os.Stdout); err == nil {
 			t.Fatal("expected error on malformed file", jsonLdFilePath, err)
 
 		}
@@ -67,17 +81,20 @@ func TestValidate(t *testing.T) {
 	}
 
 	// stage no-rdf-stmts json file
+
 	if jsonLdFilePath, err := stageFile("no-rdf-stmts.jsonld", grappDir); err != nil {
 		t.Fatal(err)
 	} else {
 
-		if err := validateGrappProjectFiles(ctxt, grappDir); err == nil {
+		if err := validateGrappProjectFiles(ctxt, grappDir, od, os.Stdout); err == nil {
 			t.Fatal("expected error on jsonld file with no rdf statements produced after expansion", jsonLdFilePath, err)
 
 		}
 		os.Remove(jsonLdFilePath)
 
 	}
+	//t.FailNow()
+
 }
 
 func stageFile(filename string, dir string) (string, error) {

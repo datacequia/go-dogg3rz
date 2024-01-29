@@ -15,7 +15,6 @@ package grapp
 
 import (
 	"context"
-	"encoding/json"
 	"fmt"
 	"io"
 	"os"
@@ -23,7 +22,7 @@ import (
 	"strings"
 
 	"github.com/datacequia/go-dogg3rz/errors"
-	"github.com/piprate/json-gold/ld"
+	"github.com/datacequia/go-dogg3rz/impl/file"
 )
 
 type jsonParseStats struct {
@@ -39,9 +38,23 @@ type triple struct {
 	object_type interface{} // IRI for XSD TYPE OR "@"
 }
 
-func (grapp *FileGrapplicationResource) Validate(ctxt context.Context, grappDir string, vw io.Writer) error {
+func (grapp *FileGrapplicationResource) Validate(ctxt context.Context, vw io.Writer) error {
 
-	err := validateGrappProjectFiles(ctxt, grappDir, vw)
+	var objectsDir string
+	var grappDir string
+	var err error
+
+	objectsDir, err = file.GrapplicationObjectsDirPath(ctxt)
+	if err != nil {
+		return err
+	}
+
+	grappDir, err = file.GrapplicationDirPath(ctxt)
+	if err != nil {
+		return err
+	}
+
+	err = validateGrappProjectFiles(ctxt, grappDir, objectsDir, vw)
 	if err != nil {
 		verbose(vw, "Validation completed with errors: ", err)
 	} else {
@@ -51,7 +64,7 @@ func (grapp *FileGrapplicationResource) Validate(ctxt context.Context, grappDir 
 
 }
 
-func validateGrappProjectFiles(ctxt context.Context, grappDir string, vw io.Writer) error {
+func validateGrappProjectFiles(ctxt context.Context, grappDir string, objectsDir string, vw io.Writer) error {
 
 	verbose(vw, "Listing .jsonld files in project directory at %s...", grappDir)
 	projectFiles, err := listJsonLdFiles(grappDir, vw)
@@ -63,99 +76,18 @@ func validateGrappProjectFiles(ctxt context.Context, grappDir string, vw io.Writ
 		return errors.NotFound.Newf("%s: no JSON-LD files found.", grappDir)
 	}
 
-	// process JSON-LD files aganst JSON-LD processor for well-formedness
+	// process JSON-LD files against JSON-LD processor for well-formedness
 	for _, jsonLdFile := range projectFiles {
 
-		var err error
-		var parsedJson map[string]interface{}
+		loader := NewDocumentLoader(nil, grappDir, objectsDir)
 
-		verbose(vw, "Applying JSON parser to %s...", jsonLdFile)
-		if parsedJson, err = parseJSON(jsonLdFile); err != nil {
-			return err
-		}
-		//var expandedJsonLd interface{}
-		var p []interface{} // list of flattened json-ld objects
-
-		verbose(vw, "Applying JSON-LD processor to parsed JSON from %s...", jsonLdFile)
-		if p, err = process(parsedJson); err != nil {
-
+		if _, err := loader.LoadDocument(jsonLdFile); err != nil {
 			return err
 		}
 
-		//fmt.Printf("expanded type %T", p)
-
-		if len(p) < 1 {
-			return errors.NotFound.Newf("%s: no RDF statement were found after processing", jsonLdFile)
-		}
-
-		//fmt.Println("after process")
-		//ld.PrintDocument(jsonLdFile, expandedJsonLd)
-
-		/*
-			termNsMap := make(map[string]string)
-			if termNsMap, err = extractNamespacesFromContext(parsedJson); err != nil {
-				return err
-			}
-
-			for k, v := range termNsMap {
-				fmt.Printf("term = %s, ns = %s\n", k, v)
-
-			}
-		*/
 	}
 
 	return nil
-
-}
-
-func parseJSON(path string) (map[string]interface{}, error) {
-
-	fp, err := os.Open(path)
-	if err != nil {
-		return nil, err
-	}
-	defer fp.Close()
-
-	jsonMap := make(map[string]interface{})
-
-	parseStats := &jsonParseStats{realReader: fp}
-	parseStats.newlineOffsets = make([]int64, 0)
-
-	decoder := json.NewDecoder(parseStats)
-
-	err = decoder.Decode(&jsonMap)
-	if err != nil {
-		//fmt.Println("InputOffset is ", decoder.InputOffset())
-		//fmt.Printf("decoder.Decode returned type %T\n", err)
-		if r, ok := err.(*json.SyntaxError); ok {
-			var syntaxErrCol int64 = r.Offset
-			var syntaxErrLine int64 = 1
-
-			// compute column
-			for i, nlOffset := range parseStats.newlineOffsets {
-
-				if r.Offset <= nlOffset {
-					if i > 0 {
-						//fmt.Println("syntaxErrCol", i, r.Offset, parseStats.newlineOffsets[i-1])
-						syntaxErrCol = r.Offset - parseStats.newlineOffsets[i-1]
-					} else {
-						syntaxErrCol = r.Offset
-						//fmt.Println("syntaxErrCol(i<=0)", syntaxErrCol)
-					}
-					syntaxErrLine = int64(i + 1)
-					break
-				}
-
-			}
-
-			return nil, errors.Newf("%s:%d:%d: %s", path, syntaxErrLine, syntaxErrCol, err.Error())
-
-		}
-		//fmt.Println("other decode err", err)
-		return nil, err
-	}
-
-	return jsonMap, nil
 
 }
 
@@ -166,35 +98,43 @@ func extractNamespacesFromContext(jsonMap map[string]interface{}) (map[string]st
 	return m, nil
 }
 
-func process(jsonMap map[string]interface{}) ([]interface{}, error) {
+/*
+func process(doc interface{}) ([]interface{}, error) {
 
 	proc := ld.NewJsonLdProcessor()
 	options := ld.NewJsonLdOptions("")
-	options.Format = "application/n-quads"
-	//var fileContent []byte
-	var err error
-	/*expanded*/
+	grappDocumentLoader := NewDocumentLoader(nil, "")
 
-	flattened, err := proc.Flatten(jsonMap, nil, options)
+	//options.Format = "application/n-quads"
+	options.DocumentLoader = grappDocumentLoader
+
+	var err error
+
+	expanded, err := proc.Expand(doc, options)
 
 	if err != nil {
 		return nil, err
 	}
 
+	var flattened interface{}
+
+	flattened, err = proc.Flatten(expanded, nil, options)
+
 	var flattenedList []interface{}
 
 	if t, ok := flattened.([]interface{}); !ok {
-		return nil, errors.UnexpectedType.Newf("expected type %T returned from proc.Flatten(), got %T",
+		return nil, errors.UnexpectedType.Newf("expected type %T returned from proc.Normalize(), got %T",
 			flattenedList, flattened)
 	} else {
 		flattenedList = t
 	}
 
-	//ld.PrintDocument("process", expanded)
+	ld.PrintDocument("Normalize", flattened)
 
 	return flattenedList, nil
 
 }
+*/
 
 func listJsonLdFiles(grappDir string, vw io.Writer) ([]string, error) {
 
