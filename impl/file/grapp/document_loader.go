@@ -5,7 +5,6 @@ import (
 	"crypto"
 	"encoding/json"
 	"fmt"
-	"hash"
 	"io"
 	"net/http"
 	"net/url"
@@ -29,20 +28,20 @@ const (
 )
 
 type DocumentLoader struct {
-	httpClient *http.Client // optional: http client to use to load documents
-	grappDir   string       // base project dir
-	objectsDir string       // where to place object files
-	//cachedDocumentIndex map[string]
+	httpClient      *http.Client          // optional: http client to use to load documents
+	grappDir        string                // base project dir
+	objectsDir      string                // where to place object files
+	objectFileIndex map[string]objectFile // index of processed documents cached as binary object files (cbor format)
 }
 
-type CachedDocument struct {
-	//ld.RemoteDocument
+type objectFile struct {
+	givenLocation        string // iri or (relative) location to project of document (.jsonld) file that was processed in project
+	standardizedLocation string // location standardized , for urls its the value returns from [X], for local paths it's relative path to project dir
+	resolvedLocation     string // location resolved to the actual path where the JSON-LD can be dereferenced
+	documentLocationHash string // hash of source path
+	documentContentHash  string // hash of sourcePath content
 
-	cacheDir   string        // baseDir to cached document files
-	tmpFile    *os.File      // Open file where cache writes are sent
-	realReader io.ReadCloser // actual reader that is proxied
-	hash       hash.Hash     // hash object that computes hash of cached doc
-
+	processedDoc interface{} // JSON-LD processor output of document
 }
 
 func NewDocumentLoader(httpClient *http.Client, grappDir string, objectsDir string) *DocumentLoader {
@@ -52,6 +51,8 @@ func NewDocumentLoader(httpClient *http.Client, grappDir string, objectsDir stri
 		rval.httpClient = http.DefaultClient
 	}
 
+	rval.objectFileIndex = make(map[string]objectFile)
+
 	return rval
 }
 
@@ -59,13 +60,12 @@ func NewDocumentLoader(httpClient *http.Client, grappDir string, objectsDir stri
 // Implements github.com/piprate/ld/DocumentLoader interface
 func (dl *DocumentLoader) LoadDocument(u string) (*ld.RemoteDocument, error) {
 
-	//fmt.Println("loading document...", u)
-	/*
-		f := func() {
-			fmt.Println("exiting loading document ", u)
-		}
-		defer f()
-	*/
+	var givenLocation string
+	var standardizedLocation string
+	var resolvedLocation string
+
+	givenLocation = u
+
 	parsedURL, err := url.Parse(u)
 	if err != nil {
 		return nil, ld.NewJsonLdError(ld.LoadingDocumentFailed, fmt.Sprintf("error parsing URL: %s", u))
@@ -73,7 +73,6 @@ func (dl *DocumentLoader) LoadDocument(u string) (*ld.RemoteDocument, error) {
 
 	var documentBody io.ReadCloser
 	var finalURL, contextURL string
-	//var loadedDocument *CachedDocument
 
 	protocol := parsedURL.Scheme
 
@@ -107,10 +106,14 @@ func (dl *DocumentLoader) LoadDocument(u string) (*ld.RemoteDocument, error) {
 		}
 		finalURL = relativePath
 
+		standardizedLocation = relativePath
+		resolvedLocation = relativePath
+
 		documentBody = file
 	} else {
+		resolvedLocation = resolveIRI(givenLocation)
 
-		req, err := http.NewRequest("GET", resolveIRI(u), nil)
+		req, err := http.NewRequest("GET", resolvedLocation, nil)
 		if err != nil {
 			return nil, ld.NewJsonLdError(ld.LoadingDocumentFailed, err)
 		}
@@ -130,6 +133,8 @@ func (dl *DocumentLoader) LoadDocument(u string) (*ld.RemoteDocument, error) {
 		}
 
 		finalURL = res.Request.URL.String()
+		standardizedLocation = finalURL
+
 		//	fmt.Println("finalURL", finalURL, "resolveIRI", resolveIRI(u)) // deleteme
 
 		//fmt.Println("finalURL", finalURL)
@@ -156,36 +161,42 @@ func (dl *DocumentLoader) LoadDocument(u string) (*ld.RemoteDocument, error) {
 		return nil, err
 	}
 
-	parsedJSON, _, err := dl.createObjectFile(finalURL, buf)
+	parsedJSON, _, err := dl.createObjectFile(givenLocation,
+		standardizedLocation,
+		resolvedLocation,
+		buf)
 	if err != nil {
 		return nil, err
 	}
-	//fmt.Println("after createObjectFile returns ", objectFilePath)
+
 	return &ld.RemoteDocument{DocumentURL: finalURL, Document: parsedJSON, ContextURL: contextURL}, nil
 
 }
 
-func (dl *DocumentLoader) createObjectFile(iri string, data []byte) (interface{}, string, error) {
+func (dl *DocumentLoader) createObjectFile(givenLocation string, standardizedLocation string, resolvedLocation string, data []byte) (interface{}, string, error) {
 
-	//fmt.Println("1.", iri)
+	var obj objectFile
 
-	// compute hash on iri
+	obj.givenLocation = givenLocation
+	obj.resolvedLocation = resolvedLocation
+	obj.standardizedLocation = standardizedLocation
+
+	// compute hash on standardized path location
 	iriHash := crypto.SHA1.New()
-	_, err := io.Copy(iriHash, strings.NewReader(iri))
+	_, err := io.Copy(iriHash, strings.NewReader(obj.standardizedLocation))
 	if err != nil {
 		return nil, "", err
 	}
-	iriHashStr := fmt.Sprintf("%x", iriHash.Sum(nil))
-	//fmt.Println("2.", iri)
+	obj.documentLocationHash = fmt.Sprintf("%x", iriHash.Sum(nil))
+
 	// compute hash on document
 	docHash := crypto.SHA1.New()
 	_, err = io.Copy(docHash, bytes.NewReader(data))
 	if err != nil {
 		return nil, "", err
 	}
-	//	docHashStr := fmt.Sprintf("%x", hash.Sum(nil))
+	obj.documentContentHash = fmt.Sprintf("%x", docHash.Sum(nil))
 
-	//fmt.Println("3.", iri)
 	// CREATE STAGING  FILE
 	var tmp *os.File
 	if tmp, err = os.CreateTemp(dl.objectsDir, "createObjectFile-*"); err != nil {
@@ -201,15 +212,12 @@ func (dl *DocumentLoader) createObjectFile(iri string, data []byte) (interface{}
 	}
 	defer cleanup()
 
-	//fmt.Println("tmp created at ", tmp.Name())
-	//fmt.Println("4.", iri)
 	// PARSE DOC CONTENTS
 	var jsonTree map[string]interface{}
-	jsonTree, err = parseJSON(bytes.NewBuffer(data), iri)
+	jsonTree, err = parseJSON(bytes.NewBuffer(data), obj.resolvedLocation)
 	if err != nil {
 		return nil, "", err
 	}
-	//fmt.Println("5.", iri, len(jsonTree))
 	// RUN JSON-LD PROCESSOR WITH PARSED JSON INPUT
 	var expandedDoc []interface{}
 	var flattenedDoc interface{}
@@ -230,32 +238,28 @@ func (dl *DocumentLoader) createObjectFile(iri string, data []byte) (interface{}
 
 	}
 
-	//fmt.Println("6.", iri)
 	// FLATTEN THE TREE TO AN ARRAY OF N-QUADS
 	flattenedDoc, err = proc.Flatten(expandedDoc, nil, options)
 	if err != nil {
 		return nil, "", err
 	}
+	obj.processedDoc = flattenedDoc
 
-	//fmt.Println("7.", iri)
 	// ENCODE OBJECT TO CBOR FORMAT
 	var cborObject []byte
 
-	cborObject, err = cbor.Marshal(flattenedDoc)
+	cborObject, err = cbor.Marshal(obj.toMap())
 	if err != nil {
 		return nil, "", err
 	}
-	//fmt.Println("8.", iri)
+
 	// WRITE CBOR OBJECT DATA TO STAGE FILE
 	_, err = io.Copy(tmp, bytes.NewReader(cborObject))
 	if err != nil {
 		return nil, "", err
 	}
-	//fmt.Println("9.", iri)
 	// CONSTRUCT OBJECT FILE  PATH NAME
-	objectFilePath := path.Join(dl.objectsDir, iriHashStr)
-
-	//tmp.Close()
+	objectFilePath := path.Join(dl.objectsDir, obj.documentLocationHash)
 
 	// MOVE STAGED FILE TO OBJECT FILE  PATH
 	if err := os.Rename(tmp.Name(), objectFilePath); err != nil {
@@ -263,14 +267,11 @@ func (dl *DocumentLoader) createObjectFile(iri string, data []byte) (interface{}
 		//fmt.Println("rename err", err)
 		return nil, "", err
 	}
-	//fmt.Println("10.", iri)
+	// ADD OBJECT TO DOCUMENT INDEX
+	dl.objectFileIndex[obj.standardizedLocation] = obj
+
 	return jsonTree, objectFilePath, nil
 
-}
-
-func DocumentFromReader(documentBody io.Reader, src string) (interface{}, error) {
-
-	return parseJSON(documentBody, src)
 }
 
 func parseJSON(r io.Reader, src string) (map[string]interface{}, error) {
@@ -284,8 +285,6 @@ func parseJSON(r io.Reader, src string) (map[string]interface{}, error) {
 
 	err := decoder.Decode(&jsonMap)
 	if err != nil {
-		//fmt.Println("InputOffset is ", decoder.InputOffset())
-		//fmt.Printf("decoder.Decode returned type %T\n", err)
 		if r, ok := err.(*json.SyntaxError); ok {
 			var syntaxErrCol int64 = r.Offset
 			var syntaxErrLine int64 = 1
@@ -295,11 +294,9 @@ func parseJSON(r io.Reader, src string) (map[string]interface{}, error) {
 
 				if r.Offset <= nlOffset {
 					if i > 0 {
-						//fmt.Println("syntaxErrCol", i, r.Offset, parseStats.newlineOffsets[i-1])
 						syntaxErrCol = r.Offset - parseStats.newlineOffsets[i-1]
 					} else {
 						syntaxErrCol = r.Offset
-						//fmt.Println("syntaxErrCol(i<=0)", syntaxErrCol)
 					}
 					syntaxErrLine = int64(i + 1)
 					break
@@ -310,7 +307,6 @@ func parseJSON(r io.Reader, src string) (map[string]interface{}, error) {
 			return nil, errors.Newf("%s:%d:%d: %s", src, syntaxErrLine, syntaxErrCol, err.Error())
 
 		}
-		//fmt.Println("other decode err", err)
 		return nil, err
 	}
 
@@ -322,7 +318,7 @@ func parseJSON(r io.Reader, src string) (map[string]interface{}, error) {
 // where prefix IRI does not make ontology available in their designated namespace
 func resolveIRI(iri string) string {
 
-	switch iri {
+	switch strings.ToLower(iri) { // urls are CASE SENSIVE. NORMALIZE TO LOWER
 	case "https://schema.org/":
 		return "https://schema.org/version/latest/schemaorg-current-https.jsonld"
 	case "http://schema.org/":
@@ -332,95 +328,19 @@ func resolveIRI(iri string) string {
 	}
 }
 
-func NewCachedDocument(r io.ReadCloser, cacheDir string, docHashType crypto.Hash) (*CachedDocument, error) {
+func (obj objectFile) toMap() map[string]interface{} {
 
-	var err error
+	m := make(map[string]interface{})
 
-	cachedDoc := &CachedDocument{}
-	if !file.DirExists(cacheDir) {
+	m["documentContentHash"] = obj.documentContentHash
 
-		return nil, errors.NotFound.Newf("%s: not found or is not a directory", cacheDir)
-	}
-	cachedDoc.cacheDir = cacheDir
+	m["givenLocation"] = obj.givenLocation
+	m["resolvedLocation"] = obj.resolvedLocation
+	m["standardizedLocation"] = obj.standardizedLocation
 
-	// CREATE CACHE TEMP FILE
-	if cachedDoc.tmpFile, err = os.CreateTemp(cacheDir, "NewGrapplicationCachedRemoteDocument-*"); err != nil {
-		return nil, err
-	}
-	// assign reader to be proxied
-	cachedDoc.realReader = r
-	// create hash object using caller supplied crypto hash type
-	cachedDoc.hash = docHashType.New()
+	m["documentLocationHash"] = obj.documentLocationHash
+	m["processedDoc"] = obj.processedDoc
 
-	return cachedDoc, nil
-
-}
-
-func (d *CachedDocument) Read(p []byte) (int, error) {
-	// pass read request to real reader
-	bytesRead, err := d.realReader.Read(p)
-
-	if err != nil {
-		if err == io.EOF {
-			//Println("is eof")
-			if bytesRead > 0 {
-				// add final bytes ...
-				if _, err = d.cacheBytesReadAndAddToHash(p[:bytesRead]); err != nil {
-					return bytesRead, err
-				}
-			}
-
-			// flush cache file writes
-			if err = d.tmpFile.Sync(); err != nil {
-				return bytesRead, err
-			}
-
-			// MOVE CACHED doc TO FINAL DESTINATION
-			// USING HASH OF DOC AS PREFIX FILENAME
-			docPath := path.Join(d.cacheDir, fmt.Sprintf("%x.jsonld", d.hash.Sum(nil)))
-
-			if err = os.Rename(d.tmpFile.Name(), docPath); err != nil {
-				return bytesRead, err
-			}
-			//d.cachedDocPath = docPath
-
-			//fmt.Println("moved cache Doc to ", docPath)
-			// RETURN  EOF
-			return bytesRead, io.EOF
-
-		} else {
-			// some i/o error
-			return bytesRead, err
-		}
-	}
-
-	if _, err = d.cacheBytesReadAndAddToHash(p[:bytesRead]); err != nil {
-		return bytesRead, err
-	}
-
-	return bytesRead, nil
-
-}
-
-func (d *CachedDocument) Close() error {
-
-	err := d.realReader.Close()
-	if err != nil {
-		d.tmpFile.Close()
-		// return first error
-		return err
-	}
-
-	return d.tmpFile.Close()
-
-}
-
-func (d *CachedDocument) cacheBytesReadAndAddToHash(p []byte) (int, error) {
-
-	// WRITER OBJECTS WHICH COMPUTE DIGEST OF BYTES READ
-	// AND WRITE TO TEMP CACHE FILE
-	mr := io.MultiWriter(d.hash, d.tmpFile)
-
-	return mr.Write(p)
+	return m
 
 }

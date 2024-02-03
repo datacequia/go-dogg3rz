@@ -29,12 +29,13 @@ func TestValidate(t *testing.T) {
 
 	var grappDir string
 
+	//Create tmp grapp project dir
 	if tmpDir, err := os.MkdirTemp("", "TestValidate"); err != nil {
 		t.Fatal("os.MkdirTemp", err)
 	} else {
 		grappDir = tmpDir
 	}
-	//defer os.RemoveAll(grappDir)
+	defer os.RemoveAll(grappDir)
 
 	// SET NEW TMP DIR AS GRAPP DIR VIA CONTEXT VAR OVERRIDE (FROM PWD)
 	ctxt := context.Background()
