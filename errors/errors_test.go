@@ -23,7 +23,7 @@ func TestNew(t *testing.T) {
 	errStr := "<my var name>"
 
 	err := InvalidValue.New(errStr)
-	bd, ok := err.(badDogg3rz)
+	bd, ok := err.(BadDogg3rz)
 	if !ok {
 		t.Errorf("returned %v", bd)
 	}

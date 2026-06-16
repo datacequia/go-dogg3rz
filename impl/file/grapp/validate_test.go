@@ -67,8 +67,7 @@ func TestValidate(t *testing.T) {
 
 	}
 
-	// stage malformed json file
-
+	// stage malformed json file and validate project
 	if jsonLdFilePath, err := stageFile("malformed-unclosed-quote.jsonld", grappDir); err != nil {
 		t.Fatal(err)
 	} else {
@@ -81,8 +80,7 @@ func TestValidate(t *testing.T) {
 
 	}
 
-	// stage no-rdf-stmts json file
-
+	// stage no-rdf-stmts json file and validate project
 	if jsonLdFilePath, err := stageFile("no-rdf-stmts.jsonld", grappDir); err != nil {
 		t.Fatal(err)
 	} else {
@@ -94,7 +92,6 @@ func TestValidate(t *testing.T) {
 		os.Remove(jsonLdFilePath)
 
 	}
-	//t.FailNow()
 
 }
 

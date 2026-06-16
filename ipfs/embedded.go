@@ -24,7 +24,7 @@ import (
 
 	"github.com/ipfs/kubo/core"
 	"github.com/ipfs/kubo/core/coreapi"
-	"github.com/ipfs/kubo/grapp/fsgrapp"
+	//"github.com/ipfs/kubo/grapp/fsgrapp"
 	"github.com/ipfs/kubo/plugin/loader" // This package is needed so that all the preloaded plugins are loaded automatically
 	"github.com/libp2p/go-libp2p-core/peer"
 )

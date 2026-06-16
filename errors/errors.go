@@ -46,12 +46,13 @@ const (
 	EmptyCommit        // AN ATTEMPT TO COMMIT A RESOURCE BUT NOTHING TO COMMIT
 	ExternalError      // EXTERNAL RESOURCE FAILED
 	UnexpectedBehavior // ENCOUNTERED UNEXPECTED BEHAVIOR WHEN INTERACTING WITH A RESOURCE
+	InProgress         // OPERATION ALREADY IN PROGRESS
 	NotImplemented     // BEHAVIOR NOT IMPLEMENTED
 )
 
-type badDogg3rz struct {
-	errorType     ErrorType
-	originalError error
+type BadDogg3rz struct {
+	ErrorType     ErrorType
+	OriginalError error
 	contextInfo   map[string]string
 	//context errorContext
 }
@@ -110,6 +111,8 @@ func errorTypeToString(errType ErrorType) string {
 		return "ExternalError"
 	case UnexpectedBehavior:
 		return "UnexpectedBehavior"
+	case InProgress:
+		return "InProgress"
 	case NotImplemented:
 		return "NotImplemented"
 	default:
@@ -118,33 +121,33 @@ func errorTypeToString(errType ErrorType) string {
 }
 
 // Error returns the mssage of a customError
-func (error badDogg3rz) Error() string {
+func (error BadDogg3rz) Error() string {
 
 	if len(error.contextInfo) > 0 {
 		context, _ := json.Marshal(error.contextInfo)
-		if error.errorType == NoType {
-			return fmt.Sprintf("%v: context = { %s }", error.originalError, string(context))
+		if error.ErrorType == NoType {
+			return fmt.Sprintf("%v: context = { %s }", error.OriginalError, string(context))
 		}
-		return fmt.Sprintf("%s - %v: context = %s ", errorTypeToString(error.errorType), error.originalError, string(context))
+		return fmt.Sprintf("%s - %v: context = %s ", errorTypeToString(error.ErrorType), error.OriginalError, string(context))
 	}
 
-	if error.errorType == NoType {
-		fmt.Sprintf("%v", error.originalError)
+	if error.ErrorType == NoType {
+		fmt.Sprintf("%v", error.OriginalError)
 	}
 
-	return fmt.Sprintf("%s: %v", errorTypeToString(error.errorType), error.originalError)
+	return fmt.Sprintf("%s: %v", errorTypeToString(error.ErrorType), error.OriginalError)
 }
 
 // New creates a new customError
 func (errType ErrorType) New(msg string) error {
-	return badDogg3rz{errorType: errType, originalError: errors.New(msg), contextInfo: make(map[string]string)}
+	return BadDogg3rz{ErrorType: errType, OriginalError: errors.New(msg), contextInfo: make(map[string]string)}
 }
 
 // New creates a new customError with formatted message
 func (errType ErrorType) Newf(msg string, args ...interface{}) error {
 	err := fmt.Errorf(msg, args...)
 
-	return badDogg3rz{errorType: errType, originalError: err, contextInfo: make(map[string]string)}
+	return BadDogg3rz{ErrorType: errType, OriginalError: err, contextInfo: make(map[string]string)}
 }
 
 // Wrap creates a new wrapped error
@@ -156,17 +159,17 @@ func (errType ErrorType) Wrap(err error, msg string) error {
 func (errType ErrorType) Wrapf(err error, msg string, args ...interface{}) error {
 	newErr := errors.Wrapf(err, msg, args...)
 
-	return badDogg3rz{errorType: errType, originalError: newErr}
+	return BadDogg3rz{ErrorType: errType, OriginalError: newErr}
 }
 
 // New creates a no type error
 func New(msg string) error {
-	return badDogg3rz{errorType: NoType, originalError: errors.New(msg)}
+	return BadDogg3rz{ErrorType: NoType, OriginalError: errors.New(msg)}
 }
 
 // Newf creates a no type error with formatted message
 func Newf(msg string, args ...interface{}) error {
-	return badDogg3rz{errorType: NoType, originalError: errors.New(fmt.Sprintf(msg, args...))}
+	return BadDogg3rz{ErrorType: NoType, OriginalError: errors.New(fmt.Sprintf(msg, args...))}
 }
 
 // Wrap wrans an error with a string
@@ -182,36 +185,36 @@ func Cause(err error) error {
 // Wrapf wraps an error with format string
 func Wrapf(err error, msg string, args ...interface{}) error {
 	wrappedError := errors.Wrapf(err, msg, args...)
-	if customErr, ok := err.(badDogg3rz); ok {
-		return badDogg3rz{
-			errorType:     customErr.errorType,
-			originalError: wrappedError,
+	if customErr, ok := err.(BadDogg3rz); ok {
+		return BadDogg3rz{
+			ErrorType:     customErr.ErrorType,
+			OriginalError: wrappedError,
 			contextInfo:   customErr.contextInfo,
 		}
 	}
 
-	return badDogg3rz{errorType: NoType, originalError: wrappedError}
+	return BadDogg3rz{ErrorType: NoType, OriginalError: wrappedError}
 }
 
 // AddErrorContext adds a context to an error
 func AddErrorContext(err error, field string, message string) error {
 	//	context := errorContext{Field: field, Message: message}
-	if myErr, ok := err.(badDogg3rz); ok {
+	if myErr, ok := err.(BadDogg3rz); ok {
 		myErr.contextInfo[field] = message
 
-		return myErr //return badDogg3rz{errorType: myErr.errorType, originalError: myErr.originalError, context: context}
+		return myErr //return BadDogg3rz{ErrorType: myErr.ErrorType, originalError: myErr.originalError, context: context}
 	}
 
 	m := make(map[string]string)
 	m[field] = message
 
-	return badDogg3rz{errorType: NoType, originalError: err, contextInfo: m}
+	return BadDogg3rz{ErrorType: NoType, OriginalError: err, contextInfo: m}
 }
 
 // GetErrorContext returns the error context
 func GetErrorContext(err error) map[string]string {
 	//	emptyContext := errorContext{}
-	if myErr, ok := err.(badDogg3rz); ok {
+	if myErr, ok := err.(BadDogg3rz); ok {
 
 		//return map[string]string{"field": myErr.context.Field, "message": myErr.context.Message}
 		return myErr.contextInfo
@@ -222,8 +225,8 @@ func GetErrorContext(err error) map[string]string {
 
 // GetType returns the error type
 func GetType(err error) ErrorType {
-	if myErr, ok := err.(badDogg3rz); ok {
-		return myErr.errorType
+	if myErr, ok := err.(BadDogg3rz); ok {
+		return myErr.ErrorType
 	}
 
 	return NoType
