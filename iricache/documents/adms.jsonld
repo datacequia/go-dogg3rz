@@ -1,0 +1,841 @@
+[
+    {
+        "@id": "_:b0",
+        "http://schema.org/affiliation": [
+            {
+                "@id": "http://www.w3.org/data#W3C"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "http://philarcher.org/foaf.rdf#me"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://www.w3.org/People/all#phila"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Phil Archer"
+            }
+        ]
+    },
+    {
+        "@id": "_:b1",
+        "http://schema.org/affiliation": [
+            {
+                "@id": "_:b4"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "http://andrea-perego.name/foaf/#me"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://andrea-perego.name/"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Andrea Perego"
+            }
+        ]
+    },
+    {
+        "@id": "_:b2",
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "http://makxdekkers.com/makxdekkers.rdf#me"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://makxdekkers.com/"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Makx Dekkers"
+            }
+        ]
+    },
+    {
+        "@id": "_:b3",
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Government Linked Data WG, based on output from the ADMS Working Group"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://www.w3.org/2011/gld/"
+            }
+        ]
+    },
+    {
+        "@id": "_:b4",
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://ies.jrc.ec.europa.eu/DE"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "European Commission, Joint Research Centre "
+            }
+        ]
+    },
+    {
+        "@id": "http://andrea-perego.name/"
+    },
+    {
+        "@id": "http://andrea-perego.name/foaf/#me"
+    },
+    {
+        "@id": "http://ies.jrc.ec.europa.eu/DE"
+    },
+    {
+        "@id": "http://makxdekkers.com/"
+    },
+    {
+        "@id": "http://makxdekkers.com/makxdekkers.rdf#me"
+    },
+    {
+        "@id": "http://philarcher.org/foaf.rdf#me"
+    },
+    {
+        "@id": "http://purl.org/vocommons/voaf#Vocabulary"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/1999/xhtml/vocab#last"
+    },
+    {
+        "@id": "http://www.w3.org/1999/xhtml/vocab#next"
+    },
+    {
+        "@id": "http://www.w3.org/1999/xhtml/vocab#prev"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Literal"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#DatatypeProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#ObjectProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+    },
+    {
+        "@id": "http://www.w3.org/2011/gld/"
+    },
+    {
+        "@id": "http://www.w3.org/People/all#phila"
+    },
+    {
+        "@id": "http://www.w3.org/TR/vocab-adms"
+    },
+    {
+        "@id": "http://www.w3.org/data#W3C"
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms",
+        "@type": [
+            "http://purl.org/vocommons/voaf#Vocabulary",
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://purl.org/vocommons/voaf#specializes": [
+            {
+                "@id": "http://www.w3.org/ns/dcat#"
+            }
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "Asset Description Metadata Schema (ADMS)",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Asset Description Metadata Schema (ADMS)",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/abstract": [
+            {
+                "@value": "ADMS is a profile of DCAT, used to describe semantic assets (or just 'Assets'), defined as highly reusable metadata (e.g. xml schemata, generic data models) and reference data (e.g. code lists, taxonomies, dictionaries, vocabularies) that are used for eGovernment system development.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/creator": [
+            {
+                "@id": "_:b0"
+            },
+            {
+                "@id": "_:b1"
+            },
+            {
+                "@id": "_:b2"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/maker": [
+            {
+                "@id": "_:b3"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "This is the RDF encoding of the Asset Description Metadata Schema, originally \n    developed under the European Union's ISA Programme and further developed by the W3C Government Linked Data Working Group.\n    It re-uses terms from several other vocabularies, notably Dublin Core, with elements of SKOS, FOAF and more. "
+            }
+        ],
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2013-05-24",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-09-16",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-12-21",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2015-07-22",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/vocab/vann/preferredNamespacePrefix": [
+            {
+                "@value": "adms"
+            }
+        ],
+        "http://purl.org/vocab/vann/preferredNamespaceUri": [
+            {
+                "@value": "http://www.w3.org/ns/adms#"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "This file specifies the set of RDF classes and properties used in ADMS",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2007/05/powder-s#describedby": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#Asset",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:Asset"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An Asset is an abstract entity that reflects the intellectual content of the asset and represents those characteristics of the asset that are independent of its physical embodiment. This abstract entity combines the FRBR entities work (a distinct intellectual or artistic creation) and expression (the intellectual or artistic realization of a work). Assets can be versioned. Every time the intellectual content of an asset changes, the result is considered to be a new asset that can be linked to previous and next versions of the Asset. The physical embodiment of an Asset is called an Asset Distribution. A particular Asset may have zero or more Asset Distributions..",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Asset",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/dcat#Dataset"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#AssetDistribution",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:AssetDistribution"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An Asset Distribution represents a particular physical embodiment of an Asset, which is an example of the FRBR entity manifestation (the physical embodiment of an expression of a work). An Asset Distribution is typically a downloadable computer file (but in principle it could also be a paper document) that implements the intellectual content of an Asset. A particular Asset Distribution is associated with one and only one Asset, while all Distributions of an Asset share the same intellectual content in different physical formats. Asset Distributions themselves are not versioned.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Asset Distribution",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/dcat#Distribution"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#AssetRepository",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:AssetRepository"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An Asset Repository is a system or service that provides facilities for storage and maintenance of descriptions of Assets and Asset Distributions, and functionality that allows users to search and access these descriptions. An Asset Repository will typically contain descriptions of several Assets and related Asset Distributions.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Asset Repository",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/dcat#Catalog"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#Identifier",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:Identifier"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "This class is based on the UN/CEFACT Identifier complex type defined in See Section 5.8 of Core Components Data Type Catalogue Version 3.1 (http://www.unece.org/fileadmin/DAM/cefact/codesfortrade/CCTS/CCTS-DTCatalogueVersion3p1.pdf) In RDF this is expressed using the following properties: - the content string should be provided using skos:notation, datatyped with the identifier scheme (inclduing the version number if appropriate); - use dcterms:creator to link to a class describing the agency that manages the identifier scheme or adms:schemaAgency to provide the name as a literal. Although not part of the ADMS conceptual model, it may be useful to provide further properties to the Identifier class such as dcterms:created to provide the date on which the identifier was issued.",
+                "@type": "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Identifier",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#identifier",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:identifier"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "adms:identifier is used to link any resource to an instance of adms:Identifier which is its range. N.B. it is not appropriate to use dcterms:identifer to link to the Identifier class as its range is rdfs:Literal. ADMS uses this to provide any identifier for the Asset.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "identifier",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Identifier"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#includedAsset",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:includedAsset"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links to an Asset that is contained in the Asset being described, e.g. when there are several vocabularies defined in a single document.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "included asset",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#interoperabilityLevel",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:interoperabilityLevel"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links an Asset to its adms:InteroperabilityLevel. Since this is encoded using skos:Concept, that is the defined range for this property.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "interoperability level",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#last",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:last"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A link to the current or latest version of the Asset.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "last",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/1999/xhtml/vocab#last"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#next",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:next"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A link to the next version of the Asset.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "next",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/1999/xhtml/vocab#next"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#prev",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:prev"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A link to the previous version of the Asset.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "prev",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/1999/xhtml/vocab#prev"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#representationTechnique",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:representationTechnique"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links an adms:AssetDistribution to a skos:Concept that is its adms:RepresentationTechnique.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "representation technique",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#sample",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:sample"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links to a sample of an Asset (which is itself an Asset).",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "sample",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#schemeAgency",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:schemeAgency"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The name of the agency responsible for issuing the identifier",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Identifier"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "scheme agency",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#Literal"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#status",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:status"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links to the status of the Asset or Asset Distribution in the context of a particular workflow process. Since Status is defined using a skos:Concept, that is the defined range for this property.",
+                "@type": "http://www.w3.org/1999/02/22-rdf-syntax-ns#XMLLiteral"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "status",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#supportedSchema",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:supportedSchema"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A schema according to which the Asset Repository can provide data about its content, e.g. ADMS",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "supported schema",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/adms#Asset"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#translation",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:translation"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Links Assets that are translations of each other.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "translation",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/adms#versionNotes",
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "adms:versionNotes"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A description of changes between this version and the previous version of the Asset.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-adms"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "version info",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#Literal"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dcat#"
+    },
+    {
+        "@id": "http://www.w3.org/ns/dcat#Catalog"
+    },
+    {
+        "@id": "http://www.w3.org/ns/dcat#Dataset"
+    },
+    {
+        "@id": "http://www.w3.org/ns/dcat#Distribution"
+    }
+]

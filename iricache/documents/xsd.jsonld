@@ -1,0 +1,256 @@
+{
+    "@context": { 
+        "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+        "xsd": "http://www.w3.org/2001/XMLSchema#",
+        "rdfs:subClassOf": {
+            "@type": "@id"
+        }
+    },
+
+    "@graph": [
+        {
+            "@id": "xsd:anyURI",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "anyURI",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:base64Binary",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "base64Binary",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:boolean",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "boolean",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:byte",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "byte",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:dateTime",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "dateTime",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:dateTimeStamp",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "dateTimeStamp",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:decimal",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "decimal",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:double",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "double",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:float",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "float",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:hexBinary",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "hexBinary",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:int",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "int",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:integer",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "integer",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:language",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "language",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:Name",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "Name",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:NCName",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "NCName",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:negativeInteger",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "negativeInteger",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:NMTOKEN",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "NMTOKEN",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:nonNegativeInteger",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "nonNegativeInteger",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:nonPostiveInteger",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "nonPositiveInteger",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:normalizedString",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "normalizedString",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:positiveInteger",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "positiveInteger",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:string",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "string",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:token",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "token",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:unsignedByte",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "unsignedByte",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:unsignedInt",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "unsignedInt",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:unsignedLong",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "unsignedLong",
+            "rdfs:comment": ""
+
+        },
+        {
+            "@id": "xsd:unsignedShort",
+            "@type": "rdfs:Datatype",
+            "rdfs:subClassOf": "rdfs:Resource",
+            "rdfs:isDefinedBy": {"@id": "xsd:"},
+            "rdfs:label": "unsignedShort",
+            "rdfs:comment": ""
+
+        }
+
+    ]
+}

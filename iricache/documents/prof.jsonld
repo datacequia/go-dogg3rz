@@ -1,0 +1,473 @@
+[
+    {
+        "@id": "http://orcid.org/0000-0002-3884-3420"
+    },
+    {
+        "@id": "http://orcid.org/0000-0002-8742-7730"
+    },
+    {
+        "@id": "http://purl.org/dc/elements/1.1/format"
+    },
+    {
+        "@id": "http://purl.org/dc/elements/1.1/relation"
+    },
+    {
+        "@id": "http://purl.org/dc/terms/"
+    },
+    {
+        "@id": "http://purl.org/dc/terms/MediaTypeOrExtent"
+    },
+    {
+        "@id": "http://purl.org/dc/terms/Standard"
+    },
+    {
+        "@id": "http://purl.org/dc/terms/conformsTo",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/dc/elements/1.1/relation"
+            },
+            {
+                "@id": "http://purl.org/dc/terms/relation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/dc/terms/Standard"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/terms/"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "An established standard to which the described resource conforms",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "conforms to"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/terms/format",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/dc/elements/1.1/format"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/dc/terms/MediaTypeOrExtent"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/terms/relation"
+    },
+    {
+        "@id": "http://www.w3.org/2001/XMLSchema#token"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#AnnotationProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#DatatypeProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#ObjectProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://www.w3.org/2002/07/owl#versionIRI": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/1.0"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Profiles Vocabulary"
+            }
+        ],
+        "http://purl.org/dc/terms/contributor": [
+            {
+                "@id": "http://orcid.org/0000-0002-8742-7730"
+            },
+            {
+                "@id": "http://orcid.org/0000-0002-3884-3420"
+            }
+        ],
+        "http://purl.org/dc/elements/1.1/creator": [
+            {
+                "@value": "Rob Atkinson"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "This vocabulary is for describing relationships between standards/specifications, profiles of them and supporting artifacts such as validating resources.\n\nThis model starts with [http://dublincore.org/2012/06/14/dcterms#Standard](dct:Standard) entities which can either be Base Specifications (a standard not profiling any other Standard) or Profiles (Standards which do profile others). Base Specifications or Profiles can have Resource Descriptors associated with them that defines implementing rules for the it. Resource Descriptors must indicate the role they play (to guide, to validate etc.) and the formalism they adhere to (dct:format) to allow for content negotiation. A vocabulary of Resource Roles are provided alongside this vocabulary but that list is extensible.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#versionInfo": [
+            {
+                "@value": "1.0"
+            }
+        ],
+        "http://purl.org/dc/elements/1.1/contributor": [
+            {
+                "@value": "Nicholas Car"
+            },
+            {
+                "@value": "Simon Cox"
+            },
+            {
+                "@value": "Alejandra Gonzalez-Beltran"
+            }
+        ],
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2018-11-15",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/created": [
+            {
+                "@value": "2018-02-16",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/1.0"
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/Profile",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/dc/terms/Standard"
+            }
+        ],
+        "http://purl.org/dc/terms/source": [
+            {
+                "@id": "https://www.w3.org/2017/dxwg/wiki/ProfileContext"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Profile"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A named set of constraints on one or more identified base specifications or other profiles, including the identification of any implementing subclasses of datatypes, semantic interpretations, vocabularies, options and parameters of those base specifications necessary to accomplish a particular function.\n\nThis definition includes what are often called \"application profiles\", \"metadata application profiles\", or \"metadata profiles\".",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/ResourceDescriptor",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Resource Descriptor",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A resource that defines an aspect - a particular part or feature - of a Profile",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "Can be use to indicate the formalism (via dct:format) and any adherence to a dct:Standard (via dct:conformsTo) to allow for machine mediation as well as its purpose via relation to a ResourceRole (via hasRole)",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/ResourceRole",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Resource Role"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "The role that an Resource plays",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "Specific terms must come from a vocabulary",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/hasArtifact",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "The URL of a downloadable file with particulars such as its format and role indicated by a Resource Descriptor",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/ResourceDescriptor"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has artifact"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/hasResource",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/ResourceDescriptor"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A resource which describes the nature of an artifact and the role it plays in relation to a profile",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has resource",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "This property is analogous to dcat:distribution however the domain is not necessarily dcat:Dataset. dcat:Dataset and prof:Profile are not disjoint, so it is up to implementations to decide if these are equivalent properties",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/hasRole",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/ResourceDescriptor"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "A set of common roles are defined by the Profiles Vocabulary. These are not exhaustive or disjoint, and may be extended for situations where finer grained description of purpose is necessary. A resource may perform multiple roles",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "The function of the described artifactresource in the expression of the Profile, such as a specification, guidance documentation, SHACL file etc.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has role"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/hasToken",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#DatatypeProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/Profile"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2001/XMLSchema#token"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A preferred alternative identifier for the Profile",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "A simple lexical form of identifier that may be accepted in some circumstances, such as API arguments to reference this profile. This is a â€œpreferred termâ€, since alternative identifiers may be declared and used by any implementation",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has token"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/isInheritedFrom",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/ResourceDescriptor"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/Profile"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "This property indicates a Resource Descriptor described by this Profileâ€™s base specification that is to be considered a Resource Descriptor for this Profile also",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "This property is created for the convenience of clients. When profile describers wish to allow clients to discover all resources relevant to a Profile without having to navigating an inheritance hierarchy of prof:profileOf relations, this predicate may be used to directly associate inherited Profile Descriptors with the Profile. If this property is present, it should be used consistently and all relevant resources a client may need to utilise the profile should be present and described using this predicate",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is inherited from"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/isProfileOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/Profile"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/dc/terms/Standard"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/isTransitiveProfileOf"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "A Profile may define constraints on the usage of one or more specifications. All constraints of these specifications are inherited, in the sense that an object conforming to a profile conforms to all the constraints specified the targets of prof:isProfileOf relations. This property is optional, allowing any specification to be declared at the root of a profile hierarchy using the Profile class",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A Profile is a profile of a dct:Standard (or a Base Specification or another Profile)",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is profile of"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/dx/prof/isTransitiveProfileOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/dx/prof/Profile"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/dc/terms/Standard"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A base specification an Profile conforms to",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is transitive profile of"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#usageNote": [
+            {
+                "@value": "This is a convenience predicate that may be used to declare all specifications (including profiles) that the subject profile requires an information resource to conform to. This avoids forcing clients to traverse a profile hierarchy to find all conformance implications and available resources. If present all such relationships should be present so a client can safely avoid hierarchy traversal",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "https://www.w3.org/2017/dxwg/wiki/ProfileContext"
+    }
+]

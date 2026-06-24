@@ -1,0 +1,165 @@
+[
+    {
+        "@id": "http://purl.org/dc/aboutdcmi#DCMI"
+    },
+    {
+        "@id": "http://purl.org/dc/dcam/",
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2012-06-14",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/publisher": [
+            {
+                "@id": "http://purl.org/dc/aboutdcmi#DCMI"
+            }
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "Metadata terms for vocabulary description",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcam/VocabularyEncodingScheme",
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2008-01-14",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An enumerated set of resources.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcam/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Vocabulary Encoding Scheme",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "https://www.dublincore.org/specifications/dublin-core/2007/06/04/abstract-model/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcam/domainIncludes",
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2020-01-20",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A suggested class for subjects of this property.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcam/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Domain Includes",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcam/memberOf",
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2008-01-14",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A relationship between a resource and a vocabulary encoding scheme which indicates that the resource is a member of a set.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcam/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Member Of",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/dc/dcam/VocabularyEncodingScheme"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "https://www.dublincore.org/specifications/dublin-core/2007/06/04/abstract-model/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcam/rangeIncludes",
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2020-01-20",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A suggested class for values of this property.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcam/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Range Includes",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    },
+    {
+        "@id": "https://www.dublincore.org/specifications/dublin-core/2007/06/04/abstract-model/"
+    }
+]

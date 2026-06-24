@@ -1,0 +1,1356 @@
+[
+    {
+        "@id": "_:b0",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "richard@cyganiak.de"
+            }
+        ]
+    },
+    {
+        "@id": "_:b1",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "jeni@jenitennison.com"
+            }
+        ]
+    },
+    {
+        "@id": "_:b2",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "arofan.gregory@earthlink.net"
+            }
+        ]
+    },
+    {
+        "@id": "_:b3",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "ian@epimorphics.com"
+            }
+        ]
+    },
+    {
+        "@id": "_:b4",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "dave@epimorphics.com"
+            }
+        ]
+    },
+    {
+        "@id": "_:b5",
+        "http://www.w3.org/2002/07/owl#unionOf": [
+            {
+                "@id": "_:b6"
+            }
+        ]
+    },
+    {
+        "@id": "_:b6",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b7"
+            }
+        ]
+    },
+    {
+        "@id": "_:b7",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Collection"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b8"
+            }
+        ]
+    },
+    {
+        "@id": "_:b8",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://purl.org/linked-data/cube#HierarchicalCodeList"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/NET/scovo#Dataset"
+    },
+    {
+        "@id": "http://purl.org/NET/scovo#Item"
+    },
+    {
+        "@id": "http://purl.org/NET/scovo#dataset"
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://www.w3.org/2002/07/owl#versionInfo": [
+            {
+                "@value": "0.2"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "The data cube vocabulary"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "This vocabulary allows multi-dimensional data, such as statistics, to be published in RDF. It is based on the core information model from SDMX (and thus also DDI)."
+            }
+        ],
+        "http://purl.org/dc/terms/created": [
+            {
+                "@value": "2010-07-12",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2010-11-27",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-03-02",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-07-26",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "Vocabulary for multi-dimensional (e.g. statistical) data publishing"
+            }
+        ],
+        "http://purl.org/dc/terms/license": [
+            {
+                "@id": "http://www.opendatacommons.org/licenses/pddl/1.0/"
+            }
+        ],
+        "http://purl.org/dc/terms/contributor": [
+            {
+                "@id": "_:b0"
+            },
+            {
+                "@id": "_:b1"
+            },
+            {
+                "@id": "_:b2"
+            },
+            {
+                "@id": "_:b3"
+            },
+            {
+                "@id": "_:b4"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#Attachable",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Attachable (abstract)",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Abstract superclass for everything that can have attributes and dimensions",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#AttributeProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Attribute property",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The class of components which represent attributes of observations in the cube, e.g. unit of measurement",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://purl.org/linked-data/cube#MeasureProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#CodedProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Coded property",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Superclass of all coded ComponentProperties",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#ComponentProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Component property (abstract)",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Abstract super-property of all properties representing dimensions, attributes or measures",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#ComponentSet",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Component set",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Abstract class of things which reference one or more ComponentProperties",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#ComponentSpecification",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Component specification",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Used to define properties of a component (attribute, dimension etc) which are specific to its usage in a DSD.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#DataSet",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Data set",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents a collection of observations, possibly organized into various slices, conforming to some common dimensional structure.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Attachable"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentClass": [
+            {
+                "@id": "http://purl.org/NET/scovo#Dataset"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#DataStructureDefinition",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Data structure definition",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Defines the structure of a DataSet or slice",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#DimensionProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Dimension property",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The class of components which represent the dimensions of the cube",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            },
+            {
+                "@id": "http://purl.org/linked-data/cube#CodedProperty"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://purl.org/linked-data/cube#MeasureProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#HierarchicalCodeList",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Hierarchical Code List",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents a generalized hierarchy of concepts which can be used for coding. The hierarchy is defined by one or more roots together with a property which relates concepts in the hierarchy to thier child concept .  The same concepts may be members of multiple hierarchies provided that different qb:parentChildProperty values are used for each hierarchy.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#MeasureProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Measure property",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The class of components which represent the measured value of the phenomenon being observed",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://purl.org/linked-data/cube#AttributeProperty"
+            },
+            {
+                "@id": "http://purl.org/linked-data/cube#DimensionProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#Observation",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Observation",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A single observation in the cube, may have one or more associated measured values",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Attachable"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentClass": [
+            {
+                "@id": "http://purl.org/NET/scovo#Item"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#ObservationGroup",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Observation Group",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A, possibly arbitrary, group of observations.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#Slice",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ObservationGroup"
+            },
+            {
+                "@id": "http://purl.org/linked-data/cube#Attachable"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Slice",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Denotes a subset of a DataSet defined by fixing a subset of the dimensional values, component properties on the Slice",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#SliceKey",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class",
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Slice key",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Denotes a subset of the component properties of a DataSet which are fixed in the corresponding slices",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#attribute",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "attribute",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An alternative to qb:componentProperty which makes explicit that the component is a attribute",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#componentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#AttributeProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#codeList",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "code list",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "gives the code list associated with a CodedProperty",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#CodedProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "_:b5"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#component",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "component specification",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates a component specification which is included in the structure of the dataset",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataStructureDefinition"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSpecification"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#componentAttachment",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "component attachment",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the level at which the component property should be attached, this might an qb:DataSet, qb:Slice or qb:Observation, or a qb:MeasureProperty.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSpecification"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#componentProperty",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "component",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates a ComponentProperty (i.e. attribute/dimension) expected on a DataSet, or a dimension fixed in a SliceKey",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#componentRequired",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "component required",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates whether a component property is required (true) or optional (false) in the context of a DSD. Only applicable\n    to components correspond to an attribute. Defaults to false (optional).",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSpecification"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#concept",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "concept",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "gives the concept which is being measured or indicated by a ComponentProperty",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#dataSet",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "data set",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates the data set of which this observation is a part",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Observation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataSet"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentProperty": [
+            {
+                "@id": "http://purl.org/NET/scovo#dataset"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#dimension",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "dimension",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An alternative to qb:componentProperty which makes explicit that the component is a dimension",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#componentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DimensionProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#hierarchyRoot",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#HierarchicalCodeList"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Specifies a root of the hierarchy. A hierarchy may have multiple roots but must have at least one.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#measure",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "measure",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An alternative to qb:componentProperty which makes explicit that the component is a measure",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#componentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#MeasureProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#measureDimension",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "measure dimension",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An alternative to qb:componentProperty which makes explicit that the component is a measure dimension",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#componentProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DimensionProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#measureType",
+        "@type": [
+            "http://purl.org/linked-data/cube#DimensionProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "measure type",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Generic measure dimension, the value of this dimension indicates which measure (from the set of measures in the DSD) is being given by the obsValue (or other primary measure)",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#MeasureProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#observation",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "observation",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates a observation contained within this slice of the data set",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ObservationGroup"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Observation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#observationGroup",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "observation group",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a group of observations. The domain of this property is left open so that a group may be attached to different resources and need not be restricted to a single DataSet",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ObservationGroup"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#order",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#DatatypeProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "order",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates a priority order for the components of sets with this structure, used to guide presentations - lower order numbers come before higher numbers, un-numbered components come last",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#ComponentSpecification"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2001/XMLSchema#int"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#parentChildProperty",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "parent-child property",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#HierarchicalCodeList"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Specifies a property which relates a parent concept in the hierarchy to a child concept.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#slice",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://purl.org/linked-data/cube#observationGroup"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "slice",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a subset of a DataSet defined by fixing a subset of the dimensional values",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Slice"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#sliceKey",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "slice key",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates a slice key which is used for slices in this dataset",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataStructureDefinition"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#SliceKey"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#sliceStructure",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "slice structure",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates the sub-key corresponding to this slice",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#Slice"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#SliceKey"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/linked-data/cube#structure",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#ObjectProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "structure",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "indicates the structure to which this data set conforms",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataSet"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://purl.org/linked-data/cube#DataStructureDefinition"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/linked-data/cube"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.opendatacommons.org/licenses/pddl/1.0/"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2001/XMLSchema#boolean"
+    },
+    {
+        "@id": "http://www.w3.org/2001/XMLSchema#int"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#DatatypeProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#ObjectProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Collection"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+    }
+]

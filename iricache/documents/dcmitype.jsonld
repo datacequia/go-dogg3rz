@@ -1,0 +1,521 @@
+[
+    {
+        "@id": "http://purl.org/dc/aboutdcmi#DCMI"
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/",
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2012-06-14",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/publisher": [
+            {
+                "@id": "http://purl.org/dc/aboutdcmi#DCMI"
+            }
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "DCMI Type Vocabulary",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Collection",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "A collection is described as a group; its parts may also be separately described.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An aggregation of resources.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Collection",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Dataset",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include lists, tables, and databases.  A dataset may be useful for direct machine processing.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Data encoded in a defined structure.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Dataset",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Event",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Metadata for an event provides descriptive information that is the basis for discovery of the purpose, location, duration, and responsible agents associated with an event. Examples include an exhibition, webcast, conference, workshop, open day, performance, battle, trial, wedding, tea party, conflagration.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A non-persistent, time-based occurrence.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Event",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Image",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include images and photographs of physical objects, paintings, prints, drawings, other images and graphics, animations and moving pictures, film, diagrams, maps, musical notation.  Note that Image may include both electronic and physical representations.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A visual representation other than text.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Image",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/InteractiveResource",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include forms on Web pages, applets, multimedia learning objects, chat services, or virtual reality environments.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A resource requiring interaction from the user to be understood, executed, or experienced.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Interactive Resource",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/MovingImage",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include animations, movies, television programs, videos, zoetropes, or visual output from a simulation.  Instances of the type Moving Image must also be describable as instances of the broader type Image.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2003-11-18",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A series of visual representations imparting an impression of motion when shown in succession.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Moving Image",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/Image"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/PhysicalObject",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Note that digital representations of, or surrogates for, these objects should use Image, Text or one of the other types.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2002-07-13",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An inanimate, three-dimensional object or substance.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Physical Object",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Service",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include a photocopying service, a banking service, an authentication service, interlibrary loans, a Z39.50 or Web server.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A system that provides one or more functions.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Service",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Software",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include a C source file, MS-Windows .exe executable, or Perl script.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A computer program in source or compiled form.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Software",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Sound",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include a music playback file format, an audio compact disc, and recorded speech or sounds.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A resource primarily intended to be heard.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Sound",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/StillImage",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include paintings, drawings, graphic designs, plans and maps. Recommended best practice is to assign the type Text to images of textual materials. Instances of the type Still Image must also be describable as instances of the broader type Image.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2003-11-18",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A static visual representation.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Still Image",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/Image"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Text",
+        "http://purl.org/dc/dcam/memberOf": [
+            {
+                "@id": "http://purl.org/dc/terms/DCMIType"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "Examples include books, letters, dissertations, poems, newspapers, articles, archives of mailing lists. Note that facsimiles or images of texts are still of the genre Text.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/issued": [
+            {
+                "@value": "2000-07-11",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A resource consisting primarily of words for reading.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Text",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/terms/DCMIType"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    }
+]

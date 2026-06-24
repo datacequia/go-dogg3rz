@@ -1,0 +1,304 @@
+[
+    {
+        "@id": "http://creativecommons.org/licenses/by/1.0/",
+        "@type": [
+            "http://web.resource.org/cc/License"
+        ],
+        "http://web.resource.org/cc/permits": [
+            {
+                "@id": "http://web.resource.org/cc/Reproduction"
+            },
+            {
+                "@id": "http://web.resource.org/cc/Distribution"
+            },
+            {
+                "@id": "http://web.resource.org/cc/DerivativeWorks"
+            }
+        ],
+        "http://web.resource.org/cc/requires": [
+            {
+                "@id": "http://web.resource.org/cc/Notice"
+            },
+            {
+                "@id": "http://web.resource.org/cc/Attribution"
+            }
+        ]
+    },
+    {
+        "@id": "http://iandavis.com/id/me",
+        "@type": [
+            "http://xmlns.com/foaf/0.1/Person"
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Ian Davis"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/dc/dcmitype/Text"
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "VANN: A vocabulary for annotating vocabulary descriptions",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/date": [
+            {
+                "@value": "2010-06-07"
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "This document describes a vocabulary for annotating descriptions of vocabularies with examples and usage notes.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/identifier": [
+            {
+                "@value": "http://purl.org/vocab/vann/vann-vocab-20050401"
+            }
+        ],
+        "http://purl.org/dc/terms/isVersionOf": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ],
+        "http://purl.org/dc/terms/replaces": [
+            {
+                "@id": "http://purl.org/vocab/vann/vann-vocab-20040305"
+            }
+        ],
+        "http://purl.org/dc/terms/creator": [
+            {
+                "@id": "http://iandavis.com/id/me"
+            }
+        ],
+        "http://purl.org/dc/terms/rights": [
+            {
+                "@value": "Copyright Â© 2005 Ian Davis"
+            }
+        ],
+        "http://purl.org/vocab/vann/preferredNamespaceUri": [
+            {
+                "@value": "http://purl.org/vocab/vann/"
+            }
+        ],
+        "http://purl.org/vocab/vann/preferredNamespacePrefix": [
+            {
+                "@value": "vann"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/changes",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Changes",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A reference to a resource that describes changes between this version of a vocabulary and the previous.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/example",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Example",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A reference to a resource that provides an example of how this resource can be used.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/preferredNamespacePrefix",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Preferred Namespace Prefix",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The preferred namespace prefix to use when using terms from this vocabulary in an XML document.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/preferredNamespaceUri",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Preferred Namespace Uri",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The preferred namespace URI to use when using terms from this vocabulary in an XML document.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/termGroup",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Term Group",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A group of related terms in a vocabulary.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/usageNote",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Usage Note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A reference to a resource that provides information on how this resource is to be used.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://purl.org/vocab/vann/"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/vocab/vann/vann-vocab-20040305"
+    },
+    {
+        "@id": "http://web.resource.org/cc/Attribution"
+    },
+    {
+        "@id": "http://web.resource.org/cc/DerivativeWorks"
+    },
+    {
+        "@id": "http://web.resource.org/cc/Distribution"
+    },
+    {
+        "@id": "http://web.resource.org/cc/License"
+    },
+    {
+        "@id": "http://web.resource.org/cc/Notice"
+    },
+    {
+        "@id": "http://web.resource.org/cc/Reproduction"
+    },
+    {
+        "@id": "http://web.resource.org/cc/Work"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#seeAlso"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#AnnotationProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+    },
+    {
+        "@id": "https://vocab.org/vann/vann-vocab-20100607.rdf",
+        "@type": [
+            "http://web.resource.org/cc/Work"
+        ],
+        "http://web.resource.org/cc/license": [
+            {
+                "@id": "http://creativecommons.org/licenses/by/1.0/"
+            }
+        ],
+        "http://purl.org/dc/terms/type": [
+            {
+                "@id": "http://purl.org/dc/dcmitype/Text"
+            }
+        ]
+    }
+]

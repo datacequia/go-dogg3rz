@@ -1,0 +1,1265 @@
+[
+    {
+        "@id": "_:b0",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#unionOf": [
+            {
+                "@id": "_:b1"
+            }
+        ]
+    },
+    {
+        "@id": "_:b1",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b2"
+            }
+        ]
+    },
+    {
+        "@id": "_:b2",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Collection"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#List"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#label"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#AnnotationProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#DatatypeProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#FunctionalProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#ObjectProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#SymmetricProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#TransitiveProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "SKOS Vocabulary",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/contributor": [
+            {
+                "@value": "Dave Beckett"
+            },
+            {
+                "@value": "Nikki Rogers"
+            },
+            {
+                "@value": "Participants in W3C's Semantic Web Deployment Working Group."
+            }
+        ],
+        "http://purl.org/dc/terms/description": [
+            {
+                "@value": "An RDF vocabulary for describing the basic structure and content of concept schemes such as thesauri, classification schemes, subject heading lists, taxonomies, 'folksonomies', other types of controlled vocabulary, and also concept schemes embedded in glossaries and terminologies.",
+                "@language": "en"
+            }
+        ],
+        "http://purl.org/dc/terms/creator": [
+            {
+                "@value": "Alistair Miles"
+            },
+            {
+                "@value": "Sean Bechhofer"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "http://www.w3.org/TR/skos-reference/"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Collection",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Collection",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A meaningful collection of concepts.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "Labelled collections can be used where you would like a set of concepts to be displayed under a 'node label' in the hierarchy.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            },
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Concept",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Concept",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "An idea or notion; a unit of thought.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Concept Scheme",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A set of concepts, optionally including statements about semantic relationships between those concepts.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "A concept scheme may be defined to include concepts from different sources.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#example": [
+            {
+                "@value": "Thesauri, classification schemes, subject heading lists, taxonomies, 'folksonomies', and other types of controlled vocabulary are all examples of concept schemes. Concept schemes are also embedded in glossaries and terminologies.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#OrderedCollection",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Ordered Collection",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "An ordered collection of concepts, where both the grouping and the ordering are meaningful.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "Ordered collections can be used where you would like a set of concepts to be displayed in a specific order, and optionally under a 'node label'.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Collection"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#altLabel",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "alternative label",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "An alternative lexical label for a resource.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#example": [
+            {
+                "@value": "Acronyms, abbreviations, spelling variants, and irregular plural/singular forms may be included among the alternative labels for a concept. Mis-spelled terms are normally included as hidden labels (see skos:hiddenLabel).",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#label"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The range of skos:altLabel is the class of RDF plain literals.",
+                "@language": "en"
+            },
+            {
+                "@value": "skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#broadMatch",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has broader match",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:broadMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#mappingRelation"
+            },
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#broader"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#narrowMatch"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#broader",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has broader",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a concept to a concept that is more general in meaning.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Broader concepts are typically rendered as parents in a concept hierarchy (tree).",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#broaderTransitive"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#narrower"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#broaderTransitive",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has broader transitive",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:broaderTransitive is a transitive superproperty of skos:broader."
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "By convention, skos:broaderTransitive is not used to make assertions. Rather, the properties can be used to draw inferences about the transitive closure of the hierarchical relation, which is useful e.g. when implementing a simple query expansion algorithm in a search application.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#TransitiveProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#semanticRelation"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#narrowerTransitive"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#changeNote",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "change note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A note about a modification to a concept.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#closeMatch",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has close match",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:closeMatch is used to link two concepts that are sufficiently similar that they can be used interchangeably in some information retrieval applications. In order to avoid the possibility of \"compound errors\" when combining mappings across more than two concept schemes, skos:closeMatch is not declared to be a transitive property.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#SymmetricProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#mappingRelation"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#definition",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "definition",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A statement or formal explanation of the meaning of a concept.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#editorialNote",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "editorial note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A note for an editor, translator or maintainer of the vocabulary.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#exactMatch",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has exact match",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:exactMatch is used to link two concepts, indicating a high degree of confidence that the concepts can be used interchangeably across a wide range of information retrieval applications. skos:exactMatch is a transitive property, and is a sub-property of skos:closeMatch.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#SymmetricProperty",
+            "http://www.w3.org/2002/07/owl#TransitiveProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#closeMatch"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "skos:exactMatch is disjoint with each of the properties skos:broadMatch and skos:relatedMatch.",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#example",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "example",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "An example of the use of a concept.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#hasTopConcept",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has top concept",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates, by convention, a concept scheme to a concept which is topmost in the broader/narrower concept hierarchies for that scheme, providing an entry point to these hierarchies.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#topConceptOf"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#hiddenLabel",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "hidden label",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A lexical label for a resource that should be hidden when generating visual displays of the resource, but should still be accessible to free text search operations.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#label"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The range of skos:hiddenLabel is the class of RDF plain literals.",
+                "@language": "en"
+            },
+            {
+                "@value": "skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise disjoint properties.",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#historyNote",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "history note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A note about the past state/use/meaning of a concept.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#inScheme",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is in scheme",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a resource (for example a concept) to a concept scheme in which it is included.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "A concept may be a member of more than one concept scheme.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#mappingRelation",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is in mapping relation with",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates two concepts coming, by convention, from different schemes, and that have comparable meanings",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "These concept mapping relations mirror semantic relations, and the data model defined below is similar (with the exception of skos:exactMatch) to the data model defined for semantic relations. A distinct vocabulary is provided for concept mapping relations, to provide a convenient way to differentiate links within a concept scheme from links between concept schemes. However, this pattern of usage is not a formal requirement of the SKOS data model, and relies on informal definitions of best practice.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#semanticRelation"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#member",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has member",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a collection to one of its members.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Collection"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "_:b0"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#memberList",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has member list",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates an ordered collection to the RDF list containing its members.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#FunctionalProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#OrderedCollection"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#List"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "For any resource, every item in the list given as the value of the\n      skos:memberList property is also a value of the skos:member property.",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#narrowMatch",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has narrower match",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:narrowMatch is used to state a hierarchical mapping link between two conceptual resources in different concept schemes.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#mappingRelation"
+            },
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#narrower"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#broadMatch"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#narrower",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has narrower",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a concept to a concept that is more specific in meaning.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "By convention, skos:broader is only used to assert an immediate (i.e. direct) hierarchical link between two conceptual resources.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Narrower concepts are typically rendered as children in a concept hierarchy (tree).",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#narrowerTransitive"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#broader"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#narrowerTransitive",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has narrower transitive",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:narrowerTransitive is a transitive superproperty of skos:narrower."
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "By convention, skos:narrowerTransitive is not used to make assertions. Rather, the properties can be used to draw inferences about the transitive closure of the hierarchical relation, which is useful e.g. when implementing a simple query expansion algorithm in a search application.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#TransitiveProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#semanticRelation"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#broaderTransitive"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#notation",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "notation",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A notation, also known as classification code, is a string of characters such as \"T58.5\" or \"303.4833\" used to uniquely identify a concept within the scope of a given concept scheme.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "By convention, skos:notation is used with a typed literal in the object position of the triple.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#DatatypeProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#note",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A general note, for any purpose.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "This property may be used directly, or as a super-property for more specific note types.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#prefLabel",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "preferred label",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "The preferred lexical label for a resource, in a given language.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2000/01/rdf-schema#label"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A resource has no more than one value of skos:prefLabel per language tag, and no more than one value of skos:prefLabel without language tag.",
+                "@language": "en"
+            },
+            {
+                "@value": "The range of skos:prefLabel is the class of RDF plain literals.",
+                "@language": "en"
+            },
+            {
+                "@value": "skos:prefLabel, skos:altLabel and skos:hiddenLabel are pairwise\n      disjoint properties.",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#related",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has related",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a concept to a concept with which there is an associative semantic relationship.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#SymmetricProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#semanticRelation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "skos:related is disjoint with skos:broaderTransitive",
+                "@language": "en"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#relatedMatch",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has related match",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "skos:relatedMatch is used to state an associative mapping link between two conceptual resources in different concept schemes.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#SymmetricProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#mappingRelation"
+            },
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#related"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#scopeNote",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "scope note",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "A note that helps to clarify the meaning and/or the use of a concept.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#note"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#semanticRelation",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is in semantic relation with",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Links a concept to a concept related by meaning.",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#scopeNote": [
+            {
+                "@value": "This property should not be used directly, but as a super-property for all properties denoting a relationship of meaning between concepts.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#topConceptOf",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "is top concept in scheme",
+                "@language": "en"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#definition": [
+            {
+                "@value": "Relates a concept to the concept scheme that it is a top level concept of.",
+                "@language": "en"
+            }
+        ],
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#inScheme"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#hasTopConcept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#ConceptScheme"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/skos-reference/"
+    }
+]

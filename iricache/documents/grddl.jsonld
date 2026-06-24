@@ -1,0 +1,425 @@
+[
+    {
+        "@id": "http://lists.w3.org/Archives/Public/public-grddl-comments/",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "public-grddl-comments"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/NET/erdf/extract"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2001/sw-grddl-wg/",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "the GRDDL Working Group"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#FunctionalProperty",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "FunctionalProperty"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view",
+        "http://www.rddl.org/purposes#normative-reference": [
+            {
+                "@id": "http://www.w3.org/TR/rdf-concepts/"
+            },
+            {
+                "@id": "http://www.w3.org/TR/grddl/"
+            },
+            {
+                "@id": "http://www.w3.org/TR/xslt"
+            }
+        ],
+        "http://webns.net/mvcb/generatorAgent": [
+            {
+                "@id": "http://purl.org/NET/erdf/extract"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/maker": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#grddl-wg"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#InformationResource",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "InformationResource"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A resource which has the property that all of its essential characteristics can be conveyed in a message"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/2004/REC-webarch-20041215/#def-information-resource"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#RDFGraph",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "RDF graphs"
+            },
+            {
+                "@value": "RDFGraph"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "a\n    set of RDF triples"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#dfn-rdf-graph"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#RootNode",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "RootNode"
+            },
+            {
+                "@value": "XML document root nodes"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "the root of the tree in the XPath data\n    model"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/TR/1999/REC-xpath-19991116#root-node"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#Transformation",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#onProperty": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#transformationProperty"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#someValuesFrom": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#TransformationProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Transformation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#InformationResource"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "an InformationResource that specifies\n    a transformation from a set of XML documents to RDF graphs"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#TransformationProperty",
+        "@type": [
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#RootNode"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#RDFGraph"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "TransformationProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/2002/07/owl#FunctionalProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "a FunctionalProperty that relates\n    XML document root nodes to\n    RDF graphs"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#danc",
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://www.w3.org/People/Connolly/"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Dan Connolly"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#grddl-wg",
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://www.w3.org/2001/sw-grddl-wg/"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#grddlProject",
+        "http://usefulinc.com/ns/doap#homepage": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view"
+            }
+        ],
+        "http://usefulinc.com/ns/doap#shortdesc": [
+            {
+                "@value": "GRDDL\n    is a technique for gleaning resource\n    descriptions from dialects of\n    languages. It's a way of extracting Semantic Web\n    data in RDF from XML formats (especially\n    XHTML dialects or microformats) via\n    transformations identified by URIs and typically expressed in\n    XSLT."
+            }
+        ],
+        "http://usefulinc.com/ns/doap#mailing-list": [
+            {
+                "@id": "http://lists.w3.org/Archives/Public/public-grddl-comments/"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#namespaceTransformation",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "namespaceTransformation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "relates a namespace to a transformation for\n    all documents in that namespace"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#Transformation"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#profileTransformation",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "profileTransformation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "relates a profile document to a\n    transformation for all documents bearing that profile"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#Transformation"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#result",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "result"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "an\n    RDF graph obtained from an information resource by directly\n    parsing a representation in the standard RDF/XML syntax or\n    indirectly by parsing some other dialect using a transformation\n    nominated by the document"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#InformationResource"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#RDFGraph"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#transformation",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "transformation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "relates a source document to a\n    transformation, usually represented in XSLT, that relates the source document syntax\n    to the RDF graph syntax"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#RootNode"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#Transformation"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/2003/g/data-view#transformationProperty",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#FunctionalProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "transformationProperty"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "relates a transformation to the algorithm\n    specified by the property that computes an RDF graph from an XML\n    document node"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#Transformation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2003/g/data-view#TransformationProperty"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/People/Connolly/",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Dan Connolly"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/1999/REC-xpath-19991116#root-node",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "section\n    5.1 Root Node in XML Path Language (XPath) Version\n    1.0"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/2004/REC-rdf-concepts-20040210/#dfn-rdf-graph",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "definition\n    in Resource Description Framework (RDF): Concepts and\n    Abstract Syntax"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/2004/REC-webarch-20041215/#def-information-resource",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "definition in Architecture of the World Wide Web, Volume One"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/grddl/",
+        "http://purl.org/dc/elements/1.1/title": [
+            {
+                "@value": "Gleaning\n        Resource Descriptions from Dialects of Languages\n        (GRDDL)"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Gleaning\n        Resource Descriptions from Dialects of Languages\n        (GRDDL), 16\n        May 2005"
+            }
+        ],
+        "http://purl.org/dc/elements/1.1/date": [
+            {
+                "@value": "2005-05-15"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/rdf-concepts/",
+        "http://purl.org/dc/elements/1.1/title": [
+            {
+                "@value": "Resource\n      Description Framework (RDF): Concepts and Abstract\n      Syntax"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Resource\n      Description Framework (RDF): Concepts and Abstract\n      Syntax, 10\n      February 2004"
+            }
+        ],
+        "http://purl.org/dc/elements/1.1/date": [
+            {
+                "@value": "2004-02-10"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/TR/xslt",
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "XSLT"
+            }
+        ]
+    }
+]

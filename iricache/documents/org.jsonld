@@ -1,0 +1,3478 @@
+[
+    {
+        "@id": "_:b0",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "dave@epimorphics.com"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Dave Reynolds"
+            }
+        ]
+    },
+    {
+        "@id": "_:b1",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "dguardiola@quinode.fr"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Dominique Guardiola"
+            }
+        ]
+    },
+    {
+        "@id": "_:b10",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#unionOf": [
+            {
+                "@id": "_:b12"
+            }
+        ]
+    },
+    {
+        "@id": "_:b11",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#unionOf": [
+            {
+                "@id": "_:b14"
+            }
+        ]
+    },
+    {
+        "@id": "_:b12",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b13"
+            }
+        ]
+    },
+    {
+        "@id": "_:b13",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "_:b14",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b15"
+            }
+        ]
+    },
+    {
+        "@id": "_:b15",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "_:b16",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#unionOf": [
+            {
+                "@id": "_:b17"
+            }
+        ]
+    },
+    {
+        "@id": "_:b17",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b18"
+            }
+        ]
+    },
+    {
+        "@id": "_:b18",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "_:b19",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class"
+        ],
+        "http://www.w3.org/2002/07/owl#intersectionOf": [
+            {
+                "@id": "_:b20"
+            }
+        ]
+    },
+    {
+        "@id": "_:b2",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "antonio.maccioni@agid.gov.it"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Antonio Maccioni"
+            }
+        ]
+    },
+    {
+        "@id": "_:b20",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b21"
+            }
+        ]
+    },
+    {
+        "@id": "_:b21",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "_:b22"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "_:b22",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Restriction"
+        ],
+        "http://www.w3.org/2002/07/owl#allValuesFrom": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#onProperty": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasMember"
+            }
+        ]
+    },
+    {
+        "@id": "_:b23",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#resultedFrom"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "_:b24"
+            }
+        ]
+    },
+    {
+        "@id": "_:b24",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#originalOrganization"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "_:b3",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "giorgia.lodi@agid.gov.it"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Giorgia Lodi"
+            }
+        ]
+    },
+    {
+        "@id": "_:b4",
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Shuji Kamitsuna"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/homepage": [
+            {
+                "@id": "http://www.asahi-net.or.jp/~ax2s-kmtn/"
+            }
+        ]
+    },
+    {
+        "@id": "_:b5",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "lupe@fi.upm.es"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Guadalupe Aguado de Cea"
+            }
+        ]
+    },
+    {
+        "@id": "_:b6",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "emontiel@fi.upm.es"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Elena Montiel Ponsoda"
+            }
+        ]
+    },
+    {
+        "@id": "_:b7",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "ogiraldo@fi.upm.es"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "Olga Ximena Giraldo"
+            }
+        ]
+    },
+    {
+        "@id": "_:b8",
+        "http://xmlns.com/foaf/0.1/mbox": [
+            {
+                "@value": "mpoveda@fi.upm.es"
+            }
+        ],
+        "http://xmlns.com/foaf/0.1/name": [
+            {
+                "@value": "MarÃ­a Poveda VillalÃ³n"
+            }
+        ]
+    },
+    {
+        "@id": "_:b9",
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#first": [
+            {
+                "@id": "http://www.w3.org/ns/org#identifier"
+            }
+        ],
+        "http://www.w3.org/1999/02/22-rdf-syntax-ns#rest": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+            }
+        ]
+    },
+    {
+        "@id": "http://purl.org/goodrelations/v1#BusinessEntity",
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#FormalOrganization"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.asahi-net.or.jp/~ax2s-kmtn/"
+    },
+    {
+        "@id": "http://www.opendatacommons.org/licenses/pddl/1.0/"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+    },
+    {
+        "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#nil"
+    },
+    {
+        "@id": "http://www.w3.org/2000/01/rdf-schema#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2001/XMLSchema#string"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#AnnotationProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Class"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#DatatypeProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#FunctionalProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#ObjectProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Ontology"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#Restriction"
+    },
+    {
+        "@id": "http://www.w3.org/2002/07/owl#TransitiveProperty"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+    },
+    {
+        "@id": "http://www.w3.org/2004/02/skos/core#notation"
+    },
+    {
+        "@id": "http://www.w3.org/TR/vocab-org/"
+    },
+    {
+        "@id": "http://www.w3.org/ns/org"
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Ontology"
+        ],
+        "http://www.w3.org/2002/07/owl#versionInfo": [
+            {
+                "@value": "0.8"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Core organization ontology",
+                "@language": "en"
+            },
+            {
+                "@value": "Ontologie des organisations",
+                "@language": "fr"
+            },
+            {
+                "@value": "Ontologia delle organizzazioni",
+                "@language": "it"
+            },
+            {
+                "@value": "OntologÃ­a de organizaciones",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Vocabulary for describing organizational structures, specializable to a broad variety of types of organization.",
+                "@language": "en"
+            },
+            {
+                "@value": "Vocabolario per descrivere strutture organizzative, le quali possono essere specializzate in una vasta varietÃ  di tipi di organizzazione",
+                "@language": "it"
+            },
+            {
+                "@value": "Vocabulario para describir organizaciones, adaptable a una amplia variedad de ellas.",
+                "@language": "es"
+            }
+        ],
+        "http://purl.org/dc/terms/created": [
+            {
+                "@value": "2010-05-28",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/modified": [
+            {
+                "@value": "2010-06-09",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2010-10-08",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2012-09-30",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2012-10-06",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-02-15",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2013-12-16",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2014-01-02",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2014-01-25",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2014-02-05",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            },
+            {
+                "@value": "2014-04-12",
+                "@type": "http://www.w3.org/2001/XMLSchema#date"
+            }
+        ],
+        "http://purl.org/dc/terms/title": [
+            {
+                "@value": "Core organization ontology",
+                "@language": "en"
+            },
+            {
+                "@value": "Ontologie des organisations",
+                "@language": "fr"
+            },
+            {
+                "@value": "Ontologia delle organizzazioni",
+                "@language": "it"
+            },
+            {
+                "@value": "OntologÃ­a de organizaciones",
+                "@language": "es"
+            }
+        ],
+        "http://purl.org/dc/terms/contributor": [
+            {
+                "@id": "_:b0"
+            },
+            {
+                "@id": "_:b1"
+            },
+            {
+                "@id": "_:b2"
+            },
+            {
+                "@id": "_:b3"
+            },
+            {
+                "@id": "_:b4"
+            },
+            {
+                "@id": "_:b5"
+            },
+            {
+                "@id": "_:b6"
+            },
+            {
+                "@id": "_:b7"
+            },
+            {
+                "@id": "_:b8"
+            }
+        ],
+        "http://purl.org/dc/terms/license": [
+            {
+                "@id": "http://www.opendatacommons.org/licenses/pddl/1.0/"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#seeAlso": [
+            {
+                "@id": "http://www.w3.org/TR/vocab-org/"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#ChangeEvent",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/prov#Activity"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Change Event",
+                "@language": "en"
+            },
+            {
+                "@value": "Ã‰vÃ¨nement",
+                "@language": "fr"
+            },
+            {
+                "@value": "Evento di cambiamento",
+                "@language": "it"
+            },
+            {
+                "@value": "evento de cambio",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents an event which resulted in a major change to an organization such as a merger or complete restructuring. It is intended for situations where the resulting organization is sufficient distinct from the original organizations that it has a distinct identity and distinct URI. Extension vocabularies should define sub-classes of this to denote particular categories of event. The instant or interval at which the event occurred should be given by `prov:startAtTime` and `prov:endedAtTime`, a description should be given by `dct:description`. ",
+                "@language": "en"
+            },
+            {
+                "@value": "ReprÃ©sente un Ã‰vÃ¨nement impliquant un changement majeur dans l'Organisation, comme une fusion ou une restructuration. PrÃ©vu pour des situations ou l'organisation finale est suffisamment diffÃ©rente des Organisations originales pour qu'elle ait une identitÃ© et une URI distinctes. Des vocabulaires d'extension devraient dÃ©finir des sous-classes de celle-ci pour annoter les diffÃ©rentes catÃ©gories d'Ã‰vÃ¨nemenents. Le moment ou l'intervalle de l'Ã‰vÃ¨nement devrait Ãªtre indiquÃ© avec `prov:startAtTime` et `prov:endedAtTime`, et une description avec la classe `dct:description`. ",
+                "@language": "fr"
+            },
+            {
+                "@value": "Rappresenta un evento risultato essere un importante cambiamento per un'organizzazione come ad esempio una fusione o una riorganizzazione. Ãˆ pensato per quelle situazioni in cui l'organizzazione risultante si distingue da quella originale sufficientemente da essere rappresentata con una URI differente. Le estensioni del vocabolario dovrebbero definire le sotto-classi per esprimere particolari categorie di eventi. L'istante o l'intervallo in cui l'evento accade dovrebbe essere espresso tramite `prov:startAtTime` e`prov:endedAtTime`. Una descrizione dovrebbe essere fornita attraverso `dct:description`.",
+                "@language": "it"
+            },
+            {
+                "@value": "åˆä½µã‚„å®Œå…¨ãªå†ç·¨ãªã©ã®çµ„ç¹”ã«å¤§ããªå¤‰åŒ–ã‚’ã‚‚ãŸã‚‰ã—ãŸå‡ºæ¥äº‹ã‚’è¡¨ã‚ã—ã¾ã™ã€‚ã“ã‚Œã¯ã€çµæžœã¨ã—ã¦ä½œæˆã•ã‚Œã‚‹çµ„ç¹”ã¨å…ƒã®çµ„ç¹”ã¨ãŒã€åˆ¥ã®ã‚¢ã‚¤ãƒ‡ãƒ³ãƒ†ã‚£ãƒ†ã‚£ãƒ¼ã¨åˆ¥ã®URIã‚’æŒã¤ã«è¶³ã‚‹ã»ã©ç•°ãªã‚‹çŠ¶æ³ã‚’å¯¾è±¡ã¨ã—ã¦ã„ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Evento que da como resultado un cambio sustancial en la organizaciÃ³n, por ejemplo, una fusiÃ³n o una reestructuraciÃ³n total. EstÃ¡ pensado para situaciones en las que la organizaciÃ³n resultante es lo suficientemente distinta de las organizaciones originales, tiene una identidad distinta y una URI tambiÃ©n distinta. Se deberÃ­an definir subtipos de eventos mediante vocabularios especÃ­ficos (Extension vocabularies) para referirse a categorÃ­as de eventos especÃ­ficos. El momento o periodo en el que el evento ocurre se deberÃ­a expresar mediante las propiedades `prov:startAtTime` y `prov:endedAtTime`, y una descripciÃ³n del mismo se deberÃ­a incluir mediante el uso de la propiedad `dct:description`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#FormalOrganization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            },
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Formal Organization",
+                "@language": "en"
+            },
+            {
+                "@value": "Organisation Formelle",
+                "@language": "fr"
+            },
+            {
+                "@value": "Organizzazione formale",
+                "@language": "it"
+            },
+            {
+                "@value": "organizaciÃ³n formal",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An Organization which is recognized in the world at large, in particular in legal jurisdictions, with associated rights and responsibilities. Examples include a Corporation, Charity, Government or Church. Note that this is a super class of `gr:BusinessEntity` and it is recommended to use the GoodRelations vocabulary to denote Business classifications such as DUNS or NAICS.",
+                "@language": "en"
+            },
+            {
+                "@value": "Une Organisation reconnue, en particulier par les juridictions locales, ayant des droits et des responsabilitÃ©s. Exemples : entreprises, association Ã  but non-lucratif, collectivitÃ©, Ã©glise. Notez que c'est une super-classe de `gr:BusinessEntity` et qu'il est recommandÃ© d'utiliser le vocabulaire GoodRelations pour indiquer les classifications Ã©conomiques comme le code NACE.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Un'organizzazione che Ã¨ riconosciuta a livello mondiale o, in generale, all'interno di una qualche giurisdizione, e che quindi possiede diritti e responsabilitÃ . Ad esempio aziende, enti governativi, associazioni di volontariato. Si noti che questa Ã¨ una superclasse di `gr:BusinessEntity` e che quindi Ã¨ raccomandabile usare il vocabolario GoodRelations per esprimere classificazioni di tipo industriale e commerciale come DUNS e NAICS.",
+                "@language": "it"
+            },
+            {
+                "@value": "é–¢é€£ã™ã‚‹æ¨©åˆ©ã¨è²¬ä»»ã‚’æœ‰ã™ã‚‹ï¼ˆç‰¹ã«æ³•çš„ç®¡è½„åŒºåŸŸã«ãŠã„ã¦ï¼‰ä¸–ç•Œä¸­ã«åºƒãèªè­˜ã•ã‚Œã¦ã„ã‚‹çµ„ç¹”ã€‚ä¾‹ã«ã¯ã€ä¼æ¥­ã€æ…ˆå–„å›£ä½“ã€æ”¿åºœã‚„æ•™ä¼šãŒå«ã¾ã‚Œã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n reconocida a nivel mundial, en particular en jurisdicciones legales, con derechos y responsabilidades asociadas. Algunos ejemplos son: organizaciÃ³n corporativa, organizaciÃ³n benÃ©fica, organizaciÃ³n gubernamental, organizaciÃ³n religiosa. Se debe tener en cuenta que Ã©sta es una superclase de `gr:BusinessEntity` y que se recomienda el uso del vocabulario GoodRelations para referirse a clasificaciones de negocios tales como DUNS o NAICS.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Head",
+        "@type": [
+            "http://www.w3.org/ns/org#Role"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "head",
+                "@language": "en"
+            },
+            {
+                "@value": "responsable",
+                "@language": "fr"
+            },
+            {
+                "@value": "responsabile",
+                "@language": "it"
+            },
+            {
+                "@value": "director ejecutivo",
+                "@language": "es"
+            },
+            {
+                "@value": "directora ejecutiva",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2004/02/skos/core#prefLabel": [
+            {
+                "@value": "head",
+                "@language": "en"
+            },
+            {
+                "@value": "responsable",
+                "@language": "fr"
+            },
+            {
+                "@value": "responsabile",
+                "@language": "it"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A role corresponding to the `org:headOf` property",
+                "@language": "en"
+            },
+            {
+                "@value": "Un rÃ´le correspondant Ã  la propriÃ©tÃ© `org:headOf`",
+                "@language": "fr"
+            },
+            {
+                "@value": "Un ruolo corrispondente alla proprietÃ  `org:headOf`.",
+                "@language": "it"
+            },
+            {
+                "@value": "Actividad correspondiente a la propiedad `org:headOf`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/ns/org#roleProperty": [
+            {
+                "@id": "http://www.w3.org/ns/org#headOf"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Membership",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Membership",
+                "@language": "en"
+            },
+            {
+                "@value": "Engagement",
+                "@language": "fr"
+            },
+            {
+                "@value": "Appartenenza",
+                "@language": "it"
+            },
+            {
+                "@value": "membresÃ­a",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the nature of an Agent's membership of an organization. Represents an n-ary relation between an Agent, an Organization and a Role. It is possible to directly indicate membership, independent of the specific Role, through use of the `org:memberOf` property.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique la nature de l'engagement d'un Agent dans une Organisation. ReprÃ©sente une relation n-aire entre un Agent, une Organisation et un Role. Il est possible d'indiquer directement l'appartenance Ã  une organisation, independemment d'un rÃ´le spÃ©cifique, Ã  travers l'usage de la propriÃ©tÃ© `org:memberOf`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la natura della relazione di appartenenza di un Agent in un'organizzazione. Rappresenta una relazione n-aria tra un'Agent, un Organization e un Role. Ãˆ possibile indicare direttamente la membership, indipendentemente dallo specifico Role, attraverso l'uso della proprietÃ  `org:memberOf`",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã®æ§‹æˆå“¡ã®æœ¬è³ªã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Pertenencia o afiliaciÃ³n de un agente a una organizaciÃ³n. Es una relaciÃ³n n-aria entre un agente, una organizaciÃ³n y una actividad. Es posible indicar pertenencia mediante el uso de la propiedad `org:memberOf`, independientemente de la actividad especÃ­fica que se desempeÃ±e.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Organization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentClass": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Organization",
+                "@language": "en"
+            },
+            {
+                "@value": "Organisation",
+                "@language": "fr"
+            },
+            {
+                "@value": "Organizzazione",
+                "@language": "it"
+            },
+            {
+                "@value": "organizaciÃ³n",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#hasKey": [
+            {
+                "@id": "_:b9"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents a collection of people organized together into a community or other social, commercial or political structure. The group has some common purpose or reason for existence which goes beyond the set of people belonging to it and can act as an Agent. Organizations are often decomposable into hierarchical structures.  It is recommended that SKOS lexical labels should be used to label the Organization. In particular `skos:prefLabel` for the primary (possibly legally recognized name), `skos:altLabel` for alternative names (trading names, colloquial names) and `skos:notation` to denote a code from a code list. Alternative names: _Collective_ _Body_ _Org_ _Group_",
+                "@language": "en"
+            },
+            {
+                "@value": "ReprÃ©sente un groupe de personnes organisÃ©es en communautÃ© oÃ¹ tout autre forme de structure sociale, commerciale ou politique. Le groupe a un but commun ou une raison d'Ãªtre qui va au-delÃ  de la somme des personnes qui en font partie et peut agir en tant que \"Agent\". Les organisations sont souvent dÃ©composables en structures hiÃ©rarchisÃ©es. Il est recommandÃ© que des labels lexicaux SKOS soient utilisÃ©s pour nommer l'Organisation. En particulier `skos:prefLabel` pour le nom principal (en gÃ©nÃ©ral le nom lÃ©gal), `skos:altLabel` pour les noms alternatifs (marques, sigles, appellations familiÃ¨res) et `skos:notation` pour indiquer un code provenant d'une liste de code.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Rappresenta una collezione di persone organizzate all'interno di una communitÃ  o di una qualche struttura sociale, commerciale o politica. Il gruppo condivide un obiettivo o una ragione d'essere che va oltre gli stessi membri appartenenti al gruppo e  puÃ² agire come un Agent. Le organizzazioni si possono spesso suddividere in strutture gerarchiche. Si raccomanda di usare le label per l'Organization mediante le proprietÃ  di SKOS. In particolare, `skos:prefLabel` per il nome principale (possibilmente un nome legalmente riconosciuto)â€, `skos:altLabel` come nome alternativo (denominazione commerciale, denominazione colloquiale) e `skos:notation` per indicare un codice di una lista di codici.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚³ãƒŸãƒ¥ãƒ‹ãƒ†ã‚£ãƒ¼ã€ãã®ä»–ã®ç¤¾ä¼šã€å•†æ¥­ã€æ”¿æ²»çš„ãªæ§‹é€ ã«å…±ã«ç·¨å…¥ã•ã‚ŒãŸäººã€…ã®é›†åˆã‚’è¡¨ã‚ã—ã¾ã™ã€‚ã‚°ãƒ«ãƒ¼ãƒ—ã«ã¯ã€ãã“ã«å±žã™ã‚‹äººã€…ã‚’è¶…ãˆãŸã€å­˜åœ¨ã«å¯¾ã™ã‚‹ã‚ã‚‹å…±é€šã®ç›®çš„ã‚„ç†ç”±ãŒã‚ã‚Šã€ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆï¼ˆä»£ç†ï¼‰ã‚’å‹™ã‚ã‚‹ã“ã¨ãŒã§ãã¾ã™ã€‚çµ„ç¹”ã¯ã€å¤šãã®å ´åˆã€éšŽå±¤æ§‹é€ ã«åˆ†å‰²ã§ãã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Grupo de personas que se organiza en una comunidad u otro tipo de estructura social, comercial o polÃ­tica. Dicho grupo tiene un objetivo o motivo comÃºn para su existencia que va mÃ¡s allÃ¡ del conjunto de personas que lo forman y que puede actuar como â€œagenteâ€. A menudo las organizaciones se pueden agrupar en estructuras jerÃ¡rquicas. Se recomienda el uso de etiquetas de SKOS para denominar a cada â€œorganizaciÃ³nâ€. En concreto, `skos:prefLabel` para la denominaciÃ³n principal o recomendada (aquella reconocida legalmente, siempre que sea posible), `skos:altLabel` para denominaciones alternativas (nombre comercial, sigla, denominaciÃ³n por la que se conoce a la organizaciÃ³n coloquialmente) y `skos:notation` para referirse al cÃ³digo que identifique a la organizaciÃ³n en una lista de cÃ³digos. Denominaciones alternativas: _colectivo_ _corporaciÃ³n_ _grupo_",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/ns/org#Role"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#OrganizationalCollaboration",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentClass": [
+            {
+                "@id": "_:b19"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Endeavour",
+                "@language": "en"
+            },
+            {
+                "@value": "Partenariat",
+                "@language": "fr"
+            },
+            {
+                "@value": "Collaborazione",
+                "@language": "it"
+            },
+            {
+                "@value": "proyecto de cooperaciÃ³n empresarial",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A collaboration between two or more Organizations such as a project. It meets the criteria for being an Organization in that it has an identity and defining purpose independent of its particular members but is neither a formally recognized legal entity nor a sub-unit within some larger organization. Might typically have a shorter lifetime than the Organizations within it, but not necessarily. All members are `org:Organization`s rather than individuals and those Organizations can play particular roles within the venture. Alternative names: _Project_ _Venture_  _Endeavour_ _Consortium_ _Endeavour_",
+                "@language": "en"
+            },
+            {
+                "@value": "Une collaboration entre deux ou plusieurs Organisations, telle qu'un projet commun. Un partenariat peut Ãªtre considÃ©rÃ© comme Organisation dans le sens ou il possÃ¨de une identitÃ© et un But propre indÃ©pendant de ceux de ses membres, mais ce n'est ni une entitÃ© lÃ©gale ni une sous-unitÃ© d'une Organisation plus grande. Typiquement, elle peut avoir une durÃ©e de vie plus courte que les Organisations qui la composent, mais pas nÃ©cessairement. Tous les membres sont des `org:Organization`s plutÃ´t que des individus et ces Organisations peuvent jouer des RÃ´les particuliers au sein du Partenariat. ",
+                "@language": "fr"
+            },
+            {
+                "@value": "Ãˆ una collaborazione tra due o piÃ¹ Organization come ad esempio un progetto. Consente di rappresentare alcune identitÃ  dell'Organization che sono fuori dallo scopo principale e non sono formalmente riconosciute. Potrebbe anche avere un ciclo di vita limitato.",
+                "@language": "it"
+            },
+            {
+                "@value": "ãƒ—ãƒ­ã‚¸ã‚§ã‚¯ãƒˆãªã©ã®2ã¤ä»¥ä¸Šã®çµ„ç¹”é–“ã®ã‚³ãƒ©ãƒœãƒ¬ãƒ¼ã‚·ãƒ§ãƒ³ã€‚ãã‚Œã¯ã€ã‚¢ã‚¤ãƒ‡ãƒ³ãƒ†ã‚£ãƒ†ã‚£ã‚’æœ‰ã—ã€ãã®ç‰¹å®šã®ãƒ¡ãƒ³ãƒãƒ¼ã¨ã¯ç„¡é–¢ä¿‚ã«ç›®çš„ã‚’å®šã‚ã¦ã„ã‚‹ã¨ã„ã†ç‚¹ã§ã€çµ„ç¹”ã¨ã—ã¦ã®åŸºæº–ã‚’æº€ãŸã—ã¾ã™ãŒã€æ­£å¼ã«èªè­˜ã•ã‚ŒãŸæ³•çš„å®Ÿä½“ã§ã‚‚ã€ã‚ã‚‹ã‚ˆã‚Šå¤§ããªçµ„ç¹”å†…ã®ã‚µãƒ–ãƒ¦ãƒ‹ãƒƒãƒˆã§ã‚‚ã‚ã‚Šã¾ã›ã‚“ã€‚ä¸€èˆ¬çš„ã«ã¯ã€ãã®å†…éƒ¨ã®çµ„ç¹”ã‚ˆã‚Šã‚‚å­˜ç¶šæœŸé–“ãŒçŸ­ã„ã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ãŒã€å¿…ãšã—ã‚‚ãã†ã¨ã¯é™ã‚Šã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "ColaboraciÃ³n determinada entre dos o mÃ¡s organizaciones, como en el caso de un proyecto comÃºn. Cumple con los criterios de ser una organizaciÃ³n en sÃ­ misma, en la medida en que tiene una identidad y un propÃ³sito definido independiente de sus miembros en particular, pero no es una entidad legal formalmente reconocida ni una sub-unidad dentro de una organizaciÃ³n mÃ¡s grande. La duraciÃ³n suele ser mÃ¡s corta que la de las organizaciones que lo componen, pero no necesariamente. Todos sus miembros son de tipo `org:Organization` en vez de individuos, y desempeÃ±an una actividad concreta en el marco del proyecto de cooperaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#OrganizationalUnit",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "OrganizationalUnit",
+                "@language": "en"
+            },
+            {
+                "@value": "UnitÃ© opÃ©rationnelle",
+                "@language": "fr"
+            },
+            {
+                "@value": "UnitÃ  Organizzativa",
+                "@language": "it"
+            },
+            {
+                "@value": "unidad organizativa",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An Organization such as a University Support Unit which is part of some larger FormalOrganization and only has full recognition within the context of that FormalOrganization, it is not a Legal Entity in its own right. Units can be large and complex containing other Units and even FormalOrganizations. Alternative names: _OU_ _Unit_ _Department_",
+                "@language": "en"
+            },
+            {
+                "@value": "Une organisation telle que le support informatique d'une universitÃ©, qui fait partie d'une Organisation Formelle plus importante et qui ne peut Ãªtre reconnue qu'en tant que membre de cette organisation supÃ©rieure, ce n'est pas une entitÃ© lÃ©gale en elle-mÃªme. Les unitÃ©s opÃ©rationnelles peuvent Ãªtre Ã©tendues, complexes et inclure elles-mÃªmes d'autres branches ou UnitÃ©s OpÃ©rationnelles, voire des Organisations Formelles.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Un'organizzazione come ad esempio l'unitÃ  dei sistemi informativi che Ã¨ parte di una piÃ¹ grande FormalOrganization e che, pur essendo riconosciuta nel contesto della propria organizzazione di riferimento, non Ã¨ legalmente riconosciuta come entitÃ  a sÃ© stante. Le unitÃ  possono essere ampie e complesse e contenere al loro interno sia altre unitÃ  che addirittura FormalOrganization.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚ã‚‹ã‚ˆã‚Šå¤§ããªçµ„ç¹”ã®ä¸€éƒ¨ã§ã‚ã‚Šã€ãã®çµ„ç¹”ã®ä¸­ã«ãŠã„ã¦ã®ã¿å®Œå…¨ã«èªè­˜ã•ã‚Œã‚‹éƒ¨å±€ã‚„æ”¯æ´éƒ¨ç½²ãªã©ã®çµ„ç¹”ã§ã™ã€‚ç‰¹ã«ã€ãã®å˜ä½ã¯ãã‚Œè‡ªä½“ã§ã¯æ³•çš„å®Ÿä½“ã¨è¦‹ãªã•ã‚Œã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n que forma parte de una organizaciÃ³n formal mÃ¡s amplia, como el servicio de informÃ¡tica o centro de cÃ¡lculo de una universidad, y que sÃ³lo tiene reconocimiento pleno en el contexto de dicha organizaciÃ³n formal, pero que no es una entidad legal propiamente dicha. Estas unidades pueden ser amplias y complejas, e incluir a otras unidades o incluso a otras organizaciones formales. Denominaciones alternativas: departamento.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Post",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Post",
+                "@language": "en"
+            },
+            {
+                "@value": "Poste",
+                "@language": "fr"
+            },
+            {
+                "@value": "Impiego",
+                "@language": "it"
+            },
+            {
+                "@value": "puesto",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "A Post represents some position within an organization that exists independently of the person or persons filling it. Posts may be used to represent situations where a person is a member of an organization ex officio (for example the Secretary of State for Scotland is part of UK Cabinet by virtue of being Secretary of State for Scotland, not as an individual person). A post can be held by multiple people and hence can be treated as a organization in its own right.",
+                "@language": "en"
+            },
+            {
+                "@value": "Un Poste reprÃ©sente une position au sein d'une Organisation qui existe indÃ©pendamment de la personne ou des personnes qui le remplissent. Les postes peuvent Ãªtre utilisÃ©s pour reprÃ©senter des situations oÃ¹ une personne est membre d'une Organisation d'office (par exemple, le SecrÃ©taire d'Etat pour l'Ecosse fait partie du Cabinet du Royaume-Uni du fait d'Ãªtre SecrÃ©taire d'Etat pour l'Ecosse, non pas comme une personne physique). Un poste aprÃ¨s peut Ãªtre occupÃ© par plusieurs personnes et peut donc Ãªtre considÃ©rÃ© comme une Organisation Ã  part entiÃ¨re.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Un Impiego rappresenta una posizione all'interno dell'organizzazione che esiste indipendentemente dalla persona che la ricopre. Gli impieghi possono essere utilizzati per le situazioni in cui una persona Ã¨ membro di un'organizzazione o di un ufficio (ad esempio un segretario di stato). Un Impiego puÃ² essere ricoperto da piÃ¹ persone.",
+                "@language": "it"
+            },
+            {
+                "@value": "ãƒã‚¹ãƒˆã¯ã€ãã‚Œã‚’åŸ‹ã‚ã‚‹äººï¼ˆäººã€…ï¼‰ã¨ã¯ç„¡é–¢ä¿‚ã«å­˜åœ¨ã™ã‚‹çµ„ç¹”å†…ã®ã‚ã‚‹ä½ç½®ã‚’è¡¨ã‚ã—ã¾ã™ã€‚ãƒã‚¹ãƒˆã¯ã€äººãŒè·æ¨©ä¸Šã€çµ„ç¹”ã®ãƒ¡ãƒ³ãƒãƒ¼ã§ã‚ã‚‹çŠ¶æ³ã‚’è¡¨ã‚ã™ãŸã‚ã«ä½¿ç”¨ã§ãã¾ã™ï¼ˆä¾‹ãˆã°ã€ã‚¹ã‚³ãƒƒãƒˆãƒ©ãƒ³ãƒ‰å¤§è‡£ã¯ã€å€‹äººã¨ã—ã¦ã§ã¯ãªãã€ã‚¹ã‚³ãƒƒãƒˆãƒ©ãƒ³ãƒ‰å¤§è‡£ã§ã‚ã‚‹ã“ã¨ã«ã‚ˆã‚Šã€è‹±å›½å†…é–£ã®ä¸€éƒ¨ã§ã™ï¼‰ã€‚ãƒã‚¹ãƒˆã¯ã€è¤‡æ•°ã®äººã€…ã«ã‚ˆã£ã¦ä¿æŒã•ã‚Œã‚‹ã“ã¨ãŒå¯èƒ½ã ã‚ã‚‹ãŸã‚ã€ãã‚Œè‡ªä½“ã‚’çµ„ç¹”ã¨ã—ã¦æ‰±ã†ã“ã¨ãŒã§ãã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Puesto o posiciÃ³n que representa algÃºn tipo de empleo dentro de una organizaciÃ³n, que existe independientemente de la persona o personas que lo desempeÃ±an. Esta clase puede utilizarse para representar situaciones en las que una persona es miembro de una organizaciÃ³n ex oficio (por ejemplo, el Secretario de Estado escocÃ©s es parte del Gabinete del gobierno britÃ¡nico por virtud de ser Secretario de Estado en Escocia, y no como individuo). Un puesto puede ser desempeÃ±ado por mÃºltiples individuos y de aquÃ­ que sea tratado como una organizaciÃ³n en sÃ­ misma.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Role",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subClassOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Role",
+                "@language": "en"
+            },
+            {
+                "@value": "RÃ´le",
+                "@language": "fr"
+            },
+            {
+                "@value": "Ruolo",
+                "@language": "it"
+            },
+            {
+                "@value": "actividad",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Denotes a role that a Person or other Agent can take in an organization. Instances of this class describe the abstract role; to denote a specific instance of a person playing that role in a specific organization use an instance of `org:Membership`. It is common for roles to be arranged in some taxonomic structure and we use SKOS to represent that. The normal SKOS lexical properties should be used when labelling the Role. Additional descriptive properties for the Role, such as a Salary band, may be added by extension vocabularies.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le rÃ´le qu'une Personne ou un autre Agent peut avoir dans une Organisation. Les instances de cette classe dÃ©crivent le rÃ´le dans l'absolu; pour indiquer une personne ayant ce rÃ´le spÃ©cifique dans une Organisation, utilisez une instance de `org:Membership`. Il est courant que les rÃ´les soient organisÃ©s dans une sorte de taxonomie, ce qui peut Ãªtre reprÃ©sentÃ© avec SKOS. Les propriÃ©tÃ©s de libellÃ©s standards de SKOS devraient Ãªtre utilisÃ©es pour libeller le RÃ´le. D'autres propriÃ©tÃ©s additionnelles pour ce rÃ´le, comme une fourchette de Salaire peuvent Ãªtre ajoutÃ©es par une extension de ce vocabulaire.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica il ruolo che una Person o un altro Agent puÃ² assumere in un'organizzazione. Le istanze di questa classe descrivono un ruolo astratto; per esprimere il ruolo che una precisa persona ricopre in un'organizzazione si usi un'istanza di `org:Membership`. Ãˆ comune organizzare i ruoli in una qualche struttura tassonomica e quindi si raccomanda SKOS per questo. Altre proprietÃ  descrittive per il Role, come salario, possono essere aggiunte mediante l'uso di altri vocabolari.",
+                "@language": "it"
+            },
+            {
+                "@value": "äººã¾ãŸã¯ãã®ä»–ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒçµ„ç¹”ã§æ‹…ã†ã“ã¨ãŒã§ãã‚‹å½¹å‰²ã‚’è¡¨ã‚ã—ã¾ã™ã€‚ã“ã®ç¨®ã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã¯ã€æŠ½è±¡çš„ãªå½¹å‰²ã‚’è¨˜è¿°ã—ã¾ã™ã€‚ç‰¹å®šã®çµ„ç¹”ã§ãã®å½¹å‰²ã‚’æ‹…ã£ã¦ã„ã‚‹äººã®ç‰¹å®šã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ç¤ºã™ãŸã‚ã«ã¯ã€org:Membershipã®ã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’ä½¿ç”¨ã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "FunciÃ³n que una persona o agente desempeÃ±a en el seno de una organizaciÃ³n. Las instancias de esta clase describen la actividad en abstracto; si lo que se pretende es incluir una instancia que refleje la funciÃ³n o actividad que desempeÃ±a una persona en concreto en una organizaciÃ³n especÃ­fica, se indica el uso de instancias de la clase `org:Membership`. Es comÃºn que dichas actividades se representen en una estructura taxonÃ³mica mediante SKOS. Las propiedades lÃ©xicas de SKOS deberÃ­an utilizarse a la hora de denominar o etiquetar la actividad desempeÃ±ada. Para aÃ±adir propiedades descriptivas adicionales, como rango salarial, se tendrÃ¡ que recurrir a vocabularios externos.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            },
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#Site",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#Class",
+            "http://www.w3.org/2000/01/rdf-schema#Class"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "Site",
+                "@language": "en"
+            },
+            {
+                "@value": "Site",
+                "@language": "fr"
+            },
+            {
+                "@value": "Sede",
+                "@language": "it"
+            },
+            {
+                "@value": "sede",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "An office or other premise at which the organization is located. Many organizations are spread across multiple sites and many sites will host multiple locations. In most cases a Site will be a physical location. However, we don't exclude the possibility of non-physical sites such as a virtual office with an associated post box and phone reception service. Extensions may provide subclasses to denote particular types of site.",
+                "@language": "en"
+            },
+            {
+                "@value": "Un Ã©tablissement ou tout autre lieu dans lequel une Organisation est localisÃ©. Beaucoup d'organisations sont dispersÃ©es Ã  travers plusieurs sites. Dans la plupart des cas un Site sera un lieu physique. Toutefois, nous n'excluons pas la possibilitÃ© de sites non-physiques comme un bureau virtuel avec une boÃ®te postale et un service de secrÃ©tariat mutualisÃ©. Des extensions pourraient fournir des sous-classes pour dÃ©crire des types de sites particuliers.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Un ufficio o altra sede dovei l'organizzazione Ã¨ situata. Molte organizzazione sono distribuite su piÃ¹ sedi e molte sedi ospitano piÃ¹ ubicazioni. Nella maggior parte dei casi un Site Ã¨ una locazione fisica. Non si esclude la possibilitÃ  di indicare sedi non fisiche come ad esempio gli uffici virtuali. Le estensioni dell'ontologia potrebbero usare delle sottoclassi per rappresentare i tipi particolari di sede.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ãŒä½ç½®ã™ã‚‹ã‚ªãƒ•ã‚£ã‚¹ã‚„ãã®ä»–ã®æ•·åœ°ã€‚å¤šãã®çµ„ç¹”ãŒè¤‡æ•°ã®ã‚µã‚¤ãƒˆã«æ•£åœ¨ã—ã¦ãŠã‚Šã€å¤šãã®ã‚µã‚¤ãƒˆãŒå¤šæ•°ã®å ´æ‰€ã‚’æŒã¤ã§ã—ã‚‡ã†ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Oficina, local o cualquier otro lugar en el que se encuentra una organizaciÃ³n. Muchas organizaciones estÃ¡n distribuidas en varias sedes, que a su vez estÃ¡n repartidas en distintas ubicaciones. En muchos casos una sede serÃ¡ un sitio o local fÃ­sico. Sin embargo, no se excluye la posibilidad de lugares no fÃ­sicos como oficinas virtuales con los correspondientes apartados de correo y servicio de atenciÃ³n telefÃ³nica. Se pueden aÃ±adir mÃ¡s subtipos mediante extensiones para incluir tipos especiales de lugares.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#disjointWith": [
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#basedAt",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "based At",
+                "@language": "en"
+            },
+            {
+                "@value": "basÃ© Ã ",
+                "@language": "fr"
+            },
+            {
+                "@value": "basata a",
+                "@language": "it"
+            },
+            {
+                "@value": "trabaja en la sede",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Person"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the site at which a person is based. We do not restrict the possibility that a person is based at multiple sites.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le site sur lequel une personne est basÃ©e. Nous ne limitons pas le nombre de sites sur lesquels une personne peut Ãªtre basÃ©e.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la sede in cui una Ã¨ stabilita una persona. Non esclude la possibilitÃ  che una persona sia allocata su piÃ¹ sedi.",
+                "@language": "it"
+            },
+            {
+                "@value": "äººãŒåŸºç¤Žã¨ã—ã¦ã„ã‚‹ã‚µã‚¤ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚äººãŒè¤‡æ•°ã®ã‚µã‚¤ãƒˆã‚’åŸºç¤Žã¨ã—ã¦ã„ã‚‹å¯èƒ½æ€§ã‚’åˆ¶é™ã—ã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Lugar en el que trabaja una persona. No se restringe el hecho de que una persona pueda estar adscrita a mÃºltiples ubicaciones.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#changedBy",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "changed by",
+                "@language": "en"
+            },
+            {
+                "@value": "modifiÃ©e par",
+                "@language": "fr"
+            },
+            {
+                "@value": "cambiata da",
+                "@language": "it"
+            },
+            {
+                "@value": "es modificada por",
+                "@language": "es"
+            },
+            {
+                "@value": "es modificado por",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a change event which resulted in a change to this organization. Depending on the event the organization may or may not have continued to exist after the event. Inverse of `org:originalOrganization`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique un Ã©vÃ¨nement qui a impliquÃ© un changement dans l'Organisation. Selon l'Ã©vÃ¨nement, l'Organisation a continuÃ© Ã  exister aprÃ¨s l'Ã©vÃ¨nement, ou pas. Inverse de `org:originalOrganization`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un evento che ha contribuito al cambiamento di questa organizzazione. A seconda dell'evento, l'organizzazione potrebbe essere esistente dopo l'evento o aver cessato la propria esistenza. Ãˆ l'inverso di `org:originalOrganization`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã“ã®çµ„ç¹”ã®å¤‰æ›´ã®ãã£ã‹ã‘ã¨ãªã£ãŸå‡ºæ¥äº‹ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Evento de cambio que resulta en una modificaciÃ³n en la organizaciÃ³n. Dependiendo del evento, la organizaciÃ³n puede dejar de existir tras el cambio. Es la relaciÃ³n inversa de `org:originalOrganization`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#originalOrganization"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#classification",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "classification",
+                "@language": "en"
+            },
+            {
+                "@value": "classification",
+                "@language": "fr"
+            },
+            {
+                "@value": "classificazione",
+                "@language": "it"
+            },
+            {
+                "@value": "pertenece a la clasificaciÃ³n",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#Concept"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a classification for this Organization within some classification scheme. Extension vocabularies may wish to specialize this property to have a range corresponding to a specific `skos:ConceptScheme`. This property is under discussion and may be revised or removed - in many cases organizations are best categorized by defining a sub-class hierarchy in an extension vocabulary.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une classification pour cette Organisation dans le cadre d'un schÃ©ma de classification. Il est possible de spÃ©cialiser cette propriÃ©tÃ© en utilisant un vocabulaire spÃ©cialisÃ© pour que le champ corresponde Ã  un concept spÃ©cifique `skos:ConceptScheme`. Cette propriÃ©tÃ© est en discussion est pourrait Ãªtre rÃ©visÃ©e ou supprimÃ©e - dans de nombreux cas, les organisations sont mieux catÃ©gorisÃ©es par une hiÃ©rarchie de sous-classe dans un vocabulaire externe.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una classificazione per questa Organization all'interno di un qualche schema di classificazione. Alcuni vocabolari potrebbero voler specializzare questa proprietÃ  per avere un codominio corrispondente a uno specifico `skos:ConceptScheme`. Si noti che la presenza di questa proprietÃ  Ã¨ ancora in fase di discussione e potrebbe  essere revisionata o rimossa.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚ã‚‹åˆ†é¡žè¡¨å†…ã®ã“ã®çµ„ç¹”ã«å¯¾ã™ã‚‹åˆ†é¡žã‚’ç¤ºã—ã¾ã™ã€‚\nã‚¢ãƒ—ãƒªã‚±ãƒ¼ã‚·ãƒ§ãƒ³ãŒorg:Organizationã®ã‚µãƒ–ã‚¯ãƒ©ã‚¹ã‚’çµ„ç¹”çš„ãªã‚«ãƒ†ã‚´ãƒªãƒ¼ã‚’è¡¨ã‚ã™æ‰‹æ®µã¨ã—ã¦å®šç¾©ã™ã‚‹ã“ã¨ã‚‚è¨±å®¹ã•ã‚Œã‚‹ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrdenaciÃ³n jerÃ¡rquica que se hace de una organizaciÃ³n dentro de un esquema de clasificaciÃ³n. Es posible que algunos vocabularios especifiquen esta propiedad de forma que el rango se corresponda con un `skos:ConceptScheme` especÃ­fico. La conveniencia de incluir esta propiedad se estÃ¡ debatiendo y puede que se revise o elimine (en muchos casos las organizaciones se clasifican mejor si se define una jerarquÃ­a de subclases en un vocabulario aparte)",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasMember",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has member",
+                "@language": "en"
+            },
+            {
+                "@value": "possÃ¨de un membre",
+                "@language": "fr"
+            },
+            {
+                "@value": "ha membro",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene miembro",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#equivalentProperty": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/member"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a person who is a member of the subject Organization. Inverse of `org:memberOf`, see that property for further clarification. Provided for compatibility with `foaf:member`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une personne membre de l'Organisation sujet. Inverse de `org:memberOf`, voyez la description de cette propriÃ©tÃ© pour plus de prÃ©cisions. Fourni pour la compatibilitÃ© avec `foaf:member`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una persona che Ã¨ membro della data Organization. Ãˆ l'inverso di `org:memberOf` ed Ã¨ fornita per  compatibilitÃ  con `foaf:member`.",
+                "@language": "it"
+            },
+            {
+                "@value": "å¯¾è±¡çµ„ç¹”ã®ãƒ¡ãƒ³ãƒãƒ¼ã§ã‚ã‚‹ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆï¼ˆäººã¾ãŸã¯ä»–ã®çµ„ç¹”ï¼‰ã‚’ç¤ºã—ã¾ã™ã€‚org:memberOfã®é€†ã€‚ã•ã‚‰ã«æ˜Žç¢ºãªèª¬æ˜Žã«ã¤ã„ã¦ã¯ã€ãã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã‚’å‚ç…§ã—ã¦ãã ã•ã„ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Persona que es miembro de la organizaciÃ³n en cuestiÃ³n. Es la relaciÃ³n inversa de `org:memberOf`, vÃ©ase la descripciÃ³n de esa propiedad para mÃ¡s detalles. Se prevÃ© compatibilidad con foaf:member`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#memberOf"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasMembership",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "membership",
+                "@language": "en"
+            },
+            {
+                "@value": "engagement",
+                "@language": "fr"
+            },
+            {
+                "@value": "appartenenza",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene membresÃ­a",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a membership relationship that the Agent plays. Inverse of `org:member`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique pour cet Agent un engagement dans une Organisation. Inverse de `org:member`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una relazione di appartenenza che coinvolge un Agent. Ãˆ l'inverso di `org:member`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒæ‹…ã†æ§‹æˆå“¡é–¢ä¿‚ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "RelaciÃ³n de pertenencia o afiliaciÃ³n a una organizaciÃ³n en la que el agente desempeÃ±a un cargo o funciÃ³n. Es la relaciÃ³n inversa de `org:member`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#member"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasPost",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "post",
+                "@language": "en"
+            },
+            {
+                "@value": "possÃ¨de un poste",
+                "@language": "fr"
+            },
+            {
+                "@value": "impiego",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene puesto",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a Post which exists within the Organization.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indicate un Poste qui existe dans l'Organisation.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica il Post che Ã¨ presente in una Organization.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”å†…ã«å­˜åœ¨ã™ã‚‹ãƒã‚¹ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "PosiciÃ³n que existe en una organizaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasPrimarySite",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "primary Site",
+                "@language": "en"
+            },
+            {
+                "@value": "site principal",
+                "@language": "fr"
+            },
+            {
+                "@value": "sede principale",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene sede principal en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasSite"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a primary site for the Organization, this is the default means by which an Organization can be contacted and is not necessarily the formal headquarters.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le site principal d'une Organisation, le moyen par dÃ©faut par lequel l'Organisation peut Ãªtre contactÃ©e et pas nÃ©cessairement le siÃ¨ge social lÃ©gal.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la sede principale per l'Organization. Ãˆ da considerarsi come la sede di default in cui l'Organization deve essere contattata pur non essendo necessariamente il quartier generale.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã®ä¸»è¦ã‚µã‚¤ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚çµ„ç¹”ã®çª“å£ã¨ãªã‚Šãˆã‚‹ãƒ‡ãƒ•ã‚©ãƒ«ãƒˆã®æ‰‹æ®µã§ã™ãŒã€æ­£å¼ãªæœ¬éƒ¨ã¨ã¯é™ã‚Šã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Oficina principal de la organizaciÃ³n, la opciÃ³n por defecto para ponerse en contacto con una organizaciÃ³n, aunque no corresponde necesariamente con las oficinas centrales de la organizaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasRegisteredSite",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "registered Site",
+                "@language": "en"
+            },
+            {
+                "@value": "siÃ¨ge social",
+                "@language": "fr"
+            },
+            {
+                "@value": "sede legale",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene sede registrada en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#FormalOrganization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasPrimarySite"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the legally registered site for the organization, in many legal jurisdictions there is a requirement that FormalOrganizations such as Companies or Charities have such a primary designed site. ",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique l'Ã©tablissement principal lÃ©galement enregistrÃ© pour l'Organisation. Dans de nombreuses juridictions existe l'obligation pour une Organisation Formelle d'avoir un tel site principal. ",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la sede legale per l'Organization. In molte giurisdizioni Ã¨ richiesto che una FormalOrganization abbia una sede di questo tipo.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã®æ³•å¾‹ä¸Šç™»éŒ²ã•ã‚ŒãŸã‚µã‚¤ãƒˆã‚’ç¤ºã—ã€å¤šãã®æ³•çš„ç®¡è½„åŒºåŸŸã§ã¯ã€ä¼šç¤¾ã‚„æ…ˆå–„å›£ä½“ãªã©ã®FormalOrganizationsï¼ˆæ­£å¼ãªçµ„ç¹”ï¼‰ãŒãã®ã‚ˆã†ãªä¸»è¦ã‚µã‚¤ãƒˆã‚’æŒã£ã¦ã„ã‚‹ã¨ã„ã†è¦ä»¶ãŒã‚ã‚Šã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Oficina o sede legalmente registrada de la organizaciÃ³n. En muchas jurisdicciones legales existe el requisito de que organizaciones formales tales como empresas u organizaciones de beneficencia tengan una sede principal de este tipo.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasSite",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has site",
+                "@language": "en"
+            },
+            {
+                "@value": "a un site",
+                "@language": "fr"
+            },
+            {
+                "@value": "ha sede",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene sede en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a site at which the Organization has some presence even if only indirect (e.g. virtual office or a professional service which is acting as the registered address for a company). Inverse of `org:siteOf`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique un site sur lequel l'Organisation possÃ¨de une prÃ©sence, mÃªme indirecte (domiciliation, boite postale). Inverse de `org:siteOf`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la sede in cui l'Organization ha una qualche presenza anche in modo indiretto (ad esempio un ufficio virtuale). Ãˆ l'inverso di `org:siteOf`.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ãŒã€é–“æŽ¥ï¼ˆä¾‹ãˆã°ã€ä¼šç¤¾ã®ç™»éŒ²ä½æ‰€ã¨ã—ã¦æ©Ÿèƒ½ã—ã¦ã„ã‚‹ãƒãƒ¼ãƒãƒ£ãƒ«ãƒ»ã‚ªãƒ•ã‚£ã‚¹ã‚„ãƒ—ãƒ­ãƒ•ã‚§ãƒƒã‚·ãƒ§ãƒŠãƒ«ãƒ»ã‚µãƒ¼ãƒ“ã‚¹ï¼‰ã®ã¿ã§ã‚ã£ãŸã¨ã—ã¦ã‚‚ã€ã‚ã‚‹å­˜åœ¨æ„Ÿã‚’æŒã£ã¦ã„ã‚‹ã‚µã‚¤ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Lugar en donde la organizaciÃ³n tiene algÃºn tipo de presencia, incluso si es de forma indirecta (por ejemplo, una oficina virtual o servicio profesional que hagan la funciÃ³n de direcciÃ³n registrada de la compaÃ±Ã­a). Es la relaciÃ³n inversa de `org:siteOf`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#siteOf"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasSubOrganization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has SubOrganization",
+                "@language": "en"
+            },
+            {
+                "@value": "a une Sous-Organization",
+                "@language": "fr"
+            },
+            {
+                "@value": "ha sotto-Organization",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene suborganizaciÃ³n",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents hierarchical containment of Organizations or Organizational Units; indicates an organization which is a sub-part or child of this organization.  Inverse of `org:subOrganizationOf`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le statut de dÃ©pendance hiÃ©rarchique pour des Organisations ou des UnitÃ©s OpÃ©rationnelles; indique une Organisation qui est une sous-partie ou une branche d'une Organisation plus large. C'est la propriÃ©tÃ© inverse de `org:subOrganizationOf`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Rappresenta un contenimento gerarchico di una Organization o di una OrganizationalUnit. Indica una organizzazione che Ã¨ parte di una organizzazione piÃ¹ grande. Ãˆ l'inverso di `org:subOrganizationOf`.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã¾ãŸã¯çµ„ç¹”å˜ä½ã®éšŽå±¤çš„åŒ…å«ã‚’è¡¨ã‚ã—ã¾ã™ã€‚ã“ã®çµ„ç¹”ã®ã‚µãƒ–ãƒ‘ãƒ¼ãƒˆã¾ãŸã¯å­ã§ã‚ã‚‹çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n jerÃ¡rquica de organizaciones o unidades. Indica que una organizaciÃ³n es parte de otra organizaciÃ³n mÃ¡s amplia o pertenece a ella. Es la relaciÃ³n inversa de `org:subOrganizationOf`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#subOrganizationOf"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#hasUnit",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "has Unit",
+                "@language": "en"
+            },
+            {
+                "@value": "possÃ¨de une UnitÃ©",
+                "@language": "fr"
+            },
+            {
+                "@value": "ha Unit",
+                "@language": "it"
+            },
+            {
+                "@value": "contiene unidad",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#FormalOrganization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#OrganizationalUnit"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasSubOrganization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a unit which is part of this Organization, e.g. a Department within a larger FormalOrganization. Inverse of `org:unitOf`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une UnitÃ© qui fait partie d'une Organisation, par exemple un DÃ©partment au sein d'une Organisation Formelle plus large. Inverse de `org:unitOf`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un'unitÃ  che Ã¨ parte di questa Organization, come ad esempio un dipartimento facente parte di una piÃ¹ ampia FormalOrganization. Ãˆ l'inverso di `org:unitOf`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ä¾‹ãˆã°ã€ã‚ˆã‚Šå¤§ããªçµ„ç¹”å†…ã®éƒ¨å±€ãªã©ã€ã“ã®çµ„ç¹”ã®ä¸€éƒ¨ã§ã‚ã‚‹å˜ä½ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Unidad que es parte de la organizaciÃ³n, como, por ejemplo, un departamento incluido en una organizaciÃ³n formal mÃ¡s amplia.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#unitOf"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#headOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "head of",
+                "@language": "en"
+            },
+            {
+                "@value": "responsable de",
+                "@language": "fr"
+            },
+            {
+                "@value": "responsabile di",
+                "@language": "it"
+            },
+            {
+                "@value": "es director ejecutivo de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#memberOf"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates that a person is the leader or formal head of the Organization. This will normally mean that they are the root of the `org:reportsTo` (acyclic) graph, though an organization may have more than one head.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique qu'une personne est le directeur ou le responsable formel d'une Organisation. Ceci indique souvent qu'il est au sommet de du graphe acyclique des `org:reportsTo`, mÃªme si une organisation peut avoir plus d'un responsable.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica che una persona Ã¨ leader o responsabile formale di una Organization. Questo significa che la persona Ã¨ alla radice del grafo (aciclico) creato dalle `org:reportsTo`, sebbene un'organizzazione possa avere piÃ¹ di un responsabile.",
+                "@language": "it"
+            },
+            {
+                "@value": "äººï¼ˆã¾ãŸã¯ä»–ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆï¼‰ãŒçµ„ç¹”ã®ãƒªãƒ¼ãƒ€ãƒ¼ã‚„æ­£å¼ãªãƒˆãƒƒãƒ—ã§ã‚ã‚‹ã“ã¨ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Persona que es jefe o jefa, representante ,,director o directora de la organizaciÃ³n. Esto significa que dicha persona es el rango de la relaciÃ³n `org:reportsTo` en el organigrama de la organizaciÃ³n (acÃ­clico), aunque una organizaciÃ³n puede tener mÃ¡s de un jefe.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#heldBy",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "held by",
+                "@language": "en"
+            },
+            {
+                "@value": "occupÃ© par",
+                "@language": "fr"
+            },
+            {
+                "@value": "ricoperto da",
+                "@language": "it"
+            },
+            {
+                "@value": "ocupado por",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an Agent which holds a Post.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indicate un Agent qui occupe le Poste.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un Agent che ricopre un Post.",
+                "@language": "it"
+            },
+            {
+                "@value": "ãƒã‚¹ãƒˆã‚’ä¿æŒã™ã‚‹ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Agente que ocupa un puesto.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#holds",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "holds",
+                "@language": "en"
+            },
+            {
+                "@value": "occupe",
+                "@language": "fr"
+            },
+            {
+                "@value": "ricopre",
+                "@language": "it"
+            },
+            {
+                "@value": "ocupa",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a Post held by some Agent.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indicate un Poste occupÃ© par un Agent.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un Impiego ricoperto da un Agent.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚ã‚‹ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆã«ã‚ˆã£ã¦ä¿æŒã•ã‚Œã¦ã„ã‚‹ãƒã‚¹ãƒˆã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Puesto ocupado por algÃºn agente.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#heldBy"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#identifier",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#DatatypeProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "identifier",
+                "@language": "en"
+            },
+            {
+                "@value": "identifiant",
+                "@language": "fr"
+            },
+            {
+                "@value": "identificatore",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene identificador",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/2004/02/skos/core#notation"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Gives an identifier, such as a company registration number, that can be used to used to uniquely identify the organization. Many different national and international identier schemes are available. The org ontology is neutral to which schemes are used. The particular identifier scheme should be indicated by the datatype of the identifier value.  Using datatypes to distinguish the notation scheme used is consistent with recommended best practice for `skos:notation` of which this property is a specialization.",
+                "@language": "en"
+            },
+            {
+                "@value": "Donne un identifiant, comme par exemple le numÃ©ro d'enregistrement d'une entreprise, qui peut Ãªtre utilisÃ© comme identifiant unique pour l'Organisation. De nombreux schÃ©mas nationaux et internationaux sont disponibles. Cette ontologie reste neutre par rapport au schÃ©ma utilisÃ©. Le schÃ©ma particulier utilisÃ© devrait Ãªtre indiquÃ© par le `datatype` de la valeur de l'identifiant. Utiliser les datatypes pour distinguer les schÃ©mas de notation est cohÃ©rent avec les bonnes pratiques pour `skos:notation` dont cette propriÃ©tÃ© est une spÃ©cialisation.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un identificatore univoco per l'organizzazione, come ad esempio la partita IVA di un'azienda. Molti schemi di identificazione a livello nazionale e internazionale sono disponibili allo scopo. L'ontologia ORG Ã¨ neutrale rispetto allo schema da utilizzare. Lo schema di identificazione dovrebbe essere indicato dal datatype del valore dell'identificatore. L'uso del datatype per distinguere lo schema di identificazione Ã¨ coerente con le best practice per `skos:notation`, di cui questa proprietÃ  Ã¨ una specializzazione.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã‚’ä¸€æ„ã«è­˜åˆ¥ã™ã‚‹ãŸã‚ã«ä½¿ç”¨ã§ãã‚‹ä¼šç¤¾ç™»éŒ²ç•ªå·ãªã©ã®è­˜åˆ¥å­ã‚’ä¸Žãˆã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "CÃ³digo o identificador, como por ejemplo el CIF de una empresa, que permite identificar de forma inequÃ­voca a una organizaciÃ³n. Existen muchos cÃ³digos de identificaciÃ³n tanto nacionales como internacionales. Esta ontologÃ­a no obliga al uso de ningÃºn esquema en concreto. Los cÃ³digos de identificaciÃ³n utilizados en cada caso se deberÃ­an indicar mediante el uso de la propiedad â€œdatatypeâ€ del valor del identificador. El uso de la propiedad â€œdatatypeâ€ para especificar el esquema de notaciÃ³n utilizado estÃ¡ en consonancia con las buenas prÃ¡cticas recomendadas para el uso de la propiedad `skos:notation`, de la que esta propiedad es una especializaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#linkedTo",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "linked to",
+                "@language": "en"
+            },
+            {
+                "@value": "reliÃ© Ã ",
+                "@language": "fr"
+            },
+            {
+                "@value": "collegato a",
+                "@language": "it"
+            },
+            {
+                "@value": "estÃ¡ relacionado con",
+                "@language": "es"
+            },
+            {
+                "@value": "estÃ¡ relacionada con",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an arbitrary relationship between two organizations. Specializations of this can be used to, for example, denote funding or supply chain relationships.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une relation arbitraire entre deux Organisations. Des spÃ©cialisations peuvent Ãªtre utilisÃ©es pour, par exemple, qualifier une relation de fournisseur ou de financeur.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una relazione arbitraria tra due organizzazioni. Ad esempio, specializzazioni di questa proprietÃ  possono essere usate per denotare relazioni particolari tipo il finanziamento o la fornitura.",
+                "@language": "it"
+            },
+            {
+                "@value": "2ã¤ã®çµ„ç¹”ã®ä»»æ„ã®é–¢ä¿‚ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "RelaciÃ³n arbitraria entre dos organizaciones. Las especializaciones de esta relaciÃ³n se pueden utilizar para denotar relaciones de financiaciÃ³n o suministro, entre otras.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#location",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#DatatypeProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "location",
+                "@language": "en"
+            },
+            {
+                "@value": "localisation",
+                "@language": "fr"
+            },
+            {
+                "@value": "luogo",
+                "@language": "it"
+            },
+            {
+                "@value": "estÃ¡ ubicado en",
+                "@language": "es"
+            },
+            {
+                "@value": "estÃ¡ ubicada en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Person"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/2001/XMLSchema#string"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Gives a location description for a person within the organization, for example a _Mail Stop_ for internal posting purposes.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique la description de l'endroit ou est basÃ© une personne de l'Organisation, par exemple pour des besoins de messagerie interne (Bureau 42).",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la descrizione del luogo presso cui Ã¨ possibile reperire una persona dell'organizzazione.",
+                "@language": "it"
+            },
+            {
+                "@value": "ä¾‹ãˆã°ã€å†…éƒ¨é…é€ç›®çš„ã®ãƒ¡ãƒ¼ãƒ«ãƒ»ã‚¹ãƒˆãƒƒãƒ—ï¼ˆMail Stopï¼‰ãªã©ã®ã€çµ„ç¹”å†…ã®äººã®ä½ç½®è¨˜è¿°ã‚’æä¾›ã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Lugar o ubicaciÃ³n exacta de una persona en una organizaciÃ³n con el objetivo de facilitar, por ejemplo, la entrega de correo.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#member",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#FunctionalProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "member",
+                "@language": "en"
+            },
+            {
+                "@value": "membre",
+                "@language": "fr"
+            },
+            {
+                "@value": "membro",
+                "@language": "it"
+            },
+            {
+                "@value": "es condiciÃ³n de miembro sobre agente",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the Person (or other Agent including Organization) involved in the Membership relationship. Inverse of `org:hasMembership`",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une personne (ou tout autre Agent, y compris une Organisation) impliquÃ© dans la relation d'Engagement. Inverse de `org:hasMembership`",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica la Person (o un altro Agent) coinvolto in una relazione di Membership. Ãˆ l'inverso di `org:hasMembership`.",
+                "@language": "it"
+            },
+            {
+                "@value": "æ§‹æˆå“¡é–¢ä¿‚ã«å«ã¾ã‚Œã¦ã„ã‚‹äººï¼ˆã¾ãŸã¯ã€çµ„ç¹”ã‚’å«ã‚“ã§ã„ã‚‹ä»–ã®ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆï¼‰ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Persona (u otro agente, incluyendo una organizaciÃ³n) que participa en la relaciÃ³n de membresÃ­a. Es la relaciÃ³n inversa de `org:hasMembership`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasMembership"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#memberDuring",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "member During",
+                "@language": "en"
+            },
+            {
+                "@value": "durÃ©e d'engagement",
+                "@language": "fr"
+            },
+            {
+                "@value": "membro durante",
+                "@language": "it"
+            },
+            {
+                "@value": "es miembro durante",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Optional property to indicate the interval for which the membership is/was valid.",
+                "@language": "en"
+            },
+            {
+                "@value": "PropriÃ©tÃ© optionnelle pour indiquer l'intervalle durant lequel l'engagemnet est ou Ã©tait valide.",
+                "@language": "fr"
+            },
+            {
+                "@value": "ProprietÃ  opzionale per indicare l'intervallo per il quale l'appartenenza Ã¨/Ã¨ stata valida.",
+                "@language": "it"
+            },
+            {
+                "@value": "æ§‹æˆå“¡ãŒæœ‰åŠ¹ã§ã‚ã‚‹ï¼ã§ã‚ã£ãŸæœŸé–“ã‚’ç¤ºã™ãŸã‚ã®ã‚ªãƒ—ã‚·ãƒ§ãƒ³ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Propiedad opcional que indica el periodo durante el cual la relaciÃ³n de membresÃ­a o pertenencia a una organizaciÃ³n se mantiene en vigencia.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#memberOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "member of",
+                "@language": "en"
+            },
+            {
+                "@value": "membre de",
+                "@language": "fr"
+            },
+            {
+                "@value": "membro di",
+                "@language": "it"
+            },
+            {
+                "@value": "es miembro de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://xmlns.com/foaf/0.1/Agent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates that a person is a member of the Organization with no indication of the nature of that membership or the role played. Note that the choice of property name is not meant to limit the property to only formal membership arrangements, it is also indended to cover related concepts such as affilliation or other involvement in the organization. Extensions can specialize this relationship to indicate particular roles within the organization or more nuanced relationships to the organization. Has an optional inverse, `org:hasmember`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique qu'une personne est membre de l'Organisation sans prÃ©cision sur la nature de cet engagement ou du rÃ´le jouÃ©. Notez que le choix du nom de cette propriÃ©tÃ© ne vise pas Ã  la limiter aux seuls engagements formels, elle peut Ã©galement couvrir des concepts reliÃ©s comme l'affiliation ou le bÃ©nÃ©volat. Des extensions peuvent spÃ©cialiser cette relation pour indiquer des rÃ´les particuliers au sein de l'Organisation or des relations plus nuancÃ©es avec elle. PossÃ¨de une propriÃ©tÃ© inverse optionnelle, `org:hasmember`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica che una persona Ã¨ membro di una Organization senza una precisa indicazione sulla natura di questa appartenenza e sul suo ruolo. Si noti che la scelta del nome di questa proprietÃ  non intende limitarla alla sola  rappresentazione formalmente di un'appartenenza. La proprietÃ  puÃ² coprire anche altri coinvolgimenti nell'organizzazione. Questa proprietÃ  puÃ² essere specializzata per indicare ruoli all'interno organizzazione o relazioni di diverse tipologie. Ha `org:hasmember` come proprietÃ  inversa opzionale.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆï¼ˆäººã¾ãŸã¯ä»–ã®çµ„ç¹”ï¼‰ãŒçµ„ç¹”ã®ãƒ¡ãƒ³ãƒãƒ¼ã§ã‚ã‚‹ã“ã¨ã‚’ç¤ºã—ã¾ã™ã€‚ãŸã ã—ã€ãã®æ§‹æˆå“¡ã®æœ¬è³ªã‚„æ‹…ã†å½¹å‰²ã¯ç¤ºã—ã¾ã›ã‚“ã€‚ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼åã®é¸æŠžã¯ã€ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã‚’æ­£å¼ãªæ§‹æˆå“¡é…ç½®ã®ã¿ã«åˆ¶é™ã™ã‚‹ã“ã¨ãŒç›®çš„ã§ã¯ãªã„ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚æ‰€å±žã‚„çµ„ç¹”ã¸ã®ãã®ä»–ã®é–¢ä¸Žãªã©ã®é–¢é€£ã™ã‚‹æ¦‚å¿µã‚’ã‚«ãƒãƒ¼ã™ã‚‹ã“ã¨ã‚‚æ„å›³ã•ã‚Œã¦ã„ã¾ã™ã€‚æ‹¡å¼µã«ã‚ˆã‚Šã€ã“ã®é–¢ä¿‚ã‚’ç‰¹æ®ŠåŒ–ã—ã€çµ„ç¹”å†…ã®ç‰¹å®šã®å½¹å‰²ã‚„ã‚ˆã‚Šãƒ‹ãƒ¥ã‚¢ãƒ³ã‚¹ã‚’å«ã‚“ã çµ„ç¹”ã¨ã®é–¢ä¿‚ã‚’ç¤ºã™ã“ã¨ãŒã§ãã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Persona que pertenece a la organizaciÃ³n o es miembro de la misma, sin que conste la naturaleza de dicha pertenencia o el papel que desempeÃ±a. Se debe tener en cuenta que la elecciÃ³n de una denominaciÃ³n para esta propiedad no significa que la propiedad estÃ© limitada a ciertos tipos de pertenencia formales, sino que pretende cubrir conceptos relacionados como el de afiliaciÃ³n u otras formas de participaciÃ³n en la organizaciÃ³n. Se puede hacer uso de extensiones para especializar esta relaciÃ³n de forma que incluya tipos especÃ­ficos de pertenencia a las organizaciones o relaciones especiales con la organizaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasMember"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#organization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property",
+            "http://www.w3.org/2002/07/owl#FunctionalProperty"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "organization",
+                "@language": "en"
+            },
+            {
+                "@value": "organisation",
+                "@language": "fr"
+            },
+            {
+                "@value": "organizzazione",
+                "@language": "it"
+            },
+            {
+                "@value": "es condiciÃ³n de miembro sobre organizaciÃ³n",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Membership"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates Organization in which the Agent is a member.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique l'Organization dont l'agent est membre.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica l'Organization in cui l'Agent Ã¨ un membro.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒãƒ¡ãƒ³ãƒãƒ¼ã§ã‚ã‚‹çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n a la que pertenece el agente en calidad de miembro.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#originalOrganization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "original organization",
+                "@language": "en"
+            },
+            {
+                "@value": "organisation originelle",
+                "@language": "fr"
+            },
+            {
+                "@value": "organizzazione originale",
+                "@language": "it"
+            },
+            {
+                "@value": "es organizaciÃ³n original",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/prov#used"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates one or more organizations that existed before the change event. Depending on the event they may or may not have continued to exist after the event. Inverse of `org:changedBy`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une ou plusieurs organisations qui ont existÃ© avant un Ã©vÃ¨nement de changement. Selon l'Ã©vÃ¨nement, ces organisations ont pu continuer Ã  exister ou non. Inverse de `org:changedBy`. ",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una o piÃ¹ organizzazioni pregresse rispetto a un evento di cambiamento. A seconda dell'evento, queste organizzazioni potrebbero essere esistenti dopo l'evento o  aver cessato la loro esistenza. Ãˆ l'inverso di `org:changedBy`.",
+                "@language": "it"
+            },
+            {
+                "@value": "å¤‰æ›´ã®ãã£ã‹ã‘ã¨ãªã£ãŸå‡ºæ¥äº‹ä»¥å‰ã«å­˜åœ¨ã—ãŸ1ã¤ä»¥ä¸Šã®çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚å‡ºæ¥äº‹ã«ã‚ˆã£ã¦ã€å‡ºæ¥äº‹ã®å¾Œã«ãã‚Œã‚‰ã¯å­˜åœ¨ã—ç¶šã‘ãŸã‹ã‚‚ã€å­˜åœ¨ã—ç¶šã‘ãªã‹ã£ãŸã‹ã‚‚ã—ã‚Œã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Una o mÃ¡s organizaciones que existÃ­an antes de que sucediera el cambio en la organizaciÃ³n. Dependiendo del tipo de cambio, dichas organizaciones pueden haber dejado de existir o no. Es la relaciÃ³n inversa de `org:changedBy`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#changedBy"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#postIn",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "post in",
+                "@language": "en"
+            },
+            {
+                "@value": "poste chez",
+                "@language": "fr"
+            },
+            {
+                "@value": "impiego in",
+                "@language": "it"
+            },
+            {
+                "@value": "es un puesto en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the Organization in which the Post exists.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indicate l'Organisation dans laquelle le Poste existe.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica l'Organization in cui il Post Ã¨ presente.",
+                "@language": "it"
+            },
+            {
+                "@value": "ãƒã‚¹ãƒˆãŒå­˜åœ¨ã™ã‚‹çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n en la que existe el puesto.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Post"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasPost"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#purpose",
+        "@type": [
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "purpose",
+                "@language": "en"
+            },
+            {
+                "@value": "but",
+                "@language": "fr"
+            },
+            {
+                "@value": "obiettivo",
+                "@language": "it"
+            },
+            {
+                "@value": "tiene objetivo",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the purpose of this Organization. There can be many purposes at different levels of abstraction but the nature of an organization is to have a reason for existence and this property is a means to document that reason. An Organization may have multiple purposes. It is recommended that the purpose be denoted by a controlled term or code list, ideally a `skos:Concept`. However, the range is left open to allow for other types of descriptive schemes. It is expected that specializations or application profiles of this vocabulary will constrain the range of the purpose. Alternative names: _remit_ _responsibility_ (esp. if applied to OrganizationalUnits such as Government Departments).",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le but de cette Organisation. Il peut exister plusieurs buts Ã  diffÃ©rents niveaux d'abstraction mais la nature d'une organisation est d'avoir une raison d'exister et cette propriÃ©tÃ© doit servir Ã  documenter cette raison d'Ãªtre. Une Organisation peut avoir plusieurs Buts. Il est recommandÃ© que le but soit libellÃ© Ã  l'aide d'un vocabulaire contrÃ´lÃ© ou autre code Ã©tabli, idÃ©alement avec un concept `skos:Concept`. Toutefois, le champ de cette propriÃ©tÃ© est laissÃ© ouvert et pourrait accepter d'autres schÃ©mas de description. Il est prÃ©fÃ©rable que les spÃ©cialisations ou les profils d'applications de ce vocabulaire contraignent le champ de cette propriÃ©tÃ©.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica l'obiettivo di questa Organization. In generale, si possono esprimere gli obiettivi di un'organizzazione secondo diversi livelli di astrazione, ma la natura stessa dell'organizzazione ha una ragione d'essere ed Ã¨ proprio questa che deve essere catturata con tale proprietÃ . Inoltre, un'Organization puÃ² avere obiettivi multipli. Ãˆ raccomandabile che l'obiettivo faccia parte di una code list, e che sia preferibilmente un `skos:Concept`. Ad ogni modo, il codominio della proprietÃ  Ã¨ lasciato aperto per consentire altri tipi di di descrizione. Conseguentemente, eventuali specializzazioni o profili applicativi possono utilizzare quel vocabolario come codominio della proprietÃ .",
+                "@language": "it"
+            },
+            {
+                "@value": "ã“ã®çµ„ç¹”ã®ç›®çš„ã‚’ç¤ºã—ã¾ã™ã€‚ç•°ãªã‚‹æŠ½è±¡ãƒ¬ãƒ™ãƒ«ã®å¤šãã®ç›®çš„ãŒã‚ã‚Šãˆã¾ã™ãŒã€çµ„ç¹”ã®æœ¬è³ªã¯å­˜åœ¨ç†ç”±ã‚’æŒã¤ã“ã¨ã§ã‚ã‚Šã€ã“ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã¯ãã®ç†ç”±ã‚’ãƒ‰ã‚­ãƒ¥ãƒ¡ãƒ³ãƒˆåŒ–ã™ã‚‹æ‰‹æ®µã§ã™ã€‚çµ„ç¹”ã¯ã€è¤‡æ•°ã®ç›®çš„ã‚’æŒã£ã¦ã„ã‚‹å¯èƒ½æ€§ãŒã‚ã‚Šã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Finalidad u objetivo de la organizaciÃ³n. La organizaciÃ³n puede tener muchos objetivos a diferentes niveles de abstracciÃ³n, pero en la naturaleza de las organizaciones estÃ¡ el tener una razÃ³n para existir, y la finalidad de esta propiedad es documentar dicha razÃ³n. La organizaciÃ³n podrÃ¡ tener mÃ¡s de un objetivo. Se recomienda el uso de vocabularios controlados o listas de cÃ³digos para indicar el objetivo, preferentemente mediante el uso de un `skos:Concept`. Sin embargo, el rango no estÃ¡ predeterminado, de forma que otros tipos de esquemas descriptivos tiene cabida. Se espera que ciertas especializaciones de este vocabulario o ciertos perfiles de aplicaciones restrinjan el rango del objetivo. Denominaciones alternativas: Ã¡rea_ _jurisdicciÃ³n_ _ responsabilidad _ (especialmente cuando se aplica a unidades tales como ministerios o divisiones administrativas de los gobiernos)",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#remuneration",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "remuneration",
+                "@language": "en"
+            },
+            {
+                "@value": "rÃ©muneration",
+                "@language": "fr"
+            },
+            {
+                "@value": "remunerazione",
+                "@language": "it"
+            },
+            {
+                "@value": "recibe remuneraciÃ³n",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Role"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a salary or other reward associated with the role. Typically this will be denoted using an existing representation scheme such as `gr:PriceSpecification` but the range is left open to allow applications to specialize it (e.g. to remunerationInGBP).",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique un salaire ou tout autre compensation associÃ©e au RÃ´le. Typiquement, ceci sera annotÃ© en utilisant un schÃ©ma existant comme  `gr:PriceSpecification` mais le champ de cette propriÃ©tÃ© est laissÃ© ouvert afin de permettre aux applications de la spÃ©cialiser (par exemple remunerationEuro).",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica il salario o altra forma di remunerazione associata al ruolo. In genere, questo si denota usando uno schema di rappresentazione esistente come il `gr:PriceSpecification` ma il codominio Ã¨ lasciato libero di essere specializzato a seconda delle applicazioni.",
+                "@language": "it"
+            },
+            {
+                "@value": "å½¹å‰²ã«é–¢ä¿‚ã™ã‚‹çµ¦æ–™ã‚„ãã®ä»–ã®å ±é…¬ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Salario o cualquier otra remuneraciÃ³n asociada con la actividad. La forma usual de referirse a dicha remuneraciÃ³n serÃ¡ utilizando un esquema de representaciÃ³n como el propuesto en la ontologÃ­a GoodRelations `gr:PriceSpecification`, pero el rango se deja abierto a que las distintas aplicaciones lo especialicen (por ejemplo, remunerationInGBP)",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#reportsTo",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "reports to",
+                "@language": "en"
+            },
+            {
+                "@value": "est subordonnÃ© Ã ",
+                "@language": "fr"
+            },
+            {
+                "@value": "riporta a",
+                "@language": "it"
+            },
+            {
+                "@value": "responde ante",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "_:b10"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "_:b11"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates a reporting relationship as might be depicted on an organizational chart. The precise semantics of the reporting relationship will vary by organization but is intended to encompass both direct supervisory relationships (e.g. carrying objective and salary setting authority) and more general reporting or accountability relationships (e.g. so called _dotted line_ reporting).",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une relation de subordination comme elle pourrait figurer dans un organigramme. La sÃ©mantique prÃ©cise de cette subordination pourra varier selon l'Organisation mais vise Ã  englober aussi bien les relations hiÃ©rarchiques directes (dÃ©finition d'objectifs, montant du salaire) que des relations plus gÃ©nÃ©rales ou organisationnelles (les liens en pointillÃ©s dans les organigrammes).",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica una relazione di subordinazione all'interno dell'organigramma. La semantica precisa puÃ² variare a seconda dell'organizzazione, per esempio puÃ² essere usata per rappresentare la proprietÃ  di supervisione oppure per le relazioni di rendicontazione.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”å›³ã§æã‹ã‚Œã‚‹ã‹ã‚‚ã—ã‚Œãªã„ã‚ˆã†ãªä¸Šä¸‹é–¢ä¿‚ã‚’ç¤ºã—ã¾ã™ã€‚ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆé–“ã¾ãŸã¯ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒå°±ãã“ã¨ãŒã§ãã‚‹ãƒã‚¹ãƒˆé–“ã®ä¸Šä¸‹é–¢ä¿‚ã‚’ç›´æŽ¥çš„ã«ç¤ºã™ãŸã‚ã«ä½¿ç”¨ã§ãã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "RelaciÃ³n de subordinaciÃ³n que se representa en los organigramas de las organizaciones. La semÃ¡ntica de la relaciÃ³n de subordinaciÃ³n varÃ­a segÃºn las organizaciones, pero su intenciÃ³n es abarcar tanto a las relaciones de supervisiÃ³n directa (por ejemplo, aquellas en las que la autoridad determina los objetivos o el salario) como a las relaciones de subordinaciÃ³n mÃ¡s generales (por ejemplo, las llamadas lÃ­neas de autoridad o de mando (y responsabilidad) (http://www.promonegocios.net/organigramas/tipos-de-organigramas.html)).",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#resultedFrom",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "resulted from",
+                "@language": "en"
+            },
+            {
+                "@value": "issue de",
+                "@language": "fr"
+            },
+            {
+                "@value": "risultato da",
+                "@language": "it"
+            },
+            {
+                "@value": "es el resultado de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/prov#wasGeneratedBy"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an event which resulted in this organization. Inverse of `org:resultingOrganization`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique un Ã©vÃ¨nement dont est issue l'Organisation. Inverse de `org:resultingOrganization`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica l'evento che ha permesso all'organizzazione di instaurarsi. Ãˆ l'inverso di `org:resultingOrganization`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã“ã®çµ„ç¹”ã«ãªã£ãŸï¼ˆå°Žã„ãŸã€ä½œæˆã•ã‚ŒãŸï¼‰ãã£ã‹ã‘ã¨ãªã£ãŸå‡ºæ¥äº‹ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Evento que tiene como resultado la creaciÃ³n de una organizaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#resultingOrganization"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#resultingOrganization",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "resulted in",
+                "@language": "en"
+            },
+            {
+                "@value": "a donnÃ© naissance Ã ",
+                "@language": "fr"
+            },
+            {
+                "@value": "risultato in",
+                "@language": "it"
+            },
+            {
+                "@value": "resulta en",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#ChangeEvent"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an organization which was created or changed as a result of the event. Inverse of `org:resultedFrom`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une organisation qui a Ã©tÃ© crÃ©Ã©e ou a Ã©tÃ© modifiÃ©e Ã  la suite d'un Ã‰vÃ¨nement de changement. Inverse de `org:resultedFrom`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica l'organizzazione che Ã¨ stata creata o mutata a seguito dell'evento. Ãˆ l'inverso di `org:resultedFrom`.",
+                "@language": "it"
+            },
+            {
+                "@value": "å‡ºæ¥äº‹ã®çµæžœã€ä½œæˆã€å¤‰æ›´ã•ã‚ŒãŸçµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n que ha sido creada o modificada tras un evento especÃ­fico.Â  Es la relaciÃ³n inversa de `org:resultedFrom`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#resultedFrom"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#role",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "role",
+                "@language": "en"
+            },
+            {
+                "@value": "rÃ´le",
+                "@language": "fr"
+            },
+            {
+                "@value": "ruolo",
+                "@language": "it"
+            },
+            {
+                "@value": "desempeÃ±a la actividad de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "_:b16"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Role"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates the Role that the Agent plays in a Membership relationship with an Organization.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique le RÃ´le de l'Agent dans son Engagement avec l'Organisation.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica il Role che un Agent ricopre in una relazione di Membership con una Organization",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚¨ãƒ¼ã‚¸ã‚§ãƒ³ãƒˆãŒçµ„ç¹”ã¨ã®æ§‹æˆå“¡é–¢ä¿‚ã«ãŠã„ã¦æ‹…ã†å½¹å‰²ã‚’ç¤ºã—ã¾ã™ã€‚ãƒã‚¹ãƒˆã®ä¿æŒè€…ãŒæ‹…ã†å½¹å‰²ã‚’ç¤ºã™ãŸã‚ã«org:Postã§ç”¨ã„ã‚‹ã“ã¨ã‚‚ã§ãã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Actividad que el agente desempeÃ±a en una relaciÃ³n de pertenencia a una organizaciÃ³n.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#roleProperty",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#AnnotationProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "role (property)",
+                "@language": "en"
+            },
+            {
+                "@value": "rÃ´le (propriÃ©tÃ©)",
+                "@language": "fr"
+            },
+            {
+                "@value": "ruolo (proprietÃ )",
+                "@language": "it"
+            },
+            {
+                "@value": "desempeÃ±a la actividad de (propiedad)",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Role"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "This is a metalevel property which is used to annotate an `org:Role` instance with a sub-property of `org:memberOf` that can be used to directly indicate the role for easy of query. The intended semantics is a Membership relation involving the Role implies the existence of a direct property relationship through an inference rule of the form:  `{ [] org:member ?p; org:organization ?o; org:role [org:roleProperty ?r] } -> {?p ?r ?o}`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Ceci est une mÃ©ta-propriÃ©tÃ© utilisÃ©e pour annoter une instance de `org:Role` ayant une sous-propriÃ©tÃ© `org:memberOf` qui peut Ãªtre utilisÃ©e pour indiquer directement le rÃ´le et pouvoir faire des requÃªtes plus facilement. La sÃ©mantique visÃ©e est un Engagement impliquant l'existence d'une relation de propriÃ©tÃ© directe Ã  travers d'une rÃ¨gle d'infÃ©rence de la forme:  `{ [] org:member ?p; org:organization ?o; org:role [org:roleProperty ?r] } -> {?p ?r ?o}`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Questa Ã¨ una meta-proprietÃ  usata per annotare un'istanza di `org:Role` con una sotto-proprietÃ  di `org:memberOf` e puÃ² essere usata per indicare direttamente il ruolo per facilitare un'interrogazione sui dati.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã“ã‚Œã¯ã€ã‚¯ã‚¨ãƒªãŒå®¹æ˜“ã«ãªã‚‹ã‚ˆã†ã«å½¹å‰²ã‚’ç›´æŽ¥çš„ã«ç¤ºã™ãŸã‚ã«ä½¿ç”¨ã§ãã‚‹org:memberOfã®ã‚µãƒ–ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã§org:Roleã‚¤ãƒ³ã‚¹ã‚¿ãƒ³ã‚¹ã‚’æ³¨é‡ˆã™ã‚‹ãŸã‚ã«ç”¨ã„ã‚‰ã‚Œã‚‹ãƒ¡ã‚¿ãƒ¬ãƒ™ãƒ«ã®ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã§ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "Meta-propiedad que se utiliza para anotar una instancia de `org:Role` con una sub-propiedad de `org:memberOf`, que puede ser utilizada para indicar directamente la actividad a fin de facilitar las consultas a los datos. The intended semantics is that a Membership relation involving the Role implies the existence of a direct property relationship through an inference rule of the form: { [] org:member ?a; org:organization ?o; org:role [org:roleProperty ?r] } -> {?a ?r ?o}",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#siteAddress",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "site Address",
+                "@language": "en"
+            },
+            {
+                "@value": "adresse du Site",
+                "@language": "fr"
+            },
+            {
+                "@value": "indirizzo della sede",
+                "@language": "it"
+            },
+            {
+                "@value": "es la direcciÃ³n de la sede",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an address for the site in a suitable encoding. Use of vCard (using the http://www.w3.org/TR/vcard-rdf/ vocabulary) is encouraged but the range is left open to allow other encodings to be used. The address may include email, telephone, and geo-location information and is not restricted to a physical address. ",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une adresse pour le site dans un encodage appropriÃ©. L'usage du vocabulaire vCard ( http://www.w3.org/TR/vcard-rdf/) est encouragÃ©, mais le range est ouvert pour permettre l'utilisation d'autres vocabulaires. L'adresse peut comporter le courriel, le tÃ©lÃ©phone, et l'information de gÃ©olocalisation; et n'est donc pas seulement limitÃ©e Ã  une adresse physique. ",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un indirizzo per la sede in una codifica appropriata. Il codominio Ã¨ lasciato libero ma Ã¨ consigliabile l'uso del vocabolario vCard (http://www.w3.org/TR/vcard-rdf/). L'indirizzo puÃ² includere email, numero di telefono e informazioni di geolocalizzazione e non Ã¨ vincolato ad essere un indirizzo fisico.",
+                "@language": "it"
+            },
+            {
+                "@value": "é©åˆ‡ã«ã‚³ãƒ¼ãƒ‰åŒ–ã•ã‚ŒãŸã‚µã‚¤ãƒˆã®ã‚¢ãƒ‰ãƒ¬ã‚¹ã‚’ç¤ºã—ã¾ã™ã€‚vCard[vcard-rdf]èªžå½™ãªã©ã®æœ‰åãªã‚¢ãƒ‰ãƒ¬ã‚¹ã®ã‚³ãƒ¼ãƒ‰åŒ–ã®ä½¿ç”¨ãŒå¥¨åŠ±ã•ã‚Œã¾ã™ãŒã€ä»–ã®ç¬¦å·åŒ–ã®ä½¿ç”¨ã‚’å¯èƒ½ã¨ã™ã‚‹ãŸã‚ã«å€¤åŸŸã¯ã‚ªãƒ¼ãƒ—ãƒ³ã®ã¾ã¾ã«ã•ã‚Œã¾ã™ã€‚ã‚¢ãƒ‰ãƒ¬ã‚¹ã«ã¯ã€é›»å­ãƒ¡ãƒ¼ãƒ«ã€é›»è©±ãŠã‚ˆã³ã‚¸ã‚ªãƒ­ã‚±ãƒ¼ã‚·ãƒ§ãƒ³æƒ…å ±ã‚’å«ã‚€ã“ã¨ãŒã§ãã€ç‰©ç†çš„ãªã‚¢ãƒ‰ãƒ¬ã‚¹ã«åˆ¶é™ã•ã‚Œã¾ã›ã‚“ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "DirecciÃ³n de la sede segÃºn una codificaciÃ³n adecuada. Se recomienda el uso de vCard (que utiliza el vocabulario en http://www.w3.org/TR/vcard-rdf/), pero el rango no se restringe Ãºnicamente al uso de este vocabulario sino que se permite el uso de otros cÃ³digos. La direcciÃ³n puede constar de una direcciÃ³n de correo electrÃ³nico, un nÃºmero de telÃ©fono o informaciÃ³n de geo-localizaciÃ³n, y no se limita a una direcciÃ³n postal fÃ­sica.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#siteOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "site Of",
+                "@language": "en"
+            },
+            {
+                "@value": "site de",
+                "@language": "fr"
+            },
+            {
+                "@value": "sede di",
+                "@language": "it"
+            },
+            {
+                "@value": "es sede de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Site"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an Organization which has some presence at the given site. This is the inverse of `org:hasSite`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique une Organisation qui a une prÃ©sence sur le site en question. Inverse de `org:hasSite`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un'Organization che ha una qualche presenza nella data sede. Ãˆ l'inverso di `org:hasSite`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ã‚ã‚‹ã‚µã‚¤ãƒˆã§ã‚ã‚‹å­˜åœ¨æ„Ÿã‚’æŒã£ã¦ã„ã‚‹çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n que tiene ubicaciÃ³n en un lugar. Es la relaciÃ³n inversa de `org:hasSite`.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasSite"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#subOrganizationOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "subOrganization of",
+                "@language": "en"
+            },
+            {
+                "@value": "sous-Organization de",
+                "@language": "fr"
+            },
+            {
+                "@value": "sotto-Organization di",
+                "@language": "it"
+            },
+            {
+                "@value": "es suborganizaciÃ³n de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#transitiveSubOrganizationOf"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Represents hierarchical containment of Organizations or OrganizationalUnits; indicates an Organization which contains this Organization. Inverse of `org:hasSubOrganization`.",
+                "@language": "en"
+            },
+            {
+                "@value": "ReprÃ©sente une relation hierarchique des Organisations ou des UnitÃ©s OpÃ©rationnelles; indique une Organisation sujet qui contient cette Organisation. Inverse de `org:hasSubOrganization`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Rappresenta un contenimento gerarchico di una Organization o di una OrganizationalUnit. Ãˆ l'inverso di `org:hasSubOrganization`. Ha nome come nome alternativo hasSubOrg.",
+                "@language": "it"
+            },
+            {
+                "@value": "çµ„ç¹”ã¾ãŸã¯çµ„ç¹”å˜ä½ã®éšŽå±¤çš„åŒ…å«ã‚’è¡¨ã‚ã—ã¾ã™ã€‚ã“ã®çµ„ç¹”ã‚’å«ã‚€çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "DistribuciÃ³n jerÃ¡rquica de organizaciones o unidades. Indica que una organizaciÃ³n contiene a otra organizaciÃ³n. Es la relaciÃ³n inversa de `org:hasSubOrganization`",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasSubOrganization"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#transitiveSubOrganizationOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/2002/07/owl#TransitiveProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "transitive sub-organization",
+                "@language": "en"
+            },
+            {
+                "@value": "sous-Organization transitive de",
+                "@language": "fr"
+            },
+            {
+                "@value": "sotto-Organization transitiva",
+                "@language": "it"
+            },
+            {
+                "@value": "es suborganizaciÃ³n de manera transitiva de",
+                "@language": "es"
+            },
+            {
+                "@value": "es suborganizaciÃ³n de (transitiva)",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#Organization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "The transitive closure of subOrganizationOf, giving a representation of all organizations that contain this one. Note that technically this is a super property of the transitive closure so it could contain additional assertions but such usage is discouraged.",
+                "@language": "en"
+            },
+            {
+                "@value": "La version transitive de la propriÃ©tÃ© subOrganizationOf, renvoie une reprÃ©sentation de toutes les organisations qui contiennent celle-ci. Notez que ceci est une super-propriÃ©tÃ© de la relation transitive donc elle pourrait contenir des assertions additionnelles mais cet usage n'est pas recommandÃ©.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Ãˆ la chiusura transitiva di subOrganizationOf, quindi rappresenta tutte le organizzazioni che la contengono. Tecnicamente, essendo una chiusura transitiva, puÃ² contenere asserzioni che non la riguardano e quindi il suo uso Ã¨ sconsigliato.",
+                "@language": "it"
+            },
+            {
+                "@value": "subOrganizationOfã®æŽ¨ç§»é–‰åŒ…ã§ã€ã“ã‚Œã‚’å«ã‚€ã™ã¹ã¦ã®çµ„ç¹”ã®è¡¨ç¾ã‚’ä¸Žãˆã‚‹ã€‚æŠ€è¡“çš„ã«ã€ã“ã‚ŒãŒæŽ¨ç§»é–‰åŒ…ã®ã‚¹ãƒ¼ãƒ‘ãƒ¼ãƒ—ãƒ­ãƒ‘ãƒ†ã‚£ãƒ¼ã§ã‚ã‚‹ãŸã‚ã€è¿½åŠ ã®è¨€æ˜Žã‚’å«ã‚€ã“ã¨ãŒã§ãã¾ã™ãŒã€ãã®ã‚ˆã†ãªä½¿ç”¨æ³•ã¯ãŠå‹§ã‚ã§ããªã„ã“ã¨ã«æ³¨æ„ã—ã¦ãã ã•ã„ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "La versiÃ³n transitiva de la propiedad â€œsubOrganizationOfâ€, es decir, la representaciÃ³n de todas las organizaciones en las que esta estÃ¡ contenida. TÃ©ngase en cuenta que desde el punto de vista tÃ©cnico esta es una propiedad que contiene a todas las propiedades transitivas, de forma que podrÃ­a contener afirmaciones adicionales, aunque su uso no estÃ¡ aconsejado.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/org#unitOf",
+        "@type": [
+            "http://www.w3.org/2002/07/owl#ObjectProperty",
+            "http://www.w3.org/1999/02/22-rdf-syntax-ns#Property"
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#label": [
+            {
+                "@value": "unit Of",
+                "@language": "en"
+            },
+            {
+                "@value": "unitÃ© de",
+                "@language": "fr"
+            },
+            {
+                "@value": "unitÃ  di",
+                "@language": "it"
+            },
+            {
+                "@value": "es unidad de",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#domain": [
+            {
+                "@id": "http://www.w3.org/ns/org#OrganizationalUnit"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#range": [
+            {
+                "@id": "http://www.w3.org/ns/org#FormalOrganization"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#subPropertyOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#subOrganizationOf"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#comment": [
+            {
+                "@value": "Indicates an Organization of which this Unit is a part, e.g. a Department within a larger FormalOrganization. This is the inverse of `org:hasUnit`.",
+                "@language": "en"
+            },
+            {
+                "@value": "Indique l'Organisation dont cette Organisation ou UnitÃ© fait partie, par exemple un DÃ©partment au sein d'une Organisation Formelle plus large. Inverse de `org:hasUnit`.",
+                "@language": "fr"
+            },
+            {
+                "@value": "Indica un Organization di cui questa Unit fa parte, come ad esempio un dipartimento all'interno di una piÃ¹ vasta FormalOrganization. Ãˆ l'inverso di `org:hasUnit`.",
+                "@language": "it"
+            },
+            {
+                "@value": "ä¾‹ãˆã°ã€ã‚ˆã‚Šå¤§ããªçµ„ç¹”å†…ã®éƒ¨å±€ãªã©ã€ã“ã®å˜ä½ãŒãã®ä¸€éƒ¨åˆ†ã§ã‚ã‚‹çµ„ç¹”ã‚’ç¤ºã—ã¾ã™ã€‚",
+                "@language": "ja"
+            },
+            {
+                "@value": "OrganizaciÃ³n de la que es parte esta unidad, por ejemplo, un departamento incluido en una organizaciÃ³n formal mÃ¡s amplia.",
+                "@language": "es"
+            }
+        ],
+        "http://www.w3.org/2000/01/rdf-schema#isDefinedBy": [
+            {
+                "@id": "http://www.w3.org/ns/org"
+            }
+        ],
+        "http://www.w3.org/2002/07/owl#inverseOf": [
+            {
+                "@id": "http://www.w3.org/ns/org#hasUnit"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/prov#Activity"
+    },
+    {
+        "@id": "http://www.w3.org/ns/prov#used"
+    },
+    {
+        "@id": "http://www.w3.org/ns/prov#wasDerivedFrom",
+        "http://www.w3.org/2002/07/owl#propertyChainAxiom": [
+            {
+                "@id": "_:b23"
+            }
+        ]
+    },
+    {
+        "@id": "http://www.w3.org/ns/prov#wasGeneratedBy"
+    },
+    {
+        "@id": "http://xmlns.com/foaf/0.1/Agent"
+    },
+    {
+        "@id": "http://xmlns.com/foaf/0.1/Organization"
+    },
+    {
+        "@id": "http://xmlns.com/foaf/0.1/Person"
+    },
+    {
+        "@id": "http://xmlns.com/foaf/0.1/member"
+    }
+]
